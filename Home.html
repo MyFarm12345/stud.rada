@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Головна | Студентська Рада</title>
+  <style>
+    /* ===========================
+       Скидання стилів (Reset)
+       =========================== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    body {
+      background-color: #F7F7F7;
+      color: #2C3E50;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    button {
+      cursor: pointer;
+      font: inherit;
+      border: none;
+      background: none;
+    }
+
+    /* ===========================
+       Кольорова палітра
+       =========================== */
+    :root {
+      --color-primary-dark: #2C3E50;
+      --color-primary-light: #4A90E2;
+      --color-accent: #FF6F61;
+      --color-hover: #F5A623;
+      --color-bg-light: #FFFFFF;
+      --color-bg-muted: #ECEFF1;
+      --color-text-light: #FFFFFF;
+      --gradient-black-start: #0d0d0d;
+      --gradient-black-end: #1a1a1a;
+    }
+
+    /* ===========================
+       Фіксована шапка (HEADER)
+       =========================== */
+    header {
+      background: linear-gradient(135deg, var(--gradient-black-start), var(--gradient-black-end));
+      color: var(--color-text-light);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+    }
+
+    .logo img {
+      max-height: 50px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links li a {
+      color: var(--color-text-light);
+      font-weight: 500;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-left: 2rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--color-text-light);
+      border-radius: 4px;
+      background-color: transparent;
+      color: var(--color-text-light);
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--color-text-light);
+      color: var(--color-primary-dark);
+      transform: scale(1.05);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 24px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      background-color: var(--color-text-light);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(135deg, var(--gradient-black-start), var(--gradient-black-end));
+      flex-direction: column;
+      padding: 1rem 0;
+    }
+
+    .mobile-nav li {
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    .mobile-nav li a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--color-text-light);
+      font-size: 1rem;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .mobile-nav li a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 992px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-buttons {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .mobile-nav.active {
+        display: flex;
+      }
+    }
+
+    main {
+      margin-top: 0; /* убрали отступ, чтобы геро-секция начиналась сразу под шапкой */
+      flex: 1;
+    }
+
+    /* Задаём для всех секций плавний відступ при скроллі */
+    section {
+      scroll-margin-top: 80px; /* висота шапки */
+    }
+
+    /* ===========================
+       ГЕРОЙ-БАНЕР (HERO SECTION)
+       =========================== */
+    #hero {
+      position: relative;
+      background: url('image/hero.jpg') center/cover no-repeat;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 80px; /* щоб герой не ховався під шапкою */
+    }
+
+    #hero .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+
+    #hero .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      width: 90%;
+      max-width: 800px;
+      padding: 0 1rem;
+      color: var(--color-text-light);
+    }
+
+    #hero .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 0.5s forwards;
+    }
+
+    #hero .hero-content p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      line-height: 1.4;
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 1s forwards;
+    }
+
+    #hero .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Видалили кнопку "Дізнатися більше" – залишили лише "Останні новини" */
+    #hero .hero-buttons a {
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      animation: fadeInUp 1s ease-out 1.5s forwards;
+      background-color: var(--color-accent);
+      color: var(--color-text-light);
+      border: none;
+    }
+
+    #hero .hero-buttons a:hover {
+      background-color: var(--color-hover);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      #hero .hero-content h1 {
+        font-size: 2.25rem;
+      }
+      #hero .hero-content p {
+        font-size: 1.1rem;
+      }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatShape {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.3;
+      }
+      50% {
+        transform: translateY(-20px) rotate(45deg);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.3;
+      }
+    }
+
+    /* ===========================
+       «КОРОТКО ПРО НАС»
+       =========================== */
+    #about-preview {
+      position: relative;
+      background-color: var(--color-bg-muted);
+      overflow: hidden;
+      padding: 4rem 0;
+    }
+
+    #about-preview::before,
+    #about-preview::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.2;
+      animation: floatShape 12s ease-in-out infinite;
+      z-index: 1;
+    }
+    #about-preview::before {
+      width: 300px;
+      height: 300px;
+      background-color: var(--color-primary-light);
+      top: -100px;
+      right: -100px;
+    }
+    #about-preview::after {
+      width: 200px;
+      height: 200px;
+      background-color: var(--color-accent);
+      bottom: -80px;
+      left: -80px;
+      animation-delay: 3s;
+    }
+
+    #about-preview .container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    #about-preview .about-left {
+      flex: 1 1 500px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 0.5s forwards;
+    }
+
+    #about-preview .about-left h2 {
+      font-size: 2.5rem;
+      color: var(--color-primary-dark);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    #about-preview .about-left h2::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 0;
+      height: 4px;
+      background-color: var(--color-accent);
+      animation: expandLine 1s ease-out 0.7s forwards;
+    }
+
+    @keyframes expandLine {
+      from { width: 0; }
+      to { width: 60px; }
+    }
+
+    #about-preview .about-left p {
+      font-size: 1.1rem;
+      color: var(--color-primary-dark);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 0.9s forwards;
+    }
+
+    #about-preview .mission-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    #about-preview .mission-list li {
+      display: flex;
+      align-items: flex-start;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out calc(1.1s + (var(--delay) * 0.2s)) forwards;
+    }
+
+    #about-preview .mission-list li::before {
+      content: '✔';
+      color: var(--color-accent);
+      font-weight: bold;
+      margin-right: 0.75rem;
+      margin-top: 3px;
+      font-size: 1rem;
+    }
+
+    #about-preview .btn-primary-about {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      background: linear-gradient(135deg, var(--gradient-black-start), var(--gradient-black-end));
+      color: var(--color-text-light);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 1.5s forwards;
+    }
+
+    #about-preview .btn-primary-about:hover {
+      background-color: var(--color-hover);
+      transform: scale(1.05);
+    }
+
+    #about-preview .about-right {
+      flex: 1 1 300px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease-out 0.8s forwards;
+    }
+
+    #about-preview .about-right img {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 992px) {
+      #about-preview .container {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
+      #about-preview .about-left,
+      #about-preview .about-right {
+        transform: none;
+        animation: none;
+        opacity: 1;
+      }
+      #about-preview .about-left {
+        margin-top: 2rem;
+      }
+      #about-preview .about-right img {
+        width: 80%;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 576px) {
+      #about-preview .about-left h2 {
+        font-size: 2rem;
+      }
+      #about-preview .about-left p {
+        font-size: 1rem;
+      }
+      #about-preview .btn-primary-about {
+        width: 100%;
+      }
+    }
+
+    /* =====================================
+       «ОСТАННІ НОВИНИ ТА ПОДІЇ»
+       ===================================== */
+    #news-preview {
+      background-color: var(--color-bg-muted);
+      position: relative;
+      padding: 5rem 0 2rem; /* зменшили нижній падінг для місця під розділювач */
+      overflow: visible;
+    }
+
+    /* Додали плавний діагональний розділювач у низу */
+    #news-preview::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background-color: var(--color-bg-light);
+      clip-path: polygon(0 0, 100% 100%, 0% 100%);
+      z-index: 1;
+    }
+
+    #news-preview h2 {
+      text-align: center;
+      font-size: 2.75rem;
+      color: var(--color-primary-dark);
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    #news-preview h2::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background-color: var(--color-accent);
+      margin: 0.5rem auto 0 auto;
+      border-radius: 2px;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .news-card {
+      background-color: var(--color-bg-light);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+      border: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .news-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+      border-color: var(--color-primary-light);
+    }
+
+    .news-image-placeholder {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, var(--color-primary-light), var(--color-accent));
+      position: relative;
+    }
+
+    .news-image-placeholder::before {
+      content: '📰';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      color: var(--color-text-light);
+      opacity: 0.8;
+    }
+
+    .news-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .news-content h3 {
+      font-size: 1.5rem;
+      color: var(--color-primary-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .news-content p {
+      font-size: 1rem;
+      color: var(--color-primary-dark);
+      margin-bottom: 1.5rem;
+      flex: 1;
+      line-height: 1.6;
+    }
+
+    .btn-news {
+      align-self: flex-start;
+      padding: 0.6rem 1.2rem;
+      background-color: var(--color-accent);
+      color: var(--color-text-light);
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-news:hover {
+      background-color: var(--color-hover);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      #news-preview {
+        padding: 3rem 0 1rem;
+      }
+      #news-preview h2 {
+        font-size: 2.25rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .news-content h3 {
+        font-size: 1.25rem;
+      }
+      .news-content p {
+        font-size: 0.95rem;
+      }
+      .btn-news {
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    /* ================================
+       «ГАЛЕРЕЯ (PREVIEW)»
+       ================================ */
+    #gallery-preview {
+      background-color: var(--color-bg-light);
+      position: relative;
+      padding: 5rem 0;
+      overflow: hidden;
+    }
+
+    #gallery-preview h2 {
+      text-align: center;
+      font-size: 2.75rem;
+      color: var(--color-primary-dark);
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    #gallery-preview h2::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background-color: var(--color-accent);
+      margin: 0.5rem auto 0 auto;
+      border-radius: 2px;
+    }
+
+    /* Фонові хвилі */
+    #gallery-preview::before,
+    #gallery-preview::after {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200px;
+      background: rgba(74, 144, 226, 0.1);
+      border-radius: 43%;
+      animation: wave 8s infinite ease-in-out;
+    }
+    #gallery-preview::before {
+      top: -50px;
+      left: -25%;
+      animation-delay: 0s;
+    }
+    #gallery-preview::after {
+      bottom: -50px;
+      right: -25%;
+      animation-delay: 4s;
+    }
+
+    @keyframes wave {
+      0% { transform: translateX(0) rotate(0deg); }
+      50% { transform: translateX(-10%) rotate(10deg); }
+      100% { transform: translateX(0) rotate(0deg); }
+    }
+
+    /* Мережа masonry */
+    .gallery-grid-masonry {
+      column-count: 3;
+      column-gap: 1.5rem;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 992px) {
+      .gallery-grid-masonry {
+        column-count: 2;
+      }
+    }
+    @media (max-width: 576px) {
+      .gallery-grid-masonry {
+        column-count: 1;
+      }
+    }
+
+    .gallery-item-2 {
+      background-color: var(--color-bg-muted);
+      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      overflow: hidden;
+      break-inside: avoid;
+      position: relative;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeUp 1s ease-out forwards;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* Затримка анімації для кожного елемента */
+    .gallery-item-2:nth-child(1) { animation-delay: 0.2s; }
+    .gallery-item-2:nth-child(2) { animation-delay: 0.4s; }
+    .gallery-item-2:nth-child(3) { animation-delay: 0.6s; }
+    .gallery-item-2:nth-child(4) { animation-delay: 0.8s; }
+    .gallery-item-2:nth-child(5) { animation-delay: 1s; }
+    .gallery-item-2:nth-child(6) { animation-delay: 1.2s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .gallery-item-2 .placeholder-box {
+      width: 100%;
+      padding-top: 70%; /* співвідношення 10:7 */
+      background: linear-gradient(135deg, var(--color-primary-light), var(--color-accent));
+      position: relative;
+      transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gallery-item-2 .placeholder-box::before {
+      content: '📷';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      color: var(--color-text-light);
+      opacity: 0.7;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .gallery-item-2 .caption-2 {
+      padding: 1rem;
+      background-color: var(--color-bg-light);
+      color: var(--color-primary-dark);
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .gallery-item-2:hover .placeholder-box {
+      transform: scale(1.05) rotate(-1deg);
+      filter: brightness(1.1);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .gallery-item-2:hover .placeholder-box::before {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    .gallery-item-2:hover .caption-2 {
+      background-color: var(--color-primary-light);
+      color: var(--color-text-light);
+    }
+
+    /* ===========================
+       ФУТЕР (Footer)
+       =========================== */
+    footer {
+      background: linear-gradient(135deg, var(--gradient-black-start), var(--gradient-black-end));
+      color: #ccc;
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .footer-section {
+      flex: 1 1 200px;
+    }
+
+    .footer-logo img {
+      max-height: 40px;
+      margin-bottom: 1rem;
+      /* Логотип залишається оригінального кольору */
+    }
+
+    .footer-logo p {
+      color: #bbb;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-top: 0.5rem;
+    }
+
+    .footer-links h3,
+    .footer-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .footer-links ul {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-links ul li a {
+      color: #ccc;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .footer-links ul li a:hover {
+      color: var(--color-accent);
+      transform: translateX(5px);
+    }
+
+    .footer-section p,
+    .footer-section a {
+      color: #ccc;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-accent);
+      transform: translateX(5px);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .footer-social a {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      color: #fff;
+      font-size: 1.25rem;
+    }
+
+    .footer-social a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .footer-copy {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .footer-social {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===========================
+       HEADER (Шапка сайту)
+       =========================== -->
+  <header>
+    <div class="container">
+      <!-- Логотип -->
+      <div class="logo">
+        <a href="Home.html">
+          <img src="image/logo.png" alt="Logo Студентська Рада" />
+        </a>
+      </div>
+
+      <!-- Навігація -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="home.html">Головна</a></li>
+          <li><a href="about.html">Про нас</a></li>
+          <li><a href="news.html">Новини</a></li>
+          <li><a href="docs.html">Документи</a></li>
+          <li><a href="gallery.html">Галерея</a></li>
+          <li><a href="contact.html">Контакти</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+        <div class="nav-buttons">
+          <!-- За потребою: кнопки Увійти/Реєстрація -->
+        </div>
+      </nav>
+
+      <!-- Гамбургер для мобільних -->
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <ul class="mobile-nav" id="mobile-nav">
+      <li><a href="#home">Головна</a></li>
+      <li><a href="#about-preview">Про нас</a></li>
+      <li><a href="#news-preview">Новини</a></li>
+      <li><a href="#docs-preview">Документи</a></li>
+      <li><a href="#gallery-preview">Галерея</a></li>
+      <li><a href="#contacts-preview">Контакти</a></li>
+      <li><a href="#faq-preview">FAQ</a></li>
+    </ul>
+  </header>
+
+  <main>
+    <!-- ===========================
+         ГЕРОЙ-БАНЕР (HERO SECTION)
+         =========================== -->
+    <section id="hero">
+      <div class="overlay"></div>
+      <div class="hero-content">
+        <h1>Ласкаво просимо до Студентської Ради</h1>
+        <p>Ми – голос студентів. Ми – рушій змін.</p>
+        <div class="hero-buttons">
+          <!-- Видалена кнопка "Дізнатися більше", залишена лише для переходу до новин -->
+          <a href="#news-preview" class="btn-secondary">Останні новини</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================
+         БЛОК «КОРОТКО ПРО НАС»
+         =========================== -->
+    <section id="about-preview">
+      <div class="container">
+        <div class="about-left">
+          <h2>Про Студентську Раду</h2>
+          <p>
+            Студентська Рада – це серце нашого кампусу. Ми представляємо інтереси понад&nbsp;5000 студентів,
+            організовуємо масштабні заходи, розвиваємо культуру взаємодії та надаємо підтримку кожному,
+            хто прагне змінити університетське життя на краще.
+          </p>
+          <ul class="mission-list">
+            <li style="--delay: 0;">Захищаємо права та інтереси студентів у всіх питаннях.</li>
+            <li style="--delay: 1;">Організовуємо освітні, культурні та спортивні заходи.</li>
+            <li style="--delay: 2;">Підтримуємо молоді ініціативи та стартапи.</li>
+            <li style="--delay: 3;">Співпрацюємо з адміністрацією задля покращення умов навчання.</li>
+          </ul>
+          <a href="about.html" class="btn-primary-about">Детальніше</a>
+        </div>
+
+        <div class="about-right">
+          <img src="image/about-mission.jpg" alt="Ілюстрація місії Студентської Ради" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================
+         БЛОК «ОСТАННІ НОВИНИ ТА ПОДІЇ»
+         =========================== -->
+    <section id="news-preview">
+      <h2>Останні новини та події</h2>
+      <div class="news-grid">
+        <div class="news-card">
+          <div class="news-image-placeholder"></div>
+          <div class="news-content">
+            <h3>Відгук про наукову конференцію</h3>
+            <p>Студенти представили понад&nbsp;1000 наукових робіт у&nbsp;14 секціях, демонструючи високий рівень досліджень.</p>
+            <a href="#" class="btn-news">Детальніше</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image-placeholder"></div>
+          <div class="news-content">
+            <h3>Турнір з кіберспорту</h3>
+            <p>Понад&nbsp;20 команд змагалися у&nbsp;CS2 на турнірі в Києві, продемонструвавши майстерність та командну гру.</p>
+            <a href="#" class="btn-news">Детальніше</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image-placeholder"></div>
+          <div class="news-content">
+            <h3>Благодійний збір для військових</h3>
+            <p>Студенти організували благодійний захід, зібравши кошти на підтримку Збройних Сил України.</p>
+            <a href="#" class="btn-news">Детальніше</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================
+         БЛОК «ГАЛЕРЕЯ (PREVIEW)»
+         =========================== -->
+    <section id="gallery-preview">
+      <h2>Галерея</h2>
+      <div class="gallery-grid-masonry">
+        <div class="gallery-item-2">
+          <div class="placeholder-box"></div>
+          <div class="caption-2">Фото Альбом 1</div>
+        </div>
+        <div class="gallery-item-2">
+          <div class="placeholder-box"></div>
+          <div class="caption-2">Фото Альбом 2</div>
+        </div>
+        <div class="gallery-item-2">
+          <div class="placeholder-box"></div>
+          <div class="caption-2">Фото Альбом 3</div>
+        </div>
+        <div class="gallery-item-2">
+          <div class="placeholder-box"></div>
+          <div class="caption-2">Фото Альбом 4</div>
+        </div>
+        <div class="gallery-item-2">
+          <div class="placeholder-box"></div>
+          <div class="caption-2">Фото Альбом 5</div>
+        </div>
+        <div class="gallery-item-2">
+          <div class="placeholder-box"></div>
+          <div class="caption-2">Фото Альбом 6</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===========================
+       ФУТЕР (Footer)
+       =========================== -->
+  <footer>
+    <div class="footer-container">
+      <!-- Лого та опис -->
+      <div class="footer-section footer-logo">
+        <a href="Home.html">
+          <img src="image/logo.png" alt="Logo Студентська Рада" />
+        </a>
+        <p>Студентська Рада – це голос кожного студента. Зв’яжіться з нами, щоб долучитися до змін!</p>
+      </div>
+
+      <!-- Навігаційні посилання -->
+      <div class="footer-section footer-links">
+        <h3>Навігація</h3>
+        <ul>
+          <li><a href="Home.html">Головна</a></li>
+          <li><a href="about.html">Про нас</a></li>
+          <li><a href="news.html">Новини</a></li>
+          <li><a href="docs.html">Документи</a></li>
+          <li><a href="gallery.html">Галерея</a></li>
+          <li><a href="contact.html">Контакти</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- Контактна інформація -->
+      <div class="footer-section">
+        <h3>Контакти</h3>
+        <p>Електронна пошта: <a href="mailto:studentsrada@kre.dp.ua">studentsrada@kre.dp.ua</a></p>
+        <p>Телефон: <a href="tel:+380123456789">+38 (012) 345 67 89</a></p>
+        <div class="footer-social">
+          <a href="#" title="Facebook">📘</a>
+          <a href="#" title="Instagram">📸</a>
+          <a href="#" title="Telegram">✈️</a>
+          <a href="#" title="TikTok">🎵</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copy">
+      &copy; 2025 Студентська Рада. Усі права захищено.
+    </div>
+  </footer>
+
+  <!-- ===========================
+       JAVASCRIPT ДЛЯ ГАМБУРГЕР-МЕНЮ
+       =========================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const hamburger = document.getElementById('hamburger');
+      const mobileNav = document.getElementById('mobile-nav');
+
+      hamburger.addEventListener('click', function () {
+        mobileNav.classList.toggle('active');
+        hamburger.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>
