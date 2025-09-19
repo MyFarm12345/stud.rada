@@ -401,8 +401,8 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
    ========================= */
 
 // ВАЖНО: Замените эти значения на ваши реальные ключи Supabase
-const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL'; // например: https://xyzcompany.supabase.co
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // ваш anon/public key
+const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co'; // например: https://xyzcompany.supabase.co
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo'; // ваш anon/public key
 
 // Инициализация Supabase клиента
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1410,8 +1410,8 @@ function showSetupModal() {
         <li>Створіть таблиці в базі даних (SQL Editor)</li>
       </ol>
       <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin: 12px 0; font-family: monospace; font-size: 13px;">
-        const SUPABASE_URL = 'https://ваш-проект.supabase.co';<br>
-        const SUPABASE_ANON_KEY = 'ваш-ключ-тут';
+        const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';<br>
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
       </div>
       <p><strong>Тестовий вхід:</strong> Логін: <code>Karen</code>, Пароль: <code>Karen123123</code> (роль: admin)</p>
     </div>
@@ -1460,7 +1460,7 @@ async function exportData() {
 /* =========================
    Error handling for missing Supabase config
    ========================= */
-if (SUPABASE_URL === 'YOUR_SUPABASE_PROJECT_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+if (SUPABASE_URL === 'https://xyhnzxyhkxijxahltcwl.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo') {
   console.warn('⚠️ Supabase не налаштований. Замініть SUPABASE_URL та SUPABASE_ANON_KEY в коді.');
 }
 </script>
