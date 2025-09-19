@@ -400,31 +400,20 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 
 <script>
 /* =========================
-   Supabase Configuration
+   Supabase Кофиг
    ========================= */
 
-// ВАЖНО: Замените эти значения на ваши реальные ключи Supabase
-const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL'; // например: https://xyzcompany.supabase.co
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // ваш anon/public key
+const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
 
-// Проверяем настройку Supabase
-const isSupabaseConfigured = SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
 
-// Инициализация Supabase клиента только если настроен
-let supabase = null;
-if (isSupabaseConfigured && window.supabase) {
-  try {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  } catch (error) {
-    console.error('Ошибка инициализации Supabase:', error);
-  }
-}
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* =========================
-   Database operations
+   Операции базы данных
    ========================= */
 
-// Универсальная функция для показа загрузки
+// показ загрузки
 function showLoading() {
   document.getElementById('loadingOverlay').style.display = 'flex';
 }
@@ -435,31 +424,19 @@ function hideLoading() {
 
 // Проверка подключения к Supabase
 async function checkSupabaseConnection() {
-  if (!isSupabaseConfigured || !supabase) {
-    console.warn('Supabase не настроен. Используется автономный режим.');
-    return false;
-  }
-  
   try {
     const { data, error } = await supabase.from('news').select('count', { count: 'exact' });
     if (error) throw error;
     return true;
   } catch (error) {
     console.error('Supabase connection error:', error);
+    showNotification('Помилка підключення до бази даних. Перевірте налаштування Supabase.', 'error');
     return false;
   }
 }
 
-// Загрузка новостей из Supabase или локального хранилища
+// Загрузка новостей 
 async function loadNews() {
-  if (!isSupabaseConfigured || !supabase) {
-    // Возвращаем тестовые данные если Supabase не настроен
-    return [
-      {id: 1, title: 'Вибори голови студентської ради', date:'07.11.2024', content:'У стінах нашого закладу відбулася значуща подія – виборча конференція. Головою обрано Кочаряна К.С.'},
-      {id: 2, title: 'Звітно-виборча конференція', date:'26.09.2024', content:'Обрано новий склад студентської ради.'}
-    ];
-  }
-  
   try {
     const { data, error } = await supabase
       .from('news')
@@ -470,15 +447,12 @@ async function loadNews() {
     return data || [];
   } catch (error) {
     console.error('Error loading news:', error);
-    // Возвращаем тестовые данные при ошибке
-    return [
-      {id: 1, title: 'Вибори голови студентської ради', date:'07.11.2024', content:'У стінах нашого закладу відбулася значуща подія – виборча конференція. Головою обрано Кочаряна К.С.'},
-      {id: 2, title: 'Звітно-виборча конференція', date:'26.09.2024', content:'Обрано новий склад студентської ради.'}
-    ];
+    showNotification('Помилка завантаження новин', 'error');
+    return [];
   }
 }
 
-// Сохранение новости в Supabase
+// Сохранение новости
 async function saveNews(newsData) {
   try {
     const { data, error } = await supabase
@@ -500,7 +474,7 @@ async function saveNews(newsData) {
   }
 }
 
-// Обновление новости в Supabase
+// Обновление новости
 async function updateNews(id, newsData) {
   try {
     const { data, error } = await supabase
@@ -522,7 +496,7 @@ async function updateNews(id, newsData) {
   }
 }
 
-// Удаление новости из Supabase
+// Удаление новости
 async function deleteNews(id) {
   try {
     const { error } = await supabase
@@ -539,7 +513,7 @@ async function deleteNews(id) {
   }
 }
 
-// Загрузка событий из Supabase
+// Загрузка событий
 async function loadEvents() {
   try {
     const { data, error } = await supabase
@@ -556,7 +530,7 @@ async function loadEvents() {
   }
 }
 
-// Сохранение события в Supabase
+// Сохранение события	
 async function saveEvent(eventData) {
   try {
     const { data, error } = await supabase
@@ -590,18 +564,8 @@ async function deleteEvent(id) {
   }
 }
 
-// Загрузка участников из Supabase или локального хранилища
+// Загрузка участников
 async function loadMembers() {
-  if (!isSupabaseConfigured || !supabase) {
-    // Тестовые данные
-    return [
-      {id: 1, name: "Жигай М.Д.", role: "Член студентської ради"},
-      {id: 2, name: "Клименко С.О.", role: "Член студентської ради"},
-      {id: 3, name: "Кочарян К.С.", role: "Голова студентської ради"},
-      {id: 4, name: "Біцай К.Б.", role: "Член студентської ради"}
-    ];
-  }
-  
   try {
     const { data, error } = await supabase
       .from('members')
@@ -612,81 +576,12 @@ async function loadMembers() {
     return data || [];
   } catch (error) {
     console.error('Error loading members:', error);
-    return [
-      {id: 1, name: "Жигай М.Д.", role: "Член студентської ради"},
-      {id: 2, name: "Клименко С.О.", role: "Член студентської ради"},
-      {id: 3, name: "Кочарян К.С.", role: "Голова студентської ради"}
-    ];
-  }
-}
-
-// Загрузка событий из Supabase или локального хранилища
-async function loadEvents() {
-  if (!isSupabaseConfigured || !supabase) {
-    return [
-      {id: 1, title: 'Лекція з IT-інновацій', date: '15.03.2025'},
-      {id: 2, title: 'Еко-акція "Чисте місто"', date: '22.03.2025'},
-      {id: 3, title: 'Спортивні змагання', date: '30.03.2025'}
-    ];
-  }
-  
-  try {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .order('date', { ascending: true });
-    
-    if (error) throw error;
-    return data || [];
-  } catch (error) {
-    console.error('Error loading events:', error);
-    return [
-      {id: 1, title: 'Лекція з IT-інновацій', date: '15.03.2025'},
-      {id: 2, title: 'Еко-акція "Чисте місто"', date: '22.03.2025'}
-    ];
-  }
-}
-
-// Загрузка документов из Supabase или локального хранилища
-async function loadDocuments() {
-  if (!isSupabaseConfigured || !supabase) {
-    return []; // Пустой массив для тестирования
-  }
-  
-  try {
-    const { data, error } = await supabase
-      .from('documents')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data || [];
-  } catch (error) {
-    console.error('Error loading documents:', error);
+    showNotification('Помилка завантаження учасників', 'error');
     return [];
   }
 }
 
-// Загрузка голосов из Supabase или локального хранилища
-async function loadVotes() {
-  if (!isSupabaseConfigured || !supabase) {
-    return [{ option: 'council_support', count: 22 }];
-  }
-  
-  try {
-    const { data, error } = await supabase
-      .from('votes')
-      .select('*');
-    
-    if (error) throw error;
-    return data || [{ option: 'council_support', count: 22 }];
-  } catch (error) {
-    console.error('Error loading votes:', error);
-    return [{ option: 'council_support', count: 22 }];
-  }
-}
-
-// Сохранение участника в Supabase
+// Сохранение участника
 async function saveMember(memberData) {
   try {
     const { data, error } = await supabase
@@ -703,7 +598,7 @@ async function saveMember(memberData) {
   }
 }
 
-// Удаление участника из Supabase
+// Удаление участника
 async function deleteMember(id) {
   try {
     const { error } = await supabase
@@ -720,7 +615,7 @@ async function deleteMember(id) {
   }
 }
 
-// Загрузка документов из Supabase
+// Загрузка документов
 async function loadDocuments() {
   try {
     const { data, error } = await supabase
@@ -737,27 +632,24 @@ async function loadDocuments() {
   }
 }
 
-// Сохранение документа в Supabase
+// Сохранение документа
 async function saveDocument(docData) {
   try {
     const { data, error } = await supabase
       .from('documents')
-      .insert([{
-        name: docData.name,
-        file_url: docData.file_url
-      }])
+      .insert([docData])
       .select();
     
     if (error) throw error;
     return data[0];
   } catch (error) {
     console.error('Error saving document:', error);
-    showNotification('Помилка збереження документа: ' + error.message, 'error');
+    showNotification('Помилка збереження документа', 'error');
     return null;
   }
 }
 
-// Удаление документа из Supabase
+// Удаление документа
 async function deleteDocument(id) {
   try {
     const { error } = await supabase
@@ -774,7 +666,7 @@ async function deleteDocument(id) {
   }
 }
 
-// Загрузка голосов из Supabase
+// Загрузка голосов
 async function loadVotes() {
   try {
     const { data, error } = await supabase
@@ -790,7 +682,7 @@ async function loadVotes() {
   }
 }
 
-// Обновление голосов в Supabase
+// Обновление голосов
 async function updateVotes(option, count) {
   try {
     const { data, error } = await supabase
@@ -818,7 +710,7 @@ let VOTES = [];
 let currentUser = null;
 
 /* =========================
-   Auth system (простая авторизация)
+   Auth system
    ========================= */
 function renderAuth() {
   const el = document.getElementById('authArea');
@@ -899,7 +791,7 @@ function logout() {
 function toggleAdminButtons() {
   const isAdmin = currentUser && currentUser.role === 'admin';
   
-  // Показываем/скрываем кнопки в зависимости от роли
+  
   const adminButtons = [
     'uploadPdfBtn',
     'addMemberBtn', 
@@ -1167,6 +1059,40 @@ async function confirmDeleteNews(id) {
 }
 
 /* =========================
+   Events
+   ========================= */
+async function renderEvents() {
+  try {
+    EVENTS = await loadEvents();
+    
+    // Render upcoming events in sidebar
+    const upcomingEl = document.getElementById('upcomingEvents');
+    upcomingEl.innerHTML = '';
+    
+    const upcoming = EVENTS.slice(0, 4);
+    if (upcoming.length === 0) {
+      upcomingEl.innerHTML = '<div class="tl-item"><div class="txt">Подій немає</div></div>';
+      return;
+    }
+    
+    upcoming.forEach(event => {
+      const item = document.createElement('div');
+      item.className = 'tl-item';
+      item.innerHTML = `
+        <div class="dot"></div>
+        <div class="txt">
+          <strong>${event.date || 'Дата не вказана'}</strong>
+          <small>${escapeHtml(event.title)}</small>
+        </div>
+      `;
+      upcomingEl.appendChild(item);
+    });
+  } catch (error) {
+    console.error('Error rendering events:', error);
+  }
+}
+
+/* =========================
    Members (team)
    ========================= */
 async function renderMembers() {
@@ -1416,6 +1342,7 @@ async function renderAll() {
   await Promise.all([
     renderNews(),
     renderMembers(), 
+    renderEvents(),
     renderDocs()
   ]);
   
@@ -1456,33 +1383,18 @@ window.addEventListener('scroll', function() {
    Initialize on load
    ========================= */
 document.addEventListener('DOMContentLoaded', async function() {
-  console.log('Инициализация приложения...');
+  // Проверяем подключение к Supabase
+  const isConnected = await checkSupabaseConnection();
   
-  // Показать загрузку
-  showLoading();
-  
-  try {
-    // Проверяем подключение к Supabase
-    const isConnected = await checkSupabaseConnection();
-    
-    if (isConnected) {
-      showNotification('Підключено до бази даних', 'success');
-    } else if (!isSupabaseConfigured) {
-      showNotification('Працює в тестовому режимі. Налаштуйте Supabase для повної функціональності.', 'warning');
-      // Показываем инструкцию через 2 секунды
-      setTimeout(showSetupModal, 2000);
-    }
-    
-    // Инициализируем интерфейс
+  if (isConnected) {
+    showNotification('Підключено до бази даних', 'success');
     await renderAll();
-    
-    console.log('Приложение инициализировано');
-  } catch (error) {
-    console.error('Ошибка инициализации:', error);
-    showNotification('Помилка ініціалізації додатку', 'error');
-  } finally {
-    hideLoading();
+  } else {
+    // Показываем инструкцию по настройке
+    showSetupModal();
   }
+  
+  hideLoading();
 });
 
 /* =========================
@@ -1500,8 +1412,8 @@ function showSetupModal() {
         <li>Створіть таблиці в базі даних (SQL Editor)</li>
       </ol>
       <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin: 12px 0; font-family: monospace; font-size: 13px;">
-        const SUPABASE_URL = 'https://ваш-проект.supabase.co';<br>
-        const SUPABASE_ANON_KEY = 'ваш-ключ-тут';
+        const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';<br>
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
       </div>
       <p><strong>Тестовий вхід:</strong> Логін: <code>Karen</code>, Пароль: <code>Karen123123</code> (роль: admin)</p>
     </div>
@@ -1550,7 +1462,7 @@ async function exportData() {
 /* =========================
    Error handling for missing Supabase config
    ========================= */
-if (SUPABASE_URL === 'YOUR_SUPABASE_PROJECT_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+if (SUPABASE_URL === 'https://xyhnzxyhkxijxahltcwl.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo') {
   console.warn('⚠️ Supabase не налаштований. Замініть SUPABASE_URL та SUPABASE_ANON_KEY в коді.');
 }
 </script>
