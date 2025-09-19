@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Студентська рада — офіційний сайт</title>
+<style>
+:root{
+  --bg1:#ffffff; --bg2:#f8fafc; --accent:#2563eb;
+  --text-primary:#1e293b; --text-secondary:#64748b;
+  --card:#ffffff; --border:#e2e8f0;
+  --success:#10b981; --warning:#f59e0b; --error:#ef4444;
+}
+*{box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Inter, "Segoe UI", Roboto, Arial, system-ui;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  color:var(--text-primary);
+  background: #ffffff;
+  line-height: 1.6;
+}
+
+/* Improved animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* top bar */
+header{
+  position:sticky; top:0; z-index:60;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.95);
+  border-bottom:1px solid var(--border);
+  padding:12px 22px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition: all 0.3s ease;
+}
+header.scrolled {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.logo{display:flex;gap:12px;align-items:center;font-weight:700;color:#0f172a; text-decoration: none;}
+.logo:hover { opacity: 0.9; }
+.logo .badge{background:var(--accent); width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;box-shadow:0 4px 14px rgba(37, 99, 235, 0.15); transition: all 0.3s ease;}
+.logo .badge:hover { transform: rotate(5deg); }
+nav{display:flex;gap:8px;align-items:center; flex-wrap: wrap;}
+nav button{background:transparent;border:none;color:var(--text-primary);padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer; transition: all 0.2s ease;}
+nav button:hover{background:rgba(0,0,0,0.05); transform: translateY(-2px);}
+nav button.active{background:var(--accent); color: white;}
+.auth{display:flex;gap:8px;align-items:center}
+.auth button{background:var(--accent); color:#fff;padding:8px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer; transition: all 0.3s ease;}
+.auth button:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+.auth .role{background:rgba(0,0,0,0.05); padding:6px 12px;border-radius:999px;color:var(--text-primary);border:1px solid rgba(0,0,0,0.05); font-size: 12px;}
+
+/* container */
+.wrap{max-width:1200px;margin:28px auto;padding:0 20px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 380px;gap:28px;align-items:center;margin-bottom:28px; animation: fadeIn 0.8s ease;}
+.hero .lead{background:var(--card); padding:32px;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,0.05); color:var(--text-primary); border: 1px solid var(--border);}
+h1{font-size:32px;margin:0 0 12px;line-height:1.2;color:#0f172a;}
+.lead p{margin:0;color:var(--text-secondary); line-height: 1.6;}
+.cta{margin-top:22px;display:flex;gap:12px; flex-wrap: wrap;}
+.btn{background:var(--accent); color:white;padding:12px 20px;border-radius:10px;border:none;font-weight:700;cursor:pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;}
+.btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.2); }
+.btn.secondary{background:#f1f5f9;border:1px solid var(--border);color:var(--text-primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.btn.secondary:hover { background: #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.btn i { font-size: 16px; }
+
+/* right card */
+.card{background:var(--card); border-radius:14px;padding:22px;color:var(--text-primary); box-shadow:0 8px 20px rgba(0,0,0,0.06); border:1px solid var(--border); transition: all 0.3s ease; margin-bottom: 20px;}
+.card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+.timeline{display:flex;flex-direction:column;gap:12px}
+.tl-item{display:flex;gap:12px;align-items:flex-start; padding: 10px; border-radius: 10px; transition: all 0.2s ease;}
+.tl-item:hover { background: #f8fafc; }
+.tl-item .dot{width:12px;height:12px;background:var(--accent);border-radius:999px;margin-top:6px;box-shadow:0 4px 10px rgba(37, 99, 235, 0.2); flex-shrink: 0;}
+.tl-item .txt small{color:var(--text-secondary);display:block; margin-top: 4px;}
+
+/* grid areas */
+.grid3{display:grid;grid-template-columns: 1fr 380px; gap:24px}
+.main-col{display:flex;flex-direction:column;gap:24px}
+
+/* news card */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.news-card{background:#f8fafc;color:var(--text-primary);padding:20px;border-radius:12px;border:1px solid var(--border); transition: all 0.3s ease; height: 100%; display: flex; flex-direction: column; justify-content: space-between;}
+.news-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+.news-card h3{margin:0 0 12px; color: var(--text-primary); font-size: 18px;}
+.meta{font-size:13px;color:var(--text-secondary);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 8px;}
+.news-content { flex-grow: 1; }
+.news-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+.centered-section {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* team */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  justify-items: center;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 20px auto;
+}
+.member {
+  background:var(--card);
+  border-radius:12px;
+  padding:16px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  width: 100%;
+  max-width: 300px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+.member:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+}
+
+.avatar{width:56px;height:56px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px; flex-shrink: 0;}
+
+/* small util */
+.muted{color:var(--text-secondary)}
+.row{display:flex;gap:12px;align-items:center; flex-wrap: wrap;}
+.badge-success { background: var(--success); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
+.badge-warning { background: var(--warning); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
+
+/* footer */
+footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); padding: 20px; border-top: 1px solid var(--border);}
+
+/* notifications */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(100vw);
+  transition: transform 0.4s ease;
+}
+.notification.show {
+  transform: translateX(0);
+}
+.notification.success { background: var(--success); }
+.notification.error { background: var(--error); }
+.notification.warning { background: var(--warning); }
+
+/* loader */
+.loader {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* responsive */
+@media (max-width:1080px){
+  .hero{grid-template-columns:1fr; padding-bottom:12px}
+  .grid3{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+}
+
+@media (max-width:768px){
+  header { flex-direction: column; gap: 15px; padding: 15px; }
+  nav { width: 100%; justify-content: center; }
+  .auth { width: 100%; justify-content: center; }
+  .cta { flex-direction: column; }
+  .hero .lead { padding: 20px; }
+  .card { padding: 18px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .member { max-width: 100%; }
+}
+
+@media (max-width:480px){
+  .wrap { padding: 0 15px; }
+  h1 { font-size: 26px; }
+  .btn { width: 100%; justify-content: center; }
+  .news-actions { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loader"></div>
+</div>
+
+<header>
+  <a href="#" class="logo" onclick="goTo('home'); return false;">
+    <div class="badge">SR</div>
+    <div>
+      <div style="font-size:14px;color:#334155">Студентська рада</div>
+      <div style="font-size:11px;color:#64748b">Коледж — офіційний сайт ДФКР</div>
+    </div>
+  </a>
+  <nav>
+    <button id="nav-home" onclick="goTo('home')" class="active">Головна</button>
+   <a href="info.html"><button id="nav-projects">Про раду</button></a>
+     <a href="command.html"><button id="nav-projects">Команда</button></a>
+    <a href="news.html"><button id="nav-projects">Новини</button></a>
+    <a href="project.html"><button id="nav-projects">Проєкти</button></a>
+    <a href="event.html"><button id="nav-projects">Події</button></a>
+  </nav>
+  <div class="auth" id="authArea">
+    <!-- auth UI inserted here -->
+  </div>
+</header>
+
+<main class="wrap" id="home">
+
+  <!-- HERO -->
+  <section class="hero" id="heroTop">
+    <div class="lead">
+      <h1>Місія — зробити студентське життя <span style="color:#2563eb">незабутнім</span></h1>
+      <p style="margin-top:10px">Ми організовуємо лекції, заходи, еко-акції та медіапроекти. Тут — офіційна платформа для новин, події і активностей студентів коледжу.</p>
+      <div class="cta">
+         <a href="news.html"><button class="btn"><i>📰</i> Останні новини</button></a>
+         <a href="command.html"><button class="btn secondary"><i>👥</i> Наша команда</button></a>
+         <a href="event.html"><button class="btn secondary"><i>📅</i> Майбутні події</button></a>
+      </div>
+      <div style="margin-top:22px;display:flex;gap:12px; flex-wrap: wrap;">
+        <div class="card" style="flex:1; min-width: 180px;">
+          <div class="row"><strong style="font-size:20px" id="membersCount">22</strong><div class="muted" style="font-size:13px">Членів ради</div></div>
+        </div>
+        <div class="card" style="flex:1; min-width: 180px;">
+          <div class="row"><strong style="font-size:20px">40+</strong><div class="muted" style="font-size:13px">Заходів за рік</div></div>
+        </div>
+        <div class="card" style="flex:1; min-width: 180px;">
+        <div class="row"><strong style="font-size:20px" id="votesCount">22</strong><div class="muted" style="font-size:13px">Вподобайки</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 12px;color:#334155">Найближчі події</h3>
+      <div class="timeline" id="upcomingEvents">
+        <div class="tl-item"><div class="dot"></div><div class="txt">Завантаження...</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2-column main area -->
+  <section class="grid3">
+
+    <div class="main-col">
+      <!-- NEWS -->
+      <div id="newsSection" class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 12px;">
+          <div><h2 style="margin:0;color:#334155">Новини</h2><div class="muted">Актуальні події та оголошення</div></div>
+          <div class="row">
+            <input id="searchNews" placeholder="Пошук..." style="padding:10px;border-radius:10px;border:1px solid var(--border);background:#f8fafc;color:var(--text-primary); min-width: 180px;" oninput="renderNews()">
+            <button id="createNewsBtn" onclick="openCreateNews()" class="btn" style="display: none;"><i>➕</i> Нова</button>
+          </div>
+        </div>
+        <div id="newsGrid" class="cards" style="margin-top:20px"></div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div id="projects" class="card">
+        <h3 style="margin:0;color:#334155">Наші проєкти</h3>
+        <div style="margin-top:16px">
+          <ul style="color:#334155; padding-left: 20px;">
+            <li style="margin-bottom: 10px;"><strong>IT-інновації</strong> — лекція про новітні технології <span class="badge-success">активно</span></li>
+            <li style="margin-bottom: 10px;"><strong>Здоровий спосіб життя</strong> — ЗОЖ та спорт <span class="badge-success">активно</span></li>
+            <li style="margin-bottom: 10px;"><strong>Розвиток особистості</strong> — тайм-менеджмент і soft skills <span class="badge-warning">планується</span></li>
+            <li style="margin-bottom: 10px;"><strong>Dnipro Education City</strong> — допомога абітурієнтам <span class="badge-success">активно</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Team -->
+      <div id="teamCard" class="card centered-section">
+        <div style="display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="margin:0;color:#334155">Команда</h3>
+            <div class="muted">Члени студентської ради</div>
+          </div>
+          <div class="row">
+            <button id="addMemberBtn" onclick="openAddMember()" class="btn secondary" style="display: none;"><i>➕</i> Додати</button>
+          </div>
+        </div>
+        <div id="teamGrid" class="team-grid" style="margin-top:16px"></div>
+      </div>
+      
+      <!-- Documents -->
+      <div class="card">
+        <h3 style="margin:0;color:#334155">Документи</h3>
+        <div style="margin-top:12px" id="docsList"></div>
+        <div style="margin-top:12px" class="row">
+          <input id="docInput" type="file" style="display:none" accept=".pdf" onchange="onDoc(event)" />
+          <button id="uploadPdfBtn" class="btn secondary" onclick="document.getElementById('docInput').click()" style="display: none;"><i>📄</i> Завантажити PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <!-- Useful Resources -->
+      <div class="card">
+        <h3 style="margin:0 0 12px;color:#334155">Мiнi-гра</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <a href="#" style="display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 8px; background: #f8fafc; text-decoration: none; color: var(--text-primary);">
+            Поки гри нема, але буде)
+          </a>
+        </div>
+      </div>
+      
+     <!-- Student Initiatives -->
+<div class="card">
+  <h3 style="margin:0 0 12px;color:#334155">Підтримай студраду!</h3>
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="padding: 16px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 12px; text-align: center;">
+      <div style="font-weight: 700; margin-bottom: 8px; font-size: 18px; color: #0f172a;">Твоя підтримка важлива для нас! ❤️</div>
+      <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">Став вподобайку за студ. раду одним кліком</div>
+      <button id="voteBtn" class="btn" onclick="voteForCouncil()" style="margin: 0 auto; padding: 12px 24px; font-size: 16px;">
+        <i>👍</i> Підтримати студраду
+      </button>
+      <div id="voteMessage" style="margin-top: 12px; font-size: 13px; color: var(--text-secondary); display: none;">
+        Дякуємо за вашу підтримку! Ви вже проголосували.
+      </div>
+    </div>
+  </div>
+</div>
+      
+      <!-- Quick Contacts -->
+      <div class="card">
+        <h3 style="margin:0 0 12px;color:#334155">Нашi мессенджери</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+           <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" width="20" height="20">
+           <a href="https://www.instagram.com/stud.dacr?igsh=eDY5OWk5MzN0dXo="><span>Наш Instagram</span></a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </section>
+
+</main>
+
+<footer>
+  <div style="opacity:0.9;color:var(--text-secondary); margin-bottom: 10px;">© 2025 Студентська рада — зроблено з ❤️ для студентів</div>
+  <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+    <a href="privacy.html" style="color: var(--accent); text-decoration: none;">Політика конфіденційності</a>
+    <a href="#" style="color: var(--accent); text-decoration: none;">Допомога</a>
+  </div>
+</footer>
+
+<!-- MODALS (hidden containers) -->
+<div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:120; padding: 20px;">
+  <div id="modalBox" style="width:720px;max-width:92%;background:#fff;border-radius:16px;padding:24px;max-height:90vh;overflow-y:auto;"></div>
+</div>
+
+<!-- NOTIFICATION CONTAINER -->
+<div id="notificationContainer"></div>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* =========================
+   Supabase Configuration
+   ========================= */
+
+
+const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co'; 
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
+
+// Инициализация Supabase клиента
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* =========================
+   Database operations
+   ========================= */
+
+// Универсальная функция для показа загрузки
+function showLoading() {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+// Проверка подключения к Supabase
+async function checkSupabaseConnection() {
+  try {
+    const { data, error } = await supabase.from('news').select('count', { count: 'exact' });
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Supabase connection error:', error);
+    showNotification('Помилка підключення до бази даних. Перевірте налаштування Supabase.', 'error');
+    return false;
+  }
+}
+
+// Загрузка новостей из Supabase
+async function loadNews() {
+  try {
+    const { data, error } = await supabase
+      .from('news')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error loading news:', error);
+    showNotification('Помилка завантаження новин', 'error');
+    return [];
+  }
+}
+
+// Сохранение новости в Supabase
+async function saveNews(newsData) {
+  try {
+    const { data, error } = await supabase
+      .from('news')
+      .insert([{
+        title: newsData.title,
+        content: newsData.body,
+        date: newsData.date,
+        created_at: new Date().toISOString()
+      }])
+      .select();
+    
+    if (error) throw error;
+    return data[0];
+  } catch (error) {
+    console.error('Error saving news:', error);
+    showNotification('Помилка збереження новини', 'error');
+    return null;
+  }
+}
+
+// Обновление новости в Supabase
+async function updateNews(id, newsData) {
+  try {
+    const { data, error } = await supabase
+      .from('news')
+      .update({
+        title: newsData.title,
+        content: newsData.body,
+        date: newsData.date
+      })
+      .eq('id', id)
+      .select();
+    
+    if (error) throw error;
+    return data[0];
+  } catch (error) {
+    console.error('Error updating news:', error);
+    showNotification('Помилка оновлення новини', 'error');
+    return null;
+  }
+}
+
+// Удаление новости из Supabase
+async function deleteNews(id) {
+  try {
+    const { error } = await supabase
+      .from('news')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error deleting news:', error);
+    showNotification('Помилка видалення новини', 'error');
+    return false;
+  }
+}
+
+// Загрузка событий из Supabase
+async function loadEvents() {
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .order('date', { ascending: true });
+    
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error loading events:', error);
+    showNotification('Помилка завантаження подій', 'error');
+    return [];
+  }
+}
+
+// Сохранение события в Supabase
+async function saveEvent(eventData) {
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .insert([eventData])
+      .select();
+    
+    if (error) throw error;
+    return data[0];
+  } catch (error) {
+    console.error('Error saving event:', error);
+    showNotification('Помилка збереження події', 'error');
+    return null;
+  }
+}
+
+// Удаление события из Supabase
+async function deleteEvent(id) {
+  try {
+    const { error } = await supabase
+      .from('events')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    showNotification('Помилка видалення події', 'error');
+    return false;
+  }
+}
+
+// Загрузка участников из Supabase
+async function loadMembers() {
+  try {
+    const { data, error } = await supabase
+      .from('members')
+      .select('*')
+      .order('created_at', { ascending: true });
+    
+    if (error) throw error;
+    return data || [];
