@@ -400,9 +400,9 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
    Supabase Configuration
    ========================= */
 
-
-const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co'; 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
+// ВАЖНО: Замените эти значения на ваши реальные ключи Supabase
+const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL'; // например: https://xyzcompany.supabase.co
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // ваш anon/public key
 
 // Инициализация Supabase клиента
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -572,3 +572,897 @@ async function loadMembers() {
     
     if (error) throw error;
     return data || [];
+  } catch (error) {
+    console.error('Error loading members:', error);
+    showNotification('Помилка завантаження учасників', 'error');
+    return [];
+  }
+}
+
+// Сохранение участника в Supabase
+async function saveMember(memberData) {
+  try {
+    const { data, error } = await supabase
+      .from('members')
+      .insert([memberData])
+      .select();
+    
+    if (error) throw error;
+    return data[0];
+  } catch (error) {
+    console.error('Error saving member:', error);
+    showNotification('Помилка збереження учасника', 'error');
+    return null;
+  }
+}
+
+// Удаление участника из Supabase
+async function deleteMember(id) {
+  try {
+    const { error } = await supabase
+      .from('members')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error deleting member:', error);
+    showNotification('Помилка видалення учасника', 'error');
+    return false;
+  }
+}
+
+// Загрузка документов из Supabase
+async function loadDocuments() {
+  try {
+    const { data, error } = await supabase
+      .from('documents')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error loading documents:', error);
+    showNotification('Помилка завантаження документів', 'error');
+    return [];
+  }
+}
+
+// Сохранение документа в Supabase
+async function saveDocument(docData) {
+  try {
+    const { data, error } = await supabase
+      .from('documents')
+      .insert([docData])
+      .select();
+    
+    if (error) throw error;
+    return data[0];
+  } catch (error) {
+    console.error('Error saving document:', error);
+    showNotification('Помилка збереження документа', 'error');
+    return null;
+  }
+}
+
+// Удаление документа из Supabase
+async function deleteDocument(id) {
+  try {
+    const { error } = await supabase
+      .from('documents')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error deleting document:', error);
+    showNotification('Помилка видалення документа', 'error');
+    return false;
+  }
+}
+
+// Загрузка голосов из Supabase
+async function loadVotes() {
+  try {
+    const { data, error } = await supabase
+      .from('votes')
+      .select('*');
+    
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error loading votes:', error);
+    showNotification('Помилка завантаження голосів', 'error');
+    return [];
+  }
+}
+
+// Обновление голосов в Supabase
+async function updateVotes(option, count) {
+  try {
+    const { data, error } = await supabase
+      .from('votes')
+      .upsert({ option, count }, { onConflict: 'option' })
+      .select();
+    
+    if (error) throw error;
+    return data[0];
+  } catch (error) {
+    console.error('Error updating votes:', error);
+    showNotification('Помилка оновлення голосів', 'error');
+    return null;
+  }
+}
+
+/* =========================
+   Global data variables
+   ========================= */
+let NEWS = [];
+let MEMBERS = [];
+let EVENTS = [];
+let DOCS = [];
+let VOTES = [];
+let currentUser = null;
+
+/* =========================
+   Auth system (простая авторизация)
+   ========================= */
+function renderAuth() {
+  const el = document.getElementById('authArea');
+  el.innerHTML = '';
+  
+  if (currentUser) {
+    const roleSpan = document.createElement('div');
+    roleSpan.className = 'role';
+    roleSpan.style.marginRight = '8px';
+    roleSpan.textContent = currentUser.role.toUpperCase();
+    
+    const name = document.createElement('div');
+    name.style.color = '#334155';
+    name.style.fontWeight = '700';
+    name.style.marginRight = '8px';
+    name.textContent = currentUser.name;
+    
+    const btnOut = document.createElement('button');
+    btnOut.textContent = 'Вийти';
+    btnOut.onclick = logout;
+    
+    el.appendChild(name);
+    el.appendChild(roleSpan);
+    el.appendChild(btnOut);
+  } else {
+    const btn = document.createElement('button');
+    btn.textContent = 'Увійти';
+    btn.onclick = showLogin;
+    el.appendChild(btn);
+  }
+  
+  toggleAdminButtons();
+}
+
+function showLogin() {
+  modalOpen(`<h3>Вхід</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+      <input id="loginName" placeholder="Логін (Karen для адміна)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="loginPass" type="password" placeholder="Пароль (Karen123123 для адміна)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button onclick="modalClose()" class="btn secondary">Відмінити</button>
+        <button class="btn" onclick="doLogin()">Увійти</button>
+      </div>
+    </div>`, 480);
+  document.getElementById('loginName').focus();
+}
+
+function doLogin() {
+  const name = (document.getElementById('loginName').value || '').trim();
+  const pass = (document.getElementById('loginPass').value || '').trim();
+  
+  if (!name || !pass) {
+    showNotification('Введіть логін і пароль', 'error');
+    return;
+  }
+  
+  let role = 'user';
+  
+  // Простая проверка для администратора
+  if (name.toLowerCase() === 'karen' && pass === 'Karen123123') {
+    role = 'admin';
+  } else {
+    role = 'user';
+  }
+  
+  currentUser = { name, role };
+  modalClose();
+  showNotification(`Вітаємо! Ви увійшли як ${role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
+  renderAll();
+}
+
+function logout() {
+  currentUser = null;
+  showNotification('Ви вийшли з системи', 'success');
+  renderAll();
+}
+
+function toggleAdminButtons() {
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  
+  // Показываем/скрываем кнопки в зависимости от роли
+  const adminButtons = [
+    'uploadPdfBtn',
+    'addMemberBtn', 
+    'createNewsBtn'
+  ];
+  
+  adminButtons.forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      btn.style.display = isAdmin ? 'block' : 'none';
+    }
+  });
+}
+
+/* =========================
+   Voting functionality
+   ========================= */
+async function voteForCouncil() {
+  const hasVoted = sessionStorage.getItem('hasVoted'); // Используем sessionStorage вместо localStorage
+  
+  if (hasVoted) {
+    showNotification('Ви вже проголосували! Дякуємо за підтримку!', 'warning');
+    return;
+  }
+  
+  try {
+    // Получаем текущее количество голосов
+    const votes = await loadVotes();
+    let councilVote = votes.find(v => v.option === 'council_support');
+    let currentCount = councilVote ? councilVote.count : 22;
+    
+    // Увеличиваем счетчик
+    currentCount++;
+    
+    // Сохраняем в базу данных
+    await updateVotes('council_support', currentCount);
+    
+    // Отмечаем что пользователь проголосовал
+    sessionStorage.setItem('hasVoted', 'true');
+    
+    // Обновляем отображение
+    document.getElementById('votesCount').textContent = currentCount;
+    
+    // Блокируем кнопку
+    const voteBtn = document.getElementById('voteBtn');
+    voteBtn.disabled = true;
+    voteBtn.innerHTML = '<i>✅</i> Ви проголосували';
+    document.getElementById('voteMessage').style.display = 'block';
+    
+    showNotification('Дякуємо за вашу підтримку студентської ради!', 'success');
+  } catch (error) {
+    showNotification('Помилка при голосуванні', 'error');
+  }
+}
+
+/* =========================
+   Modal helpers
+   ========================= */
+function modalOpen(html, width = 760) {
+  const modal = document.getElementById('modal');
+  const box = document.getElementById('modalBox');
+  box.style.width = width + 'px';
+  box.innerHTML = html;
+  modal.style.display = 'flex';
+}
+
+function modalClose() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+/* =========================
+   Notification system
+   ========================= */
+function showNotification(message, type = 'success') {
+  const container = document.getElementById('notificationContainer');
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `<div>${message}</div>`;
+  container.appendChild(notification);
+  
+  // Trigger animation
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+  
+  // Remove after delay
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      if (container.contains(notification)) {
+        container.removeChild(notification);
+      }
+    }, 400);
+  }, 3000);
+}
+
+/* =========================
+   News CRUD + UI
+   ========================= */
+async function renderNews() {
+  const grid = document.getElementById('newsGrid');
+  grid.innerHTML = '<div class="loader"></div>';
+  
+  try {
+    NEWS = await loadNews();
+    grid.innerHTML = '';
+    
+    const q = (document.getElementById('searchNews')?.value || '').toLowerCase();
+    let items = NEWS.filter(n => 
+      n.title.toLowerCase().includes(q) || 
+      n.content.toLowerCase().includes(q)
+    );
+    
+    if (items.length === 0) {
+      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted)">Новини не знайдені</div>';
+      return;
+    }
+    
+    items.forEach(n => {
+      const d = document.createElement('div');
+      d.className = 'news-card';
+      d.innerHTML = `
+        <div class="news-content">
+          <div class="meta">
+            <div>${n.date || ''}</div>
+            <div><small class="muted">#${n.id}</small></div>
+          </div>
+          <h3>${escapeHtml(n.title)}</h3>
+          <p>${escapeHtml(shorten(n.content, 220))}</p>
+        </div>
+      `;
+      
+      const row = document.createElement('div');
+      row.className = 'news-actions';
+      
+      const more = document.createElement('button');
+      more.textContent = 'Читати';
+      more.className = 'btn secondary';
+      more.onclick = () => openNews(n.id);
+      row.appendChild(more);
+      
+      if (currentUser && currentUser.role === 'admin') {
+        const edit = document.createElement('button');
+        edit.textContent = 'Редагувати';
+        edit.className = 'btn secondary';
+        edit.onclick = () => editNews(n.id);
+        
+        const del = document.createElement('button');
+        del.textContent = 'Видалити';
+        del.className = 'btn';
+        del.onclick = () => confirmDeleteNews(n.id);
+        
+        row.appendChild(edit);
+        row.appendChild(del);
+      }
+      
+      d.appendChild(row);
+      grid.appendChild(d);
+    });
+  } catch (error) {
+    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--error)">Помилка завантаження новин</div>';
+  }
+}
+
+function openNews(id) {
+  const n = NEWS.find(x => x.id === id);
+  if (!n) return;
+  
+  modalOpen(`
+    <h3>${escapeHtml(n.title)}</h3>
+    <div style="color:var(--text-secondary); margin-bottom: 16px;">${n.date || ''}</div>
+    <div style="line-height: 1.6;">${escapeHtml(n.content).replace(/\n/g, '<br>')}</div>
+    <div style="margin-top:16px;display:flex;justify-content:flex-end">
+      <button class="btn secondary" onclick="modalClose()">Закрити</button>
+    </div>
+  `);
+}
+
+function openCreateNews() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    showNotification('Тільки адміністратор може додавати новини', 'error');
+    return;
+  }
+  
+  modalOpen(`
+    <h3>Нова новина</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+      <input id="nTitle" placeholder="Заголовок" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="nDate" placeholder="Дата (напр. 7 листопада 2024)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <textarea id="nBody" placeholder="Текст..." style="height:160px;padding:12px;border:1px solid var(--border);border-radius:8px; resize: vertical;"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn secondary" onclick="modalClose()">Відмінити</button>
+        <button class="btn" onclick="createNews()">Зберегти</button>
+      </div>
+    </div>
+  `, 640);
+}
+
+async function createNews() {
+  const title = document.getElementById('nTitle').value.trim();
+  const date = document.getElementById('nDate').value.trim();
+  const content = document.getElementById('nBody').value.trim();
+  
+  if (!title || !content) {
+    showNotification('Заповніть заголовок і текст', 'error');
+    return;
+  }
+  
+  showLoading();
+  const saved = await saveNews({ title, body: content, date });
+  hideLoading();
+  
+  if (saved) {
+    modalClose();
+    showNotification('Новину додано успішно!', 'success');
+    renderAll();
+  }
+}
+
+function editNews(id) {
+  const n = NEWS.find(x => x.id === id);
+  if (!n) return;
+  
+  modalOpen(`
+    <h3>Редагування</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+      <input id="eTitle" value="${escapeHtmlAttr(n.title)}" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="eDate" value="${escapeHtmlAttr(n.date || '')}" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <textarea id="eBody" style="height:160px;padding:12px;border:1px solid var(--border);border-radius:8px; resize: vertical;">${escapeHtmlAttr(n.content)}</textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn secondary" onclick="modalClose()">Відмінити</button>
+        <button class="btn" onclick="saveEdit(${n.id})">Зберегти</button>
+      </div>
+    </div>
+  `, 640);
+}
+
+async function saveEdit(id) {
+  const title = document.getElementById('eTitle').value.trim();
+  const date = document.getElementById('eDate').value.trim();
+  const content = document.getElementById('eBody').value.trim();
+  
+  showLoading();
+  const updated = await updateNews(id, { title, body: content, date });
+  hideLoading();
+  
+  if (updated) {
+    modalClose();
+    showNotification('Зміни збережено', 'success');
+    renderAll();
+  }
+}
+
+async function confirmDeleteNews(id) {
+  if (!confirm('Видалити новину?')) return;
+  
+  showLoading();
+  const deleted = await deleteNews(id);
+  hideLoading();
+  
+  if (deleted) {
+    showNotification('Новину видалено', 'success');
+    renderAll();
+  }
+}
+
+/* =========================
+   Events
+   ========================= */
+async function renderEvents() {
+  try {
+    EVENTS = await loadEvents();
+    
+    // Render upcoming events in sidebar
+    const upcomingEl = document.getElementById('upcomingEvents');
+    upcomingEl.innerHTML = '';
+    
+    const upcoming = EVENTS.slice(0, 4);
+    if (upcoming.length === 0) {
+      upcomingEl.innerHTML = '<div class="tl-item"><div class="txt">Подій немає</div></div>';
+      return;
+    }
+    
+    upcoming.forEach(event => {
+      const item = document.createElement('div');
+      item.className = 'tl-item';
+      item.innerHTML = `
+        <div class="dot"></div>
+        <div class="txt">
+          <strong>${event.date || 'Дата не вказана'}</strong>
+          <small>${escapeHtml(event.title)}</small>
+        </div>
+      `;
+      upcomingEl.appendChild(item);
+    });
+  } catch (error) {
+    console.error('Error rendering events:', error);
+  }
+}
+
+/* =========================
+   Members (team)
+   ========================= */
+async function renderMembers() {
+  const grid = document.getElementById('teamGrid');
+  grid.innerHTML = '<div class="loader"></div>';
+  
+  try {
+    MEMBERS = await loadMembers();
+    grid.innerHTML = '';
+    
+    // Update members count
+    document.getElementById('membersCount').textContent = MEMBERS.length;
+    
+    if (MEMBERS.length === 0) {
+      grid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--muted); grid-column: 1/-1;">Учасники відсутні</div>';
+      return;
+    }
+    
+    MEMBERS.forEach(member => {
+      const d = document.createElement('div');
+      d.className = 'member';
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar';
+      avatar.textContent = initials(member.name);
+      
+      const info = document.createElement('div');
+      info.style.flex = '1';
+      info.innerHTML = `
+        <div style="font-weight:700">${escapeHtml(member.name)}</div>
+        <div class="muted" style="font-size:13px">${escapeHtml(member.role || 'Член студентської ради')}</div>
+      `;
+      
+      d.appendChild(avatar);
+      d.appendChild(info);
+      
+      if (currentUser && currentUser.role === 'admin') {
+        const del = document.createElement('button');
+        del.className = 'btn';
+        del.style.marginLeft = '8px';
+        del.textContent = 'Видалити';
+        del.onclick = () => confirmDeleteMember(member.id);
+        d.appendChild(del);
+      }
+      
+      grid.appendChild(d);
+    });
+  } catch (error) {
+    grid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--error); grid-column: 1/-1;">Помилка завантаження учасників</div>';
+  }
+}
+
+function openAddMember() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    showNotification('Тільки адміністратор може додавати учасників', 'error');
+    return;
+  }
+  
+  modalOpen(`
+    <h3>Додати учасника</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+      <input id="mName" placeholder="Ім'я та ініціали" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="mRole" placeholder="Роль (необов'язково)" value="Член студентської ради" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn secondary" onclick="modalClose()">Відмінити</button>
+        <button class="btn" onclick="addMemberModal()">Додати</button>
+      </div>
+    </div>
+  `, 420);
+}
+
+async function addMemberModal() {
+  const name = document.getElementById('mName').value.trim();
+  const role = document.getElementById('mRole').value.trim() || 'Член студентської ради';
+  
+  if (!name) {
+    showNotification('Введіть ім\'я', 'error');
+    return;
+  }
+  
+  showLoading();
+  const saved = await saveMember({ name, role });
+  hideLoading();
+  
+  if (saved) {
+    modalClose();
+    showNotification('Учасника додано', 'success');
+    renderAll();
+  }
+}
+
+async function confirmDeleteMember(id) {
+  if (!confirm('Видалити учасника?')) return;
+  
+  showLoading();
+  const deleted = await deleteMember(id);
+  hideLoading();
+  
+  if (deleted) {
+    showNotification('Учасника видалено', 'success');
+    renderAll();
+  }
+}
+
+/* =========================
+   Documents
+   ========================= */
+async function renderDocs() {
+  const el = document.getElementById('docsList');
+  el.innerHTML = '<div class="loader"></div>';
+  
+  try {
+    DOCS = await loadDocuments();
+    el.innerHTML = '';
+    
+    if (DOCS.length === 0) {
+      el.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--muted)">Документи відсутні</div>';
+      return;
+    }
+    
+    DOCS.forEach(doc => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:10px; backgroundColor:#f8fafc; border-radius:8px';
+      
+      const left = document.createElement('div');
+      left.innerHTML = `
+        <strong style="color:var(--text-primary)">${escapeHtml(doc.name)}</strong> 
+        <div class="muted" style="font-size:12px">#${doc.id}</div>
+      `;
+      
+      const right = document.createElement('div');
+      right.style.cssText = 'display:flex; gap:8px';
+      
+      const a = document.createElement('a');
+      a.href = doc.file_url;
+      a.download = doc.name;
+      a.className = 'btn secondary';
+      a.textContent = 'Скачати';
+      a.target = '_blank';
+      
+      right.appendChild(a);
+      
+      if (currentUser && currentUser.role === 'admin') {
+        const del = document.createElement('button');
+        del.className = 'btn';
+        del.textContent = 'Видалити';
+        del.onclick = () => confirmDeleteDocument(doc.id);
+        right.appendChild(del);
+      }
+      
+      row.appendChild(left);
+      row.appendChild(right);
+      el.appendChild(row);
+    });
+  } catch (error) {
+    el.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--error)">Помилка завантаження документів</div>';
+  }
+}
+
+async function onDoc(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  if (!currentUser || currentUser.role !== 'admin') {
+    showNotification('Тільки адміністратор може завантажувати документи', 'error');
+    return;
+  }
+  
+  if (file.type !== 'application/pdf') {
+    showNotification('Потрібен PDF файл', 'error');
+    return;
+  }
+  
+  // Для простоты используем Data URL (в продакшене лучше использовать Supabase Storage)
+  const reader = new FileReader();
+  reader.onload = async () => {
+    showLoading();
+    const saved = await saveDocument({
+      name: file.name,
+      file_url: reader.result
+    });
+    hideLoading();
+    
+    if (saved) {
+      showNotification('PDF завантажено', 'success');
+      renderAll();
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function confirmDeleteDocument(id) {
+  if (!confirm('Видалити документ?')) return;
+  
+  showLoading();
+  const deleted = await deleteDocument(id);
+  hideLoading();
+  
+  if (deleted) {
+    showNotification('Документ видалено', 'success');
+    renderAll();
+  }
+}
+
+/* =========================
+   Navigation
+   ========================= */
+function goTo(section) {
+  // Update active nav button
+  document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+  const navBtn = document.getElementById(`nav-${section}`);
+  if (navBtn) navBtn.classList.add('active');
+  
+  if (section === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
+  else if (section === 'about') document.getElementById('heroTop').scrollIntoView({ behavior: 'smooth' });
+  else if (section === 'team') document.getElementById('teamCard').scrollIntoView({ behavior: 'smooth' });
+  else if (section === 'news') document.getElementById('newsSection').scrollIntoView({ behavior: 'smooth' });
+  else if (section === 'projects') document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+}
+
+/* =========================
+   Utilities
+   ========================= */
+function escapeHtml(s) {
+  return (s + '').replace(/[&<>"']/g, function(m) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]);
+  });
+}
+
+function escapeHtmlAttr(s) {
+  return escapeHtml(s).replace(/"/g, '&quot;');
+}
+
+function initials(name) {
+  return name.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
+}
+
+function shorten(s, len = 200) {
+  return (s.length > len) ? s.slice(0, len - 1) + '…' : s;
+}
+
+/* =========================
+   Initialize and render all
+   ========================= */
+async function renderAll() {
+  renderAuth();
+  await Promise.all([
+    renderNews(),
+    renderMembers(), 
+    renderEvents(),
+    renderDocs()
+  ]);
+  
+  // Load and display votes count
+  try {
+    const votes = await loadVotes();
+    const councilVote = votes.find(v => v.option === 'council_support');
+    if (councilVote) {
+      document.getElementById('votesCount').textContent = councilVote.count;
+    }
+    
+    // Check if user already voted
+    const hasVoted = sessionStorage.getItem('hasVoted');
+    if (hasVoted) {
+      const voteBtn = document.getElementById('voteBtn');
+      voteBtn.disabled = true;
+      voteBtn.innerHTML = '<i>✅</i> Ви проголосували';
+      document.getElementById('voteMessage').style.display = 'block';
+    }
+  } catch (error) {
+    console.error('Error loading votes:', error);
+  }
+}
+
+/* =========================
+   Scroll effect for header
+   ========================= */
+window.addEventListener('scroll', function() {
+  const header = document.querySelector('header');
+  if (window.scrollY > 50) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
+
+/* =========================
+   Initialize on load
+   ========================= */
+document.addEventListener('DOMContentLoaded', async function() {
+  // Проверяем подключение к Supabase
+  const isConnected = await checkSupabaseConnection();
+  
+  if (isConnected) {
+    showNotification('Підключено до бази даних', 'success');
+    await renderAll();
+  } else {
+    // Показываем инструкцию по настройке
+    showSetupModal();
+  }
+  
+  hideLoading();
+});
+
+/* =========================
+   Setup modal for first time users
+   ========================= */
+function showSetupModal() {
+  modalOpen(`
+    <h3>🔧 Налаштування Supabase</h3>
+    <div style="line-height: 1.6; margin: 16px 0;">
+      <p>Для роботи сайту потрібно налаштувати підключення до Supabase:</p>
+      <ol style="text-align: left; margin: 16px 0; padding-left: 20px;">
+        <li>Створіть проект на <a href="https://supabase.com" target="_blank" style="color: var(--accent);">supabase.com</a></li>
+        <li>Отримайте URL проекту та anon key з Settings → API</li>
+        <li>Замініть значення SUPABASE_URL та SUPABASE_ANON_KEY в коді</li>
+        <li>Створіть таблиці в базі даних (SQL Editor)</li>
+      </ol>
+      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin: 12px 0; font-family: monospace; font-size: 13px;">
+        const SUPABASE_URL = 'https://ваш-проект.supabase.co';<br>
+        const SUPABASE_ANON_KEY = 'ваш-ключ-тут';
+      </div>
+      <p><strong>Тестовий вхід:</strong> Логін: <code>Karen</code>, Пароль: <code>Karen123123</code> (роль: admin)</p>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:20px;">
+      <button class="btn" onclick="modalClose()">Зрозуміло</button>
+    </div>
+  `, 600);
+}
+
+/* =========================
+   Admin functions (export/import)
+   ========================= */
+async function exportData() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    showNotification('Тільки адміністратор може експортувати дані', 'error');
+    return;
+  }
+  
+  try {
+    showLoading();
+    const data = {
+      news: await loadNews(),
+      events: await loadEvents(),
+      members: await loadMembers(),
+      documents: await loadDocuments(),
+      votes: await loadVotes(),
+      exportDate: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `student-council-export-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    hideLoading();
+    showNotification('Дані експортовано', 'success');
+  } catch (error) {
+    hideLoading();
+    showNotification('Помилка експорту', 'error');
+  }
+}
+
+/* =========================
+   Error handling for missing Supabase config
+   ========================= */
+if (SUPABASE_URL === 'YOUR_SUPABASE_PROJECT_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+  console.warn('⚠️ Supabase не налаштований. Замініть SUPABASE_URL та SUPABASE_ANON_KEY в коді.');
+}
+</script>
+</body>
+</html>
