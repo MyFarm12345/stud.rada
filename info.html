@@ -264,12 +264,16 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 <body>
 
 <header>
-  <a href="home.html" class="logo">
-    <div class="badge">SR</div>
-    <div>
-      <div style="font-size:14px;color:#334155">Студентська рада</div>
-      <div style="font-size:11px;color:#64748b">Коледж — офіційний сайт ДФКР</div>
-    </div>
+<a href="https://kre.dp.ua" style="display:flex; align-items:center; text-decoration:none;">
+  <div style="width:40px; height:40px; background-color:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; border-radius:6px; margin-right:10px;">
+    SR
+  </div>
+  <div>
+    <div style="font-size:14px; color:#334155; font-weight:600;">Студентська рада</div>
+    <div style="font-size:11px; color:#64748b;">Коледж — офіційний сайт ДФКР</div>
+  </div>
+</a>
+ </div>
   </a>
   <nav>
     <a href="Home.html"><button id="nav-projects">Головна</button></a>
@@ -394,7 +398,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
           <div class="contact-icon">📧</div>
           <div>
             <h3>Email</h3>
-            <p>писька@kre.dp.ua</p>
+            <p style="font-size: 12px;">students.council.dacr@gmail.com</p>
           </div>
         </div>
         <div class="contact-item">
@@ -408,7 +412,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
           <div class="contact-icon">🏢</div>
           <div>
             <h3>Кабiнет</h3>
-            <p>ауд. 305, 3 поверх</p>
+            <p>каб. 210а, 2 поверх</p>
           </div>
         </div>
         <div class="contact-item">
@@ -479,11 +483,11 @@ function showLogin(){
     <div style="width:480px;max-width:92%;background:#fff;border-radius:16px;padding:24px;">
       <h3>Вхід</h3>
       <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-        <input id="loginName" placeholder="Логін (Напр. Макс, Карен, Admin)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <input id="loginPass" type="password" placeholder="Пароль (будь-який)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+        <input id="loginName" placeholder="Логін" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+        <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
         <div style="display:flex;gap:8px;justify-content:flex-end">
           <button onclick="document.body.removeChild(this.parentElement.parentElement.parentElement.parentElement)" class="btn secondary">Відмінити</button>
-          <button class="btn" onclick="doLogin()">Увійти</button>
+          <button class="btn" onclick="()">Увійти</button>
         </div>
       </div>
     </div>

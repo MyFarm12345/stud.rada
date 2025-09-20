@@ -225,12 +225,15 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 </div>
 
 <header>
-  <a href="#" class="logo" onclick="goTo('home'); return false;">
-    <div class="badge">SR</div>
-    <div>
-      <div style="font-size:14px;color:#334155">Студентська рада</div>
-      <div style="font-size:11px;color:#64748b">Коледж — офіційний сайт ДФКР</div>
-    </div>
+  <a href="https://kre.dp.ua" style="display:flex; align-items:center; text-decoration:none;">
+  <div style="width:40px; height:40px; background-color:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; border-radius:6px; margin-right:10px;">
+    SR
+  </div>
+  <div>
+    <div style="font-size:14px; color:#334155; font-weight:600;">Студентська рада</div>
+    <div style="font-size:11px; color:#64748b;">Коледж — офіційний сайт ДФКР</div>
+  </div>
+</a>
   </a>
   <nav>
     <button id="nav-home" onclick="goTo('home')" class="active">Головна</button>
@@ -259,13 +262,13 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
       </div>
       <div style="margin-top:22px;display:flex;gap:12px; flex-wrap: wrap;">
         <div class="card" style="flex:1; min-width: 180px;">
-          <div class="row"><strong style="font-size:20px" id="membersCount">22</strong><div class="muted" style="font-size:13px">Членів ради</div></div>
+          <div class="row"><strong style="font-size:20px" id="membersCount">0</strong><div class="muted" style="font-size:13px">Членів ради</div></div>
         </div>
         <div class="card" style="flex:1; min-width: 180px;">
-          <div class="row"><strong style="font-size:20px">40+</strong><div class="muted" style="font-size:13px">Заходів за рік</div></div>
+          <div class="row"><strong style="font-size:20px">0</strong><div class="muted" style="font-size:13px">Заходів за рік</div></div>
         </div>
         <div class="card" style="flex:1; min-width: 180px;">
-        <div class="row"><strong style="font-size:20px" id="votesCount">22</strong><div class="muted" style="font-size:13px">Вподобайки</div></div>
+        <div class="row"><strong style="font-size:20px" id="votesCount">0</strong><div class="muted" style="font-size:13px">Вподобайки</div></div>
         </div>
       </div>
     </div>
@@ -748,8 +751,8 @@ function renderAuth() {
 function showLogin() {
   modalOpen(`<h3>Вхід</h3>
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-      <input id="loginName" placeholder="Логін (Karen для адміна)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <input id="loginPass" type="password" placeholder="Пароль (Karen123123 для адміна)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="loginName" placeholder="Логін" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button onclick="modalClose()" class="btn secondary">Відмінити</button>
         <button class="btn" onclick="doLogin()">Увійти</button>
