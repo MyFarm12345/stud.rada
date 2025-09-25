@@ -397,8 +397,7 @@ async function loadProjects() {
     if (error) throw error;
     return data || [];
   } catch (error) {
-    console.error('Error loading projects:', error);
-    showNotification('Помилка завантаження проєктів', 'error');
+    
     return [];
   }
 }
