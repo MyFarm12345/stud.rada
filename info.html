@@ -505,7 +505,7 @@ function doLogin(){
   if(['адмін','admin','administrator'].includes(name.toLowerCase())) role='admin';
   localStorage.setItem(LS.USER, JSON.stringify({ name, role }));
   
-  // Remove modal
+
   const modals = document.querySelectorAll('div');
   for (let modal of modals) {
     if (modal.style.position === 'fixed' && modal.style.zIndex === '120') {
@@ -530,12 +530,12 @@ function showNotification(message, type = 'success') {
   `;
   container.appendChild(notification);
   
-  // Trigger animation
+
   setTimeout(() => {
     notification.classList.add('show');
   }, 10);
   
-  // Remove after delay
+
   setTimeout(() => {
     notification.classList.remove('show');
     setTimeout(() => {

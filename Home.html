@@ -215,11 +215,19 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   .btn { width: 100%; justify-content: center; }
   .news-actions { flex-direction: column; }
 }
+
+.badge-error { 
+  background: var(--error); 
+  color: white; 
+  padding: 4px 8px; 
+  border-radius: 999px; 
+  font-size: 12px; 
+}
 </style>
 </head>
 <body>
 
-<!-- Loading overlay -->
+
 <div id="loadingOverlay" class="loading-overlay">
   <div class="loader"></div>
 </div>
@@ -301,17 +309,18 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
       </div>
 
       <!-- PROJECTS -->
-      <div id="projects" class="card">
-        <h3 style="margin:0;color:#334155">Наші проєкти</h3>
-        <div style="margin-top:16px">
-          <ul style="color:#334155; padding-left: 20px;">
-            <li style="margin-bottom: 10px;"><strong>IT-інновації</strong> — лекція про новітні технології <span class="badge-success">активно</span></li>
-            <li style="margin-bottom: 10px;"><strong>Здоровий спосіб життя</strong> — ЗОЖ та спорт <span class="badge-success">активно</span></li>
-            <li style="margin-bottom: 10px;"><strong>Розвиток особистості</strong> — тайм-менеджмент і soft skills <span class="badge-warning">планується</span></li>
-            <li style="margin-bottom: 10px;"><strong>Dnipro Education City</strong> — допомога абітурієнтам <span class="badge-success">активно</span></li>
-          </ul>
-        </div>
-      </div>
+<div id="projects" class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h3 style="margin:0;color:#334155">Наші проєкти</h3>
+      <div class="muted">Останні активні проєкти студентської ради</div>
+    </div>
+    <a href="project.html" class="btn secondary" style="font-size: 14px; padding: 8px 16px;">Всі проєкти</a>
+  </div>
+  <div id="projectsListHome" style="margin-top:16px">
+    <div class="loader"></div>
+  </div>
+</div>
 
       <!-- Team -->
       <div id="teamCard" class="card centered-section">
@@ -366,7 +375,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </div>
       
-      <!-- Quick Contacts -->
+      
       <div class="card">
         <h3 style="margin:0 0 12px;color:#334155">Нашi мессенджери</h3>
         <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -416,7 +425,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
    Операции базы данных
    ========================= */
 
-// показ загрузки
+
 function showLoading() {
   document.getElementById('loadingOverlay').style.display = 'flex';
 }
@@ -425,7 +434,7 @@ function hideLoading() {
   document.getElementById('loadingOverlay').style.display = 'none';
 }
 
-// Проверка подключения к Supabase
+
 async function checkSupabaseConnection() {
   try {
     const { data, error } = await supabase.from('news').select('count', { count: 'exact' });
@@ -438,7 +447,7 @@ async function checkSupabaseConnection() {
   }
 }
 
-// Загрузка новостей 
+
 async function loadNews() {
   try {
     const { data, error } = await supabase
@@ -455,7 +464,6 @@ async function loadNews() {
   }
 }
 
-// Сохранение новости
 async function saveNews(newsData) {
   try {
     const { data, error } = await supabase
@@ -477,7 +485,7 @@ async function saveNews(newsData) {
   }
 }
 
-// Обновление новости
+
 async function updateNews(id, newsData) {
   try {
     const { data, error } = await supabase
@@ -499,7 +507,7 @@ async function updateNews(id, newsData) {
   }
 }
 
-// Удаление новости
+
 async function deleteNews(id) {
   try {
     const { error } = await supabase
@@ -516,7 +524,7 @@ async function deleteNews(id) {
   }
 }
 
-// Загрузка событий
+
 async function loadEvents() {
   try {
     const { data, error } = await supabase
@@ -533,7 +541,7 @@ async function loadEvents() {
   }
 }
 
-// Сохранение события	
+	
 async function saveEvent(eventData) {
   try {
     const { data, error } = await supabase
@@ -550,7 +558,7 @@ async function saveEvent(eventData) {
   }
 }
 
-// Удаление события из Supabase
+
 async function deleteEvent(id) {
   try {
     const { error } = await supabase
@@ -567,7 +575,7 @@ async function deleteEvent(id) {
   }
 }
 
-// Загрузка участников
+
 async function loadMembers() {
   try {
     const { data, error } = await supabase
@@ -584,7 +592,7 @@ async function loadMembers() {
   }
 }
 
-// Сохранение участника
+
 async function saveMember(memberData) {
   try {
     const { data, error } = await supabase
@@ -601,7 +609,6 @@ async function saveMember(memberData) {
   }
 }
 
-// Удаление участника
 async function deleteMember(id) {
   try {
     const { error } = await supabase
@@ -618,7 +625,7 @@ async function deleteMember(id) {
   }
 }
 
-// Загрузка документов
+
 async function loadDocuments() {
   try {
     const { data, error } = await supabase
@@ -635,7 +642,7 @@ async function loadDocuments() {
   }
 }
 
-// Сохранение документа
+
 async function saveDocument(docData) {
   try {
     const { data, error } = await supabase
@@ -652,7 +659,7 @@ async function saveDocument(docData) {
   }
 }
 
-// Удаление документа
+
 async function deleteDocument(id) {
   try {
     const { error } = await supabase
@@ -669,7 +676,7 @@ async function deleteDocument(id) {
   }
 }
 
-// Загрузка голосов
+
 async function loadVotes() {
   try {
     const { data, error } = await supabase
@@ -685,7 +692,6 @@ async function loadVotes() {
   }
 }
 
-// Обновление голосов
 async function updateVotes(option, count) {
   try {
     const { data, error } = await supabase
@@ -772,7 +778,7 @@ function doLogin() {
   
   let role = 'user';
   
-  // Простая проверка для администратора
+
   if (name.toLowerCase() === 'karen' && pass === 'Karen123123') {
     role = 'admin';
   } else {
@@ -813,7 +819,7 @@ function toggleAdminButtons() {
    Voting functionality
    ========================= */
 async function voteForCouncil() {
-  const hasVoted = sessionStorage.getItem('hasVoted'); // Используем sessionStorage вместо localStorage
+  const hasVoted = sessionStorage.getItem('hasVoted'); 
   
   if (hasVoted) {
     showNotification('Ви вже проголосували! Дякуємо за підтримку!', 'warning');
@@ -821,24 +827,24 @@ async function voteForCouncil() {
   }
   
   try {
-    // Получаем текущее количество голосов
+
     const votes = await loadVotes();
     let councilVote = votes.find(v => v.option === 'council_support');
     let currentCount = councilVote ? councilVote.count : 22;
     
-    // Увеличиваем счетчик
+
     currentCount++;
     
-    // Сохраняем в базу данных
+
     await updateVotes('council_support', currentCount);
     
-    // Отмечаем что пользователь проголосовал
+
     sessionStorage.setItem('hasVoted', 'true');
     
-    // Обновляем отображение
+
     document.getElementById('votesCount').textContent = currentCount;
     
-    // Блокируем кнопку
+
     const voteBtn = document.getElementById('voteBtn');
     voteBtn.disabled = true;
     voteBtn.innerHTML = '<i>✅</i> Ви проголосували';
@@ -875,12 +881,12 @@ function showNotification(message, type = 'success') {
   notification.innerHTML = `<div>${message}</div>`;
   container.appendChild(notification);
   
-  // Trigger animation
+  
   setTimeout(() => {
     notification.classList.add('show');
   }, 10);
   
-  // Remove after delay
+ 
   setTimeout(() => {
     notification.classList.remove('show');
     setTimeout(() => {
@@ -1061,14 +1067,77 @@ async function confirmDeleteNews(id) {
   }
 }
 
-/* =========================
-   Events
-   ========================= */
+async function renderProjectsForHome() {
+  const container = document.getElementById('projectsListHome');
+  if (!container) return;
+  
+  container.innerHTML = '<div class="loader"></div>';
+  
+  try {
+    const projects = await loadProjectsForHome();
+    container.innerHTML = '';
+    
+    if (projects.length === 0) {
+      container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary)">Проєкти відсутні</div>';
+      return;
+    }
+    
+    let projectsHTML = '<ul style="color:#334155; padding-left: 20px; margin: 0;">';
+    
+    projects.forEach(project => {
+      let statusBadge = '';
+      if (project.status === 'активно') {
+        statusBadge = '<span class="badge-success" style="margin-left: 8px;">активно</span>';
+      } else if (project.status === 'планується') {
+        statusBadge = '<span class="badge-warning" style="margin-left: 8px;">планується</span>';
+      } else if (project.status === 'завершено') {
+        statusBadge = '<span class="badge-error" style="margin-left: 8px;">завершено</span>';
+      }
+      
+     
+      const shortDescription = project.description.length > 80 
+        ? project.description.substring(0, 80) + '...' 
+        : project.description;
+      
+      projectsHTML += `
+        <li style="margin-bottom: 12px; line-height: 1.4;">
+          <strong style="color: var(--text-primary);">${escapeHtml(project.title)}</strong> 
+          <span style="color: var(--text-secondary);">— ${escapeHtml(shortDescription)}</span>
+          ${statusBadge}
+        </li>
+      `;
+    });
+    
+    projectsHTML += '</ul>';
+    container.innerHTML = projectsHTML;
+    
+  } catch (error) {
+    console.error('Error rendering projects:', error);
+    container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--error)">Помилка завантаження проєктів</div>';
+  }
+}
+async function loadProjectsForHome() {
+  try {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(4);
+    
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error loading projects:', error);
+    showNotification('Помилка завантаження проєктів', 'error');
+    return [];
+  }
+}
+
 async function renderEvents() {
   try {
     EVENTS = await loadEvents();
     
-    // Render upcoming events in sidebar
+  
     const upcomingEl = document.getElementById('upcomingEvents');
     upcomingEl.innerHTML = '';
     
@@ -1106,7 +1175,7 @@ async function renderMembers() {
     MEMBERS = await loadMembers();
     grid.innerHTML = '';
     
-    // Update members count
+   
     document.getElementById('membersCount').textContent = MEMBERS.length;
     
     if (MEMBERS.length === 0) {
@@ -1157,11 +1226,9 @@ function openAddMember() {
   modalOpen(`
     <h3>Додати учасника</h3>
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-      <input id="mName" placeholder="Ім'я та ініціали" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <input id="mRole" placeholder="Роль (необов'язково)" value="Член студентської ради" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+	<h2>Додавати учасників можна в сторiнцi <a href="command.html">Команда</a>
       <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button class="btn secondary" onclick="modalClose()">Відмінити</button>
-        <button class="btn" onclick="addMemberModal()">Додати</button>
+        <button class="btn secondary" onclick="modalClose()">Ок</button>
       </div>
     </div>
   `, 420);
@@ -1269,7 +1336,7 @@ async function onDoc(e) {
     return;
   }
   
-  // Для простоты используем Data URL (в продакшене лучше использовать Supabase Storage)
+  
   const reader = new FileReader();
   reader.onload = async () => {
     showLoading();
@@ -1304,7 +1371,7 @@ async function confirmDeleteDocument(id) {
    Navigation
    ========================= */
 function goTo(section) {
-  // Update active nav button
+
   document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
   const navBtn = document.getElementById(`nav-${section}`);
   if (navBtn) navBtn.classList.add('active');
@@ -1338,7 +1405,7 @@ function shorten(s, len = 200) {
 }
 
 /* =========================
-   Initialize and render all
+		render all
    ========================= */
 async function renderAll() {
   renderAuth();
@@ -1346,10 +1413,11 @@ async function renderAll() {
     renderNews(),
     renderMembers(), 
     renderEvents(),
-    renderDocs()
+    renderDocs(),
+	renderProjectsForHome()
   ]);
   
-  // Load and display votes count
+
   try {
     const votes = await loadVotes();
     const councilVote = votes.find(v => v.option === 'council_support');
@@ -1357,7 +1425,7 @@ async function renderAll() {
       document.getElementById('votesCount').textContent = councilVote.count;
     }
     
-    // Check if user already voted
+ 
     const hasVoted = sessionStorage.getItem('hasVoted');
     if (hasVoted) {
       const voteBtn = document.getElementById('voteBtn');
@@ -1386,14 +1454,14 @@ window.addEventListener('scroll', function() {
    Initialize on load
    ========================= */
 document.addEventListener('DOMContentLoaded', async function() {
-  // Проверяем подключение к Supabase
+  
   const isConnected = await checkSupabaseConnection();
   
   if (isConnected) {
     showNotification('Підключено до бази даних', 'success');
     await renderAll();
   } else {
-    // Показываем инструкцию по настройке
+
     showSetupModal();
   }
   
@@ -1463,7 +1531,7 @@ async function exportData() {
 }
 
 /* =========================
-   Error handling for missing Supabase config
+   Error missing Supabase config
    ========================= */
 if (SUPABASE_URL === 'https://xyhnzxyhkxijxahltcwl.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo') {
   console.warn('⚠️ Supabase не налаштований. Замініть SUPABASE_URL та SUPABASE_ANON_KEY в коді.');

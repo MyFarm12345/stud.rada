@@ -320,12 +320,12 @@ function showNotification(message, type = 'success') {
   `;
   container.appendChild(notification);
   
-  // Trigger animation
+  
   setTimeout(() => {
     notification.classList.add('show');
   }, 10);
   
-  // Remove after delay
+  
   setTimeout(() => {
     notification.classList.remove('show');
     setTimeout(() => {
