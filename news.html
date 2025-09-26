@@ -653,8 +653,18 @@ function doLogin() {
   
   let role = 'user';
   
+const adminAccounts = [
+    { login: 'karen', password: '123' },
+    { login: 'Vlad', password: '123' },
+    { login: 'Maks', password: '123' },
+    { login: 'Misha', password: '123' },
+  ];
 
-  if (name.toLowerCase() === 'karen' && pass === 'Karen123123') {
+const isAdmin = adminAccounts.some(account => 
+    name.toLowerCase() === account.login.toLowerCase() && pass === account.password
+  );
+  
+  if (isAdmin) {
     role = 'admin';
   } else {
     role = 'user';

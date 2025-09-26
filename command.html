@@ -323,11 +323,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 
   <!-- Admin Panel -->
   <div id="adminPanel" class="admin-section" style="display: none;">
-    <h3>Панель адміністратора</h3>
-    <div class="admin-actions">
-      <button class="btn" onclick="syncWithMainSite()"><i>🔄</i> Синхронізувати з головним сайтом</button>
-      <button class="btn" onclick="resetTeamData()"><i>🔄</i> Скинути до початкових значень</button>
-    </div>
+
   </div>
 
   <!-- Sections will be rendered here -->
@@ -617,8 +613,18 @@ function doLogin() {
   
   let role = 'user';
   
+const adminAccounts = [
+    { login: 'karen', password: '123' },
+    { login: 'Vlad', password: '123' },
+    { login: 'Maks', password: '123' },
+    { login: 'Misha', password: '123' },
+  ];
 
-  if (name.toLowerCase() === 'karen' && pass === 'Karen123123') {
+const isAdmin = adminAccounts.some(account => 
+    name.toLowerCase() === account.login.toLowerCase() && pass === account.password
+  );
+  
+  if (isAdmin) {
     role = 'admin';
   } else {
     role = 'user';

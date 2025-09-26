@@ -472,7 +472,7 @@ async function checkSupabaseConnection() {
   }
 }
 
-// Projects CRUD operations
+
 async function loadProjects() {
   try {
     const { data, error } = await supabase
@@ -541,7 +541,7 @@ async function deleteProject(id) {
   }
 }
 
-// Categories CRUD operations
+
 async function loadCategories() {
   try {
     const { data, error } = await supabase
@@ -649,7 +649,18 @@ function doLogin() {
   }
   
   let role = 'user';
-  if (name.toLowerCase() === 'karen' && pass === 'Karen123123') {
+ const adminAccounts = [
+    { login: 'karen', password: '123' },
+    { login: 'Vlad', password: '123' },
+    { login: 'Maks', password: '123' },
+    { login: 'Misha', password: '123' },
+  ];
+
+const isAdmin = adminAccounts.some(account => 
+    name.toLowerCase() === account.login.toLowerCase() && pass === account.password
+  );
+  
+  if (isAdmin) {
     role = 'admin';
   } else {
     role = 'user';
@@ -730,13 +741,13 @@ async function renderCategories() {
   try {
     CATEGORIES = await loadCategories();
     
-    // Render filter buttons
+
     const filterContainer = document.getElementById('filterButtons');
     while (filterContainer.children.length > 1) {
       filterContainer.removeChild(filterContainer.lastChild);
     }
     
-    // Add category buttons
+
     CATEGORIES.forEach(category => {
       const button = document.createElement('button');
       button.className = 'filter-btn';
@@ -745,7 +756,7 @@ async function renderCategories() {
       filterContainer.appendChild(button);
     });
     
-    // Render category list for admin
+   
     const categoryList = document.getElementById('categoryList');
     if (categoryList) {
       categoryList.innerHTML = '';
@@ -799,7 +810,7 @@ async function deleteCategory(category) {
     return;
   }
   
-  // Check if category is used in any project
+
   const isUsed = PROJECTS.some(project => project.category === category);
   if (isUsed) {
     showNotification('Не можна видалити категорію, яка використовується в проєктах', 'error');
@@ -895,7 +906,7 @@ async function renderProjects(filter = 'all') {
 }
 
 function filterProjects(category) {
-  // Update active filter button
+
   document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
   
@@ -937,7 +948,7 @@ function openCreateProject() {
     return; 
   }
   
-  // Generate category options
+
   const categoryOptions = CATEGORIES.map(cat => 
     `<option value="${escapeHtmlAttr(cat)}">${escapeHtml(cat)}</option>`
   ).join('');
@@ -999,7 +1010,7 @@ function editProject(id) {
   const project = PROJECTS.find(p => p.id === id);
   if (!project) return;
   
-  // Generate category options
+
   const categoryOptions = CATEGORIES.map(cat => 
     `<option value="${escapeHtmlAttr(cat)}" ${project.category === cat ? 'selected' : ''}>${escapeHtml(cat)}</option>`
   ).join('');
@@ -1128,8 +1139,7 @@ function importProjects() {
         
         showLoading();
         
-        // Clear existing data and import new
-        // Note: This is a simplified version - in production you'd want more sophisticated import logic
+
         showNotification('Імпорт даних поки не підтримується через Supabase. Скористайтесь ручним додаванням.', 'warning');
         
         hideLoading();
@@ -1178,11 +1188,11 @@ function formatDate(dateString) {
    ========================= */
 async function initializeDefaultData() {
   try {
-    // Check if we have any projects
+  
     const existingProjects = await loadProjects();
     const existingCategories = await loadCategories();
     
-    // Add default categories if none exist
+    
     if (existingCategories.length === 0) {
       const defaultCategories = ['лекції', 'міні-ігри', 'соціальні', 'інше'];
       for (const category of defaultCategories) {
@@ -1190,37 +1200,11 @@ async function initializeDefaultData() {
       }
       showNotification('Додано базові категорії', 'success');
     }
-    
-    // Add default projects if none exist
+
     if (existingProjects.length === 0) {
       const defaultProjects = [
         {
-          title: 'IT-інновації',
-          category: 'лекції',
-          description: 'Серія лекцій про новітні технології, програмування та штучний інтелект. Участь беруть провідні фахівці з IT-галузі.',
-          status: 'активно',
-          date: '12.03.2025'
-        },
-        {
-          title: 'Шаховий турнір',
-          category: 'міні-ігри',
-          description: 'Щорічний турнір з шахів серед студентів. Переможці отримують цінні призи та можливість представити коледж на міських змаганнях.',
-          status: 'активно',
-          date: '20.03.2025'
-        },
-        {
-          title: 'Допомога притулку для тварин',
-          category: 'соціальні',
-          description: 'Збір коштів, корму та медикаментів для місцевого притулку для тварин. Волонтерські виїзди та організація заходів.',
-          status: 'планується',
-          date: '05.04.2025'
-        },
-        {
-          title: 'Студентський театр',
-          category: 'інше',
-          description: 'Створення театральної групи з метою розвитку творчих здібностей студентів та організації вистав для мешканців міста.',
-          status: 'завершено',
-          date: '15.12.2024'
+         
         }
       ];
       
