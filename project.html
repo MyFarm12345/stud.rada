@@ -75,9 +75,61 @@ h1{font-size:32px;margin:0 0 12px;line-height:1.2;color:#0f172a;}
 .btn.secondary:hover { background: #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 .btn i { font-size: 16px; }
 
-/* card */
+/* right card */
 .card{background:var(--card); border-radius:14px;padding:22px;color:var(--text-primary); box-shadow:0 8px 20px rgba(0,0,0,0.06); border:1px solid var(--border); transition: all 0.3s ease; margin-bottom: 20px;}
 .card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+.timeline{display:flex;flex-direction:column;gap:12px}
+.tl-item{display:flex;gap:12px;align-items:flex-start; padding: 10px; border-radius: 10px; transition: all 0.2s ease;}
+.tl-item:hover { background: #f8fafc; }
+.tl-item .dot{width:12px;height:12px;background:var(--accent);border-radius:999px;margin-top:6px;box-shadow:0 4px 10px rgba(37, 99, 235, 0.2); flex-shrink: 0;}
+.tl-item .txt small{color:var(--text-secondary);display:block; margin-top: 4px;}
+
+/* grid areas */
+.grid3{display:grid;grid-template-columns: 1fr 380px; gap:24px}
+.main-col{display:flex;flex-direction:column;gap:24px}
+
+/* news card */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.news-card{background:#f8fafc;color:var(--text-primary);padding:20px;border-radius:12px;border:1px solid var(--border); transition: all 0.3s ease; height: 100%; display: flex; flex-direction: column; justify-content: space-between;}
+.news-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+.news-card h3{margin:0 0 12px; color: var(--text-primary); font-size: 18px;}
+.meta{font-size:13px;color:var(--text-secondary);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 8px;}
+.news-content { flex-grow: 1; }
+.news-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+.centered-section {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* team */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  justify-items: center;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 20px auto;
+}
+.member {
+  background:var(--card);
+  border-radius:12px;
+  padding:16px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  width: 100%;
+  max-width: 300px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+.member:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+}
+
+.avatar{width:56px;height:56px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px; flex-shrink: 0;}
 
 /* small util */
 .muted{color:var(--text-secondary)}
@@ -250,9 +302,23 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   font-weight: bold;
 }
 
+/* Admin panel */
+.admin-panel {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.admin-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 /* responsive */
 @media (max-width:1080px){
   .hero{grid-template-columns:1fr; padding-bottom:12px}
+  .grid3{grid-template-columns:1fr}
   .cards{grid-template-columns:1fr}
 }
 
@@ -263,16 +329,20 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   .cta { flex-direction: column; }
   .hero .lead { padding: 20px; }
   .card { padding: 18px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .member { max-width: 100%; }
   .project-header, .project-footer {
     flex-direction: column;
     align-items: flex-start;
   }
+  .admin-actions { flex-direction: column; }
 }
 
 @media (max-width:480px){
   .wrap { padding: 0 15px; }
   h1 { font-size: 26px; }
   .btn { width: 100%; justify-content: center; }
+  .news-actions { flex-direction: column; }
   .project-actions { width: 100%; }
   .project-actions .btn { width: 100%; }
 }
@@ -280,7 +350,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 </head>
 <body>
 
-<!-- Loading overlay -->
 <div id="loadingOverlay" class="loading-overlay">
   <div class="loader"></div>
 </div>
@@ -296,12 +365,12 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </a>
   <nav>
-    <a href="Home.html"><button id="nav-home">Головна</button></a>
-   <a href="info.html"><button id="nav-info">Про раду</button></a>
-     <a href="command.html"><button id="nav-team">Команда</button></a>
-    <a href="news.html"><button id="nav-news">Новини</button></a>
+    <a href="Home.html"><button id="nav-projects">Головна</button></a>
+   <a href="info.html"><button id="nav-projects"">Про раду</button></a>
+     <a href="command.html"><button id="nav-projects ">Команда</button></a>
+    <a href="news.html"><button id="nav-projects">Новини</button></a>
     <a href="project.html"><button id="nav-projects" class="active">Проєкти</button></a>
-    <a href="event.html"><button id="nav-events">Події</button></a>
+    <a href="event.html"><button id="nav-projects">Події</button></a>
   </nav>
   <div class="auth" id="authArea">
     <!-- auth UI inserted here -->
@@ -315,11 +384,12 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
       <h1>Наші <span style="color:#2563eb">проєкти</span></h1>
       <p style="margin-top:10px">Тут ви можете ознайомитися з усіма проєктами студентської ради, взяти участь у їх реалізації чи запропонувати власні ідеї.</p>
       <div class="cta">
-        <button class="btn" id="addProjectBtn" style="display:none;" onclick="openCreateProject()">➕ Додати проєкт</button>
-        <button class="btn secondary" onclick="filterProjects('all')">🔄 Всі проєкти</button>
+        <button class="btn" id="addProjectBtn" style="display:none;" onclick="openCreateProject()"><i>➕</i> Додати проєкт</button>
+        <button class="btn secondary" onclick="filterProjects('all')"><i>🔄</i> Всі проєкти</button>
       </div>
     </div>
   </section>
+
 
   <!-- Category management (admin only) -->
   <div id="categoryManagement" class="category-management" style="display: none;">
@@ -338,7 +408,9 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 
   <!-- Projects list -->
-  <div id="projectsList"></div>
+  <div id="projectsList">
+    <div class="loader"></div>
+  </div>
 
 </main>
 
@@ -363,16 +435,22 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 
 <script>
 /* =========================
-   Supabase Config
+   Supabase Configuration
    ========================= */
-
 const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* =========================
-   Loading helpers
+   Global variables
+   ========================= */
+let PROJECTS = [];
+let CATEGORIES = [];
+let currentUser = null;
+
+/* =========================
+   Database operations
    ========================= */
 function showLoading() {
   document.getElementById('loadingOverlay').style.display = 'flex';
@@ -382,11 +460,19 @@ function hideLoading() {
   document.getElementById('loadingOverlay').style.display = 'none';
 }
 
-/* =========================
-   Database operations
-   ========================= */
+async function checkSupabaseConnection() {
+  try {
+    const { data, error } = await supabase.from('projects').select('count', { count: 'exact' });
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Supabase connection error:', error);
+    showNotification('Помилка підключення до бази даних', 'error');
+    return false;
+  }
+}
 
-
+// Projects CRUD operations
 async function loadProjects() {
   try {
     const { data, error } = await supabase
@@ -397,7 +483,8 @@ async function loadProjects() {
     if (error) throw error;
     return data || [];
   } catch (error) {
-    
+    console.error('Error loading projects:', error);
+    showNotification('Помилка завантаження проєктів', 'error');
     return [];
   }
 }
@@ -406,7 +493,10 @@ async function saveProject(projectData) {
   try {
     const { data, error } = await supabase
       .from('projects')
-      .insert([projectData])
+      .insert([{
+        ...projectData,
+        created_at: new Date().toISOString()
+      }])
       .select();
     
     if (error) throw error;
@@ -451,16 +541,16 @@ async function deleteProject(id) {
   }
 }
 
-
+// Categories CRUD operations
 async function loadCategories() {
   try {
     const { data, error } = await supabase
       .from('project_categories')
       .select('*')
-      .order('created_at', { ascending: true });
+      .order('name');
     
     if (error) throw error;
-    return data || [];
+    return data?.map(cat => cat.name) || [];
   } catch (error) {
     console.error('Error loading categories:', error);
     showNotification('Помилка завантаження категорій', 'error');
@@ -468,11 +558,11 @@ async function loadCategories() {
   }
 }
 
-async function saveCategory(name) {
+async function saveCategory(categoryName) {
   try {
     const { data, error } = await supabase
       .from('project_categories')
-      .insert([{ name }])
+      .insert([{ name: categoryName }])
       .select();
     
     if (error) throw error;
@@ -484,12 +574,12 @@ async function saveCategory(name) {
   }
 }
 
-async function deleteCategoryFromDB(id) {
+async function deleteCategoryFromDB(categoryName) {
   try {
     const { error } = await supabase
       .from('project_categories')
       .delete()
-      .eq('id', id);
+      .eq('name', categoryName);
     
     if (error) throw error;
     return true;
@@ -501,15 +591,7 @@ async function deleteCategoryFromDB(id) {
 }
 
 /* =========================
-   Global data variables
-   ========================= */
-let PROJECTS = [];
-let CATEGORIES = [];
-let currentUser = null;
-let currentFilter = 'all';
-
-/* =========================
-   Auth system
+   Auth system (same as HOME.html)
    ========================= */
 function renderAuth() {
   const el = document.getElementById('authArea');
@@ -541,7 +623,7 @@ function renderAuth() {
     el.appendChild(btn);
   }
   
-  toggleAdminElements();
+  toggleAdminButtons();
 }
 
 function showLogin() {
@@ -567,8 +649,6 @@ function doLogin() {
   }
   
   let role = 'user';
-  
-
   if (name.toLowerCase() === 'karen' && pass === 'Karen123123') {
     role = 'admin';
   } else {
@@ -587,18 +667,19 @@ function logout() {
   renderAll();
 }
 
-function toggleAdminElements() {
+function toggleAdminButtons() {
   const isAdmin = currentUser && currentUser.role === 'admin';
   
   const adminElements = [
-    'addProjectBtn',
-    'categoryManagement'
+    'adminPanel',
+    'categoryManagement',
+    'addProjectBtn'
   ];
   
-  adminElements.forEach(elemId => {
-    const elem = document.getElementById(elemId);
-    if (elem) {
-      elem.style.display = isAdmin ? 'block' : 'none';
+  adminElements.forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      btn.style.display = isAdmin ? 'block' : 'none';
     }
   });
 }
@@ -628,11 +709,9 @@ function showNotification(message, type = 'success') {
   notification.innerHTML = `<div>${message}</div>`;
   container.appendChild(notification);
   
-  
   setTimeout(() => {
     notification.classList.add('show');
   }, 10);
-  
   
   setTimeout(() => {
     notification.classList.remove('show');
@@ -651,35 +730,36 @@ async function renderCategories() {
   try {
     CATEGORIES = await loadCategories();
     
-   
+    // Render filter buttons
     const filterContainer = document.getElementById('filterButtons');
-    
     while (filterContainer.children.length > 1) {
       filterContainer.removeChild(filterContainer.lastChild);
     }
     
-    
+    // Add category buttons
     CATEGORIES.forEach(category => {
       const button = document.createElement('button');
       button.className = 'filter-btn';
-      button.textContent = category.name;
-      button.onclick = () => filterProjects(category.name);
+      button.textContent = category;
+      button.onclick = () => filterProjects(category);
       filterContainer.appendChild(button);
     });
     
-    
+    // Render category list for admin
     const categoryList = document.getElementById('categoryList');
-    categoryList.innerHTML = '';
-    
-    CATEGORIES.forEach(category => {
-      const categoryItem = document.createElement('div');
-      categoryItem.className = 'category-item';
-      categoryItem.innerHTML = `
-        ${escapeHtml(category.name)}
-        <span class="delete" onclick="deleteCategory(${category.id}, '${escapeHtmlAttr(category.name)}')">×</span>
-      `;
-      categoryList.appendChild(categoryItem);
-    });
+    if (categoryList) {
+      categoryList.innerHTML = '';
+      
+      CATEGORIES.forEach(category => {
+        const categoryItem = document.createElement('div');
+        categoryItem.className = 'category-item';
+        categoryItem.innerHTML = `
+          ${category}
+          <span class="delete" onclick="deleteCategory('${escapeHtmlAttr(category)}')">×</span>
+        `;
+        categoryList.appendChild(categoryItem);
+      });
+    }
   } catch (error) {
     console.error('Error rendering categories:', error);
   }
@@ -697,8 +777,7 @@ async function addCategory() {
     return;
   }
   
-  
-  if (CATEGORIES.some(cat => cat.name.toLowerCase() === newCategory.toLowerCase())) {
+  if (CATEGORIES.includes(newCategory)) {
     showNotification('Ця категорія вже існує', 'error');
     return;
   }
@@ -710,31 +789,31 @@ async function addCategory() {
   if (saved) {
     document.getElementById('newCategoryInput').value = '';
     showNotification('Категорію додано', 'success');
-    renderCategories();
+    renderAll();
   }
 }
 
-async function deleteCategory(id, name) {
+async function deleteCategory(category) {
   if (!currentUser || currentUser.role !== 'admin') {
     showNotification('Тільки адміністратор може видаляти категорії', 'error');
     return;
   }
   
-  
-  const isUsed = PROJECTS.some(project => project.category === name);
+  // Check if category is used in any project
+  const isUsed = PROJECTS.some(project => project.category === category);
   if (isUsed) {
     showNotification('Не можна видалити категорію, яка використовується в проєктах', 'error');
     return;
   }
   
-  if (confirm(`Видалити категорію "${name}"?`)) {
+  if (confirm(`Видалити категорію "${category}"?`)) {
     showLoading();
-    const deleted = await deleteCategoryFromDB(id);
+    const deleted = await deleteCategoryFromDB(category);
     hideLoading();
     
     if (deleted) {
       showNotification('Категорію видалено', 'success');
-      renderCategories();
+      renderAll();
     }
   }
 }
@@ -787,13 +866,12 @@ async function renderProjects(filter = 'all') {
         <div class="project-footer">
           <div class="project-date">Створено: ${project.date || formatDate(project.created_at)}</div>
           <div class="project-actions">
-            <button class="btn secondary" onclick="viewProject(${project.id})">Детальніше</button>
+            <button class="btn secondary" onclick="viewProject('${project.id}')">Детальніше</button>
           </div>
         </div>
       `;
       
-      const isAdmin = currentUser && currentUser.role === 'admin';
-      if (isAdmin) {
+      if (currentUser && currentUser.role === 'admin') {
         const actions = projectEl.querySelector('.project-actions');
         const editBtn = document.createElement('button');
         editBtn.className = 'btn secondary';
@@ -817,11 +895,10 @@ async function renderProjects(filter = 'all') {
 }
 
 function filterProjects(category) {
-  
+  // Update active filter button
   document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
   
-  currentFilter = category;
   renderProjects(category);
 }
 
@@ -854,15 +931,15 @@ function viewProject(id) {
   `, 600);
 }
 
-async function openCreateProject() {
+function openCreateProject() {
   if (!currentUser || currentUser.role !== 'admin') {
     showNotification('Тільки адміністратор може додавати проєкти', 'error'); 
     return; 
   }
   
-  
+  // Generate category options
   const categoryOptions = CATEGORIES.map(cat => 
-    `<option value="${escapeHtmlAttr(cat.name)}">${escapeHtml(cat.name)}</option>`
+    `<option value="${escapeHtmlAttr(cat)}">${escapeHtml(cat)}</option>`
   ).join('');
   
   modalOpen(`
@@ -870,12 +947,11 @@ async function openCreateProject() {
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
       <input id="pTitle" placeholder="Назва проєкту" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <select id="pCategory" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <option value="інше">інше</option>
         ${categoryOptions}
       </select>
       <select id="pStatus" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <option value="планується">Планується</option>
         <option value="активно">Активно</option>
+        <option value="планується">Планується</option>
         <option value="завершено">Завершено</option>
       </select>
       <input id="pDate" placeholder="Дата (напр. 12.03.2025)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
@@ -915,17 +991,17 @@ async function createProject() {
   if (saved) {
     modalClose();
     showNotification('Проєкт додано успішно!', 'success');
-    renderProjects(currentFilter);
+    renderAll();
   }
 }
 
-async function editProject(id) {
+function editProject(id) {
   const project = PROJECTS.find(p => p.id === id);
   if (!project) return;
   
- 
+  // Generate category options
   const categoryOptions = CATEGORIES.map(cat => 
-    `<option value="${escapeHtmlAttr(cat.name)}" ${project.category === cat.name ? 'selected' : ''}>${escapeHtml(cat.name)}</option>`
+    `<option value="${escapeHtmlAttr(cat)}" ${project.category === cat ? 'selected' : ''}>${escapeHtml(cat)}</option>`
   ).join('');
   
   modalOpen(`
@@ -933,25 +1009,24 @@ async function editProject(id) {
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
       <input id="eTitle" value="${escapeHtmlAttr(project.title)}" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <select id="eCategory" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <option value="інше" ${project.category === 'інше' ? 'selected' : ''}>інше</option>
         ${categoryOptions}
       </select>
       <select id="eStatus" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <option value="планується" ${project.status === 'планується' ? 'selected' : ''}>Планується</option>
         <option value="активно" ${project.status === 'активно' ? 'selected' : ''}>Активно</option>
+        <option value="планується" ${project.status === 'планується' ? 'selected' : ''}>Планується</option>
         <option value="завершено" ${project.status === 'завершено' ? 'selected' : ''}>Завершено</option>
       </select>
       <input id="eDate" value="${escapeHtmlAttr(project.date || '')}" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <textarea id="eDescription" style="height:160px;padding:12px;border:1px solid var(--border);border-radius:8px; resize: vertical;">${escapeHtmlAttr(project.description)}</textarea>
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button class="btn secondary" onclick="modalClose()">Відмінити</button>
-        <button class="btn" onclick="saveProjectEdit(${project.id})">Оновити</button>
+        <button class="btn" onclick="updateProjectModal('${project.id}')">Оновити</button>
       </div>
     </div>
   `, 640);
 }
 
-async function saveProjectEdit(id) {
+async function updateProjectModal(id) {
   const projectData = {
     title: document.getElementById('eTitle').value.trim(),
     category: document.getElementById('eCategory').value,
@@ -972,7 +1047,7 @@ async function saveProjectEdit(id) {
   if (updated) {
     modalClose();
     showNotification('Проєкт оновлено успішно!', 'success');
-    renderProjects(currentFilter);
+    renderAll();
   }
 }
 
@@ -985,30 +1060,139 @@ async function confirmDeleteProject(id) {
   
   if (deleted) {
     showNotification('Проєкт видалено', 'success');
-    renderProjects(currentFilter);
+    renderAll();
   }
 }
 
 /* =========================
-   Initialize database with default data
+   Admin functions
    ========================= */
-async function initializeDefaultData() {
+async function exportProjects() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    showNotification('Тільки адміністратор може експортувати дані', 'error'); 
+    return; 
+  }
+  
   try {
-    
+    showLoading();
     const projects = await loadProjects();
     const categories = await loadCategories();
     
+    const data = {
+      projects,
+      categories,
+      exportDate: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `projects-export-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    hideLoading();
+    showNotification('Дані експортовано', 'success');
+  } catch (error) {
+    hideLoading();
+    showNotification('Помилка експорту', 'error');
+  }
+}
 
-    if (categories.length === 0) {
-      const defaultCategories = ['лекції', 'міні-ігри', 'соціальні', 'інше'];
-      
-      for (const categoryName of defaultCategories) {
-        await saveCategory(categoryName);
+function importProjects() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    showNotification('Тільки адміністратор може імпортувати дані', 'error'); 
+    return; 
+  }
+  
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  
+  input.onchange = async (e) => { 
+    const file = e.target.files[0]; 
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.readAsText(file, 'UTF-8');
+    
+    reader.onload = async (readerEvent) => {
+      const content = readerEvent.target.result;
+      try {
+        const data = JSON.parse(content);
+        if (!data.projects || !data.categories) {
+          showNotification('Невірний формат файлу', 'error');
+          return;
+        }
+        
+        showLoading();
+        
+        // Clear existing data and import new
+        // Note: This is a simplified version - in production you'd want more sophisticated import logic
+        showNotification('Імпорт даних поки не підтримується через Supabase. Скористайтесь ручним додаванням.', 'warning');
+        
+        hideLoading();
+      } catch (error) {
+        hideLoading();
+        showNotification('Помилка при читанні файлу', 'error');
       }
+    };
+  };
+  
+  input.click();
+}
+
+async function resetProjects() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    showNotification('Тільки адміністратор може скидати дані', 'error'); 
+    return; 
+  }
+  
+  if (confirm('Ви впевнені, що хочете скинути всі проєкти? Ця дія незворотна!')) {
+    showNotification('Скидання даних поки не підтримується через Supabase. Видаліть проєкти вручну.', 'warning');
+  }
+}
+
+/* =========================
+   Utilities
+   ========================= */
+function escapeHtml(s) {
+  return (s + '').replace(/[&<>"']/g, function(m) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]);
+  });
+}
+
+function escapeHtmlAttr(s) {
+  return escapeHtml(s).replace(/"/g, '&quot;');
+}
+
+function formatDate(dateString) {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('uk-UA');
+}
+
+/* =========================
+   Initialize default data
+   ========================= */
+async function initializeDefaultData() {
+  try {
+    // Check if we have any projects
+    const existingProjects = await loadProjects();
+    const existingCategories = await loadCategories();
+    
+    // Add default categories if none exist
+    if (existingCategories.length === 0) {
+      const defaultCategories = ['лекції', 'міні-ігри', 'соціальні', 'інше'];
+      for (const category of defaultCategories) {
+        await saveCategory(category);
+      }
+      showNotification('Додано базові категорії', 'success');
     }
     
-
-    if (projects.length === 0) {
+    // Add default projects if none exist
+    if (existingProjects.length === 0) {
       const defaultProjects = [
         {
           title: 'IT-інновації',
@@ -1020,7 +1204,7 @@ async function initializeDefaultData() {
         {
           title: 'Шаховий турнір',
           category: 'міні-ігри',
-          description: 'Щорічний турнір з шахів серед студентів. Переможці отримують цінні призи та возможность представити коледж на міських змаганнях.',
+          description: 'Щорічний турнір з шахів серед студентів. Переможці отримують цінні призи та можливість представити коледж на міських змаганнях.',
           status: 'активно',
           date: '20.03.2025'
         },
@@ -1043,31 +1227,10 @@ async function initializeDefaultData() {
       for (const project of defaultProjects) {
         await saveProject(project);
       }
+      showNotification('Додано приклади проєктів', 'success');
     }
   } catch (error) {
     console.error('Error initializing default data:', error);
-  }
-}
-
-/* =========================
-   Utilities
-   ========================= */
-function escapeHtml(s) { 
-  return (s + '').replace(/[&<>"']/g, function(m) { 
-    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]) 
-  }) 
-}
-
-function escapeHtmlAttr(s) { 
-  return escapeHtml(s).replace(/"/g, '&quot;') 
-}
-
-function formatDate(dateString) {
-  try {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('uk-UA');
-  } catch (error) {
-    return dateString || '';
   }
 }
 
@@ -1084,31 +1247,33 @@ window.addEventListener('scroll', function() {
 });
 
 /* =========================
-   Initialize on load
+   Main render function
    ========================= */
 async function renderAll() {
   renderAuth();
-  await renderCategories();
-  await renderProjects(currentFilter);
+  await Promise.all([
+    renderCategories(),
+    renderProjects()
+  ]);
 }
 
+/* =========================
+   Initialize on load
+   ========================= */
 document.addEventListener('DOMContentLoaded', async function() {
   showLoading();
   
-  try {
+  const isConnected = await checkSupabaseConnection();
   
+  if (isConnected) {
     await initializeDefaultData();
-    
-    
     await renderAll();
-    
-    showNotification('Пiдключено до бази даних', 'success');
-  } catch (error) {
-    console.error('Error during initialization:', error);
-    showNotification('Помилка ініціалізації', 'error');
-  } finally {
-    hideLoading();
+    showNotification('Підключено до бази даних', 'success');
+  } else {
+    showNotification('Помилка підключення до бази даних. Перевірте налаштування Supabase.', 'error');
   }
+  
+  hideLoading();
 });
 </script>
 </body>
