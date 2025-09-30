@@ -437,6 +437,8 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 
 <!-- NOTIFICATION CONTAINER -->
 <div id="notificationContainer"></div>
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 /* =========================
@@ -448,74 +450,163 @@ const LS = {
 
 function read(key, def){ try{ return JSON.parse(localStorage.getItem(key) || 'null') || def }catch(e){return def}}
 
-/* =========================
-   Auth
-   ========================= */
-function renderAuth(){
-  const el = document.getElementById('authArea');
-  const user = read(LS.USER, null);
-  el.innerHTML = '';
-  if(user){
-    const roleSpan = document.createElement('div'); roleSpan.className='role'; roleSpan.style.marginRight='8px';
-    roleSpan.textContent = user.role.toUpperCase();
-    const name = document.createElement('div'); name.style.color='#334155'; name.style.fontWeight='700'; name.style.marginRight='8px'; name.textContent = user.name;
-    const btnOut = document.createElement('button'); btnOut.textContent='Вийти'; btnOut.onclick = ()=>{ localStorage.removeItem(LS.USER); showNotification('Ви вийшли з системи', 'success'); renderAuth(); }
-    el.appendChild(name); el.appendChild(roleSpan); el.appendChild(btnOut);
-  } else {
-    const btn = document.createElement('button'); btn.textContent='Увійти'; btn.onclick = showLogin; el.appendChild(btn);
-  }
-}
-function showLogin(){
-  const modal = document.createElement('div');
-  modal.style.position = 'fixed';
-  modal.style.left = '0';
-  modal.style.top = '0';
-  modal.style.width = '100%';
-  modal.style.height = '100%';
-  modal.style.display = 'flex';
-  modal.style.alignItems = 'center';
-  modal.style.justifyContent = 'center';
-  modal.style.background = 'rgba(2,6,23,0.6)';
-  modal.style.zIndex = '120';
-  modal.style.padding = '20px';
-  
-  modal.innerHTML = `
-    <div style="width:480px;max-width:92%;background:#fff;border-radius:16px;padding:24px;">
-      <h3>Вхід</h3>
-      <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-        <input id="loginName" placeholder="Логін" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button onclick="document.body.removeChild(this.parentElement.parentElement.parentElement.parentElement)" class="btn secondary">Відмінити</button>
-          <button class="btn" onclick="()">Увійти</button>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-  document.getElementById('loginName').focus();
-}
-function doLogin(){
-  const name = (document.getElementById('loginName').value || '').trim();
-  const pass = (document.getElementById('loginPass').value || '').trim();
-  if(!name || !pass){ showNotification('Введіть логін і пароль', 'error'); return; }
-  let role = 'user';
-  if(['макс','max','карен','karen'].includes(name.toLowerCase())) role='editor';
-  if(['адмін','admin','administrator'].includes(name.toLowerCase())) role='admin';
-  localStorage.setItem(LS.USER, JSON.stringify({ name, role }));
-  
 
-  const modals = document.querySelectorAll('div');
-  for (let modal of modals) {
-    if (modal.style.position === 'fixed' && modal.style.zIndex === '120') {
-      document.body.removeChild(modal);
-      break;
-    }
+
+/* =========================
+   Auth system
+   ========================= */
+
+const ADMIN_UIDS = [
+  '4495aa8c-46fe-46de-8246-20cce7be22a4', 
+  '375bd9f4-2550-4055-8011-9ac386596898',
+  'b25d0c73-dd74-4dc5-9a32-77ad1e526db3' 
+];
+
+async function initAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    await setCurrentUser(session.user);
   }
   
-  showNotification('Вітаємо! Ви увійшли в систему', 'success');
-  renderAuth();
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      setCurrentUser(session.user);
+      renderAll();
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      renderAll();
+    }
+  });
+}
+
+async function setCurrentUser(user) {
+  const isAdmin = ADMIN_UIDS.includes(user.id);
+  currentUser = {
+    id: user.id,
+    email: user.email,
+    name: user.email.split('@')[0],
+    role: isAdmin ? 'admin' : 'user'
+  };
+}
+
+function renderAuth() {
+  const el = document.getElementById('authArea');
+  el.innerHTML = '';
+  
+  if (currentUser) {
+    const roleSpan = document.createElement('div');
+    roleSpan.className = 'role';
+    roleSpan.style.marginRight = '8px';
+    roleSpan.textContent = currentUser.role.toUpperCase();
+    
+    const name = document.createElement('div');
+    name.style.color = '#334155';
+    name.style.fontWeight = '700';
+    name.style.marginRight = '8px';
+    name.textContent = currentUser.email || currentUser.name;
+    
+    const btnOut = document.createElement('button');
+    btnOut.textContent = 'Вийти';
+    btnOut.onclick = logout;
+    
+    el.appendChild(name);
+    el.appendChild(roleSpan);
+    el.appendChild(btnOut);
+  } else {
+    const btn = document.createElement('button');
+    btn.textContent = 'Увійти';
+    btn.onclick = showLogin;
+    el.appendChild(btn);
+  }
+  
+  toggleAdminButtons();
+}
+
+function showLogin() {
+  modalOpen(`<h3>Вхід</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+      <input id="loginEmail" type="email" placeholder="Email" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button onclick="modalClose()" class="btn secondary">Відмінити</button>
+        <button class="btn" onclick="doLogin()">Увійти</button>
+      </div>
+    </div>`, 480);
+  document.getElementById('loginEmail').focus();
+}
+
+async function doLogin() {
+  const email = (document.getElementById('loginEmail').value || '').trim();
+  const password = (document.getElementById('loginPass').value || '').trim();
+  
+  if (!email || !password) {
+    showNotification('Введіть email і пароль', 'error');
+    return;
+  }
+  
+  showLoading();
+  
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) throw error;
+    
+    await setCurrentUser(data.user);
+    modalClose();
+    
+    console.log('User logged in:', currentUser);
+    
+    showNotification(`Вітаємо! Ви увійшли як ${currentUser.role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
+    
+    
+    await renderAll();
+    
+  } catch (error) {
+    showNotification('Помилка входу: ' + error.message, 'error');
+  } finally {
+    hideLoading();
+  }
+}
+
+async function logout() {
+  showLoading();
+  try {
+    await supabase.auth.signOut();
+    currentUser = null;
+    showNotification('Ви вийшли з системи', 'success');
+    renderAll();
+  } catch (error) {
+    showNotification('Помилка виходу: ' + error.message, 'error');
+  } finally {
+    hideLoading();
+  }
+}
+
+function toggleAdminButtons() {
+  const isAdmin = currentUser && currentUser.role === 'admin';
+  
+  console.log('toggleAdminButtons called:', { isAdmin, currentUser });
+  
+  const adminButtons = [
+    'uploadPdfBtn',
+    'addMemberBtn', 
+    'createNewsBtn'
+  ];
+  
+  adminButtons.forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    console.log(`Button ${btnId}:`, btn ? 'found' : 'not found', 'isAdmin:', isAdmin);
+    if (btn) {
+      btn.style.display = isAdmin ? 'inline-flex' : 'none';
+    }
+  });
+  
+  if (isAdmin) {
+    console.log('Admin mode enabled - showing admin controls');
+  }
 }
 
 /* =========================
@@ -562,6 +653,12 @@ window.addEventListener('scroll', function() {
 document.addEventListener('DOMContentLoaded', function() {
   renderAuth();
 });
+/* =========================
+   Error missing Supabase config
+   ========================= */
+if (SUPABASE_URL === 'https://xyhnzxyhkxijxahltcwl.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo') {
+  console.warn('⚠️ Supabase не налаштований. Замініть SUPABASE_URL та SUPABASE_ANON_KEY в коді.');
+}
 </script>
 </body>
 </html>

@@ -554,8 +554,42 @@ async function deleteMember(id) {
 }
 
 /* =========================
-   Auth system
+   Auth system with Supabase Auth
    ========================= */
+
+const ADMIN_UIDS = [
+  '4495aa8c-46fe-46de-8246-20cce7be22a4', 
+  '375bd9f4-2550-4055-8011-9ac386596898',
+  'b25d0c73-dd74-4dc5-9a32-77ad1e526db3' 
+];
+
+async function initAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    await setCurrentUser(session.user);
+  }
+  
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      setCurrentUser(session.user);
+      renderAll();
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      renderAll();
+    }
+  });
+}
+
+async function setCurrentUser(user) {
+  const isAdmin = ADMIN_UIDS.includes(user.id);
+  currentUser = {
+    id: user.id,
+    email: user.email,
+    name: user.email.split('@')[0],
+    role: isAdmin ? 'admin' : 'user'
+  };
+}
+
 function renderAuth() {
   const el = document.getElementById('authArea');
   el.innerHTML = '';
@@ -570,7 +604,7 @@ function renderAuth() {
     name.style.color = '#334155';
     name.style.fontWeight = '700';
     name.style.marginRight = '8px';
-    name.textContent = currentUser.name;
+    name.textContent = currentUser.email || currentUser.name;
     
     const btnOut = document.createElement('button');
     btnOut.textContent = 'Вийти';
@@ -586,68 +620,103 @@ function renderAuth() {
     el.appendChild(btn);
   }
   
-  toggleAdminElements();
+  toggleAdminButtons();
 }
 
 function showLogin() {
   modalOpen(`<h3>Вхід</h3>
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-      <input id="loginName" placeholder="Логін" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="loginEmail" type="email" placeholder="Email" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button onclick="modalClose()" class="btn secondary">Відмінити</button>
         <button class="btn" onclick="doLogin()">Увійти</button>
       </div>
     </div>`, 480);
-  document.getElementById('loginName').focus();
+  document.getElementById('loginEmail').focus();
 }
 
-function doLogin() {
-  const name = (document.getElementById('loginName').value || '').trim();
-  const pass = (document.getElementById('loginPass').value || '').trim();
+async function doLogin() {
+  const email = (document.getElementById('loginEmail').value || '').trim();
+  const password = (document.getElementById('loginPass').value || '').trim();
   
-  if (!name || !pass) {
-    showNotification('Введіть логін і пароль', 'error');
+  if (!email || !password) {
+    showNotification('Введіть email і пароль', 'error');
     return;
   }
   
-  let role = 'user';
+  showLoading();
   
-const adminAccounts = [
-    { login: 'karen', password: '123' },
-    { login: 'Vlad', password: '123' },
-    { login: 'Maks', password: '123' },
-    { login: 'Misha', password: '123' },
-  ];
-
-const isAdmin = adminAccounts.some(account => 
-    name.toLowerCase() === account.login.toLowerCase() && pass === account.password
-  );
-  
-  if (isAdmin) {
-    role = 'admin';
-  } else {
-    role = 'user';
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) throw error;
+    
+    await setCurrentUser(data.user);
+    modalClose();
+    
+    console.log('User logged in:', currentUser);
+    
+    showNotification(`Вітаємо! Ви увійшли як ${currentUser.role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
+    
+    
+    await renderAll();
+    
+  } catch (error) {
+    showNotification('Помилка входу: ' + error.message, 'error');
+  } finally {
+    hideLoading();
   }
-  
-  currentUser = { name, role };
-  modalClose();
-  showNotification(`Вітаємо! Ви увійшли як ${role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
-  renderAll();
 }
 
-function logout() {
-  currentUser = null;
-  showNotification('Ви вийшли з системи', 'success');
-  renderAll();
+async function logout() {
+  showLoading();
+  try {
+    await supabase.auth.signOut();
+    currentUser = null;
+    showNotification('Ви вийшли з системи', 'success');
+    renderAll();
+  } catch (error) {
+    showNotification('Помилка виходу: ' + error.message, 'error');
+  } finally {
+    hideLoading();
+  }
 }
 
-function toggleAdminElements() {
+function toggleAdminButtons() {
   const isAdmin = currentUser && currentUser.role === 'admin';
   
-  document.getElementById('adminPanel').style.display = isAdmin ? 'block' : 'none';
-  document.getElementById('addSectionBtn').style.display = isAdmin ? 'inline-flex' : 'none';
+  console.log('toggleAdminButtons called:', { isAdmin, currentUser });
+  
+  // Головна кнопка "Додати секцію"
+  const addSectionBtn = document.getElementById('addSectionBtn');
+  if (addSectionBtn) {
+    addSectionBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+    console.log('Add Section Button:', isAdmin ? 'shown' : 'hidden');
+  }
+  
+  // Інші admin кнопки (якщо є на інших сторінках)
+  const adminButtons = [
+    'uploadPdfBtn',
+    'addMemberBtn', 
+    'createNewsBtn'
+  ];
+  
+  adminButtons.forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      btn.style.display = isAdmin ? 'inline-flex' : 'none';
+    }
+  });
+  
+  if (isAdmin) {
+    console.log('Admin mode enabled - showing admin controls');
+  }
 }
+
 
 /* =========================
    Modal helpers
@@ -1229,7 +1298,6 @@ document.addEventListener('DOMContentLoaded', async function() {
   const isConnected = await checkSupabaseConnection();
   
   if (isConnected) {
-    showNotification('Підключено до бази даних', 'success');
     await renderAll();
   } else {
 

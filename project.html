@@ -85,51 +85,7 @@ h1{font-size:32px;margin:0 0 12px;line-height:1.2;color:#0f172a;}
 .tl-item .txt small{color:var(--text-secondary);display:block; margin-top: 4px;}
 
 /* grid areas */
-.grid3{display:grid;grid-template-columns: 1fr 380px; gap:24px}
-.main-col{display:flex;flex-direction:column;gap:24px}
-
-/* news card */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.news-card{background:#f8fafc;color:var(--text-primary);padding:20px;border-radius:12px;border:1px solid var(--border); transition: all 0.3s ease; height: 100%; display: flex; flex-direction: column; justify-content: space-between;}
-.news-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
-.news-card h3{margin:0 0 12px; color: var(--text-primary); font-size: 18px;}
 .meta{font-size:13px;color:var(--text-secondary);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 8px;}
-.news-content { flex-grow: 1; }
-.news-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
-
-.centered-section {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-/* team */
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  justify-items: center;
-  gap: 20px;
-  max-width: 1000px;
-  margin: 20px auto;
-}
-.member {
-  background:var(--card);
-  border-radius:12px;
-  padding:16px;
-  display:flex;
-  gap:14px;
-  align-items:center;
-  width: 100%;
-  max-width: 300px;
-  box-shadow:0 6px 15px rgba(0,0,0,0.05);
-  transition: all 0.3s ease;
-}
-.member:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 20px rgba(0,0,0,0.1);
-}
-
-.avatar{width:56px;height:56px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px; flex-shrink: 0;}
 
 /* small util */
 .muted{color:var(--text-secondary)}
@@ -302,18 +258,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   font-weight: bold;
 }
 
-/* Admin panel */
-.admin-panel {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-.admin-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
 
 /* responsive */
 @media (max-width:1080px){
@@ -330,7 +274,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   .hero .lead { padding: 20px; }
   .card { padding: 18px; }
   .team-grid { grid-template-columns: 1fr; }
-  .member { max-width: 100%; }
   .project-header, .project-footer {
     flex-direction: column;
     align-items: flex-start;
@@ -342,7 +285,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   .wrap { padding: 0 15px; }
   h1 { font-size: 26px; }
   .btn { width: 100%; justify-content: center; }
-  .news-actions { flex-direction: column; }
   .project-actions { width: 100%; }
   .project-actions .btn { width: 100%; }
 }
@@ -502,8 +444,6 @@ async function saveProject(projectData) {
     if (error) throw error;
     return data[0];
   } catch (error) {
-    console.error('Error saving project:', error);
-    showNotification('Помилка збереження проєкту', 'error');
     return null;
   }
 }
@@ -591,8 +531,43 @@ async function deleteCategoryFromDB(categoryName) {
 }
 
 /* =========================
-   Auth system (same as HOME.html)
+   Auth system with Supabase Auth
    ========================= */
+
+const ADMIN_UIDS = [
+  '4495aa8c-46fe-46de-8246-20cce7be22a4', 
+  '375bd9f4-2550-4055-8011-9ac386596898',
+  'b25d0c73-dd74-4dc5-9a32-77ad1e526db3' 
+];
+
+async function initAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    await setCurrentUser(session.user);
+  }
+  
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      setCurrentUser(session.user);
+      renderAll();
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      renderAll();
+    }
+  });
+}
+
+async function setCurrentUser(user) {
+  const isAdmin = ADMIN_UIDS.includes(user.id);
+   const displayName = user.user_metadata?.display_name || user.email.split('@')[0];
+  currentUser = {
+    id: user.id,
+    email: user.email,
+    name: displayName,
+    role: isAdmin ? 'admin' : 'user'
+  };
+}
+
 function renderAuth() {
   const el = document.getElementById('authArea');
   el.innerHTML = '';
@@ -607,7 +582,7 @@ function renderAuth() {
     name.style.color = '#334155';
     name.style.fontWeight = '700';
     name.style.marginRight = '8px';
-    name.textContent = currentUser.name;
+    name.textContent = currentUser.email || currentUser.name;
     
     const btnOut = document.createElement('button');
     btnOut.textContent = 'Вийти';
@@ -629,70 +604,85 @@ function renderAuth() {
 function showLogin() {
   modalOpen(`<h3>Вхід</h3>
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-      <input id="loginName" placeholder="Логін" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+      <input id="loginEmail" type="email" placeholder="Email" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button onclick="modalClose()" class="btn secondary">Відмінити</button>
         <button class="btn" onclick="doLogin()">Увійти</button>
       </div>
     </div>`, 480);
-  document.getElementById('loginName').focus();
+  document.getElementById('loginEmail').focus();
 }
 
-function doLogin() {
-  const name = (document.getElementById('loginName').value || '').trim();
-  const pass = (document.getElementById('loginPass').value || '').trim();
+async function doLogin() {
+  const email = (document.getElementById('loginEmail').value || '').trim();
+  const password = (document.getElementById('loginPass').value || '').trim();
   
-  if (!name || !pass) {
-    showNotification('Введіть логін і пароль', 'error');
+  if (!email || !password) {
+    showNotification('Введіть email і пароль', 'error');
     return;
   }
   
-  let role = 'user';
- const adminAccounts = [
-    { login: 'karen', password: '123' },
-    { login: 'Vlad', password: '123' },
-    { login: 'Maks', password: '123' },
-    { login: 'Misha', password: '123' },
-  ];
-
-const isAdmin = adminAccounts.some(account => 
-    name.toLowerCase() === account.login.toLowerCase() && pass === account.password
-  );
+  showLoading();
   
-  if (isAdmin) {
-    role = 'admin';
-  } else {
-    role = 'user';
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) throw error;
+    
+    await setCurrentUser(data.user);
+    modalClose();
+    
+    console.log('User logged in:', currentUser);
+    
+    showNotification(`Вітаємо! Ви увійшли як ${currentUser.role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
+    
+    
+    await renderAll();
+    
+  } catch (error) {
+    showNotification('Помилка входу: ' + error.message, 'error');
+  } finally {
+    hideLoading();
   }
-  
-  currentUser = { name, role };
-  modalClose();
-  showNotification(`Вітаємо! Ви увійшли як ${role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
-  renderAll();
 }
 
-function logout() {
-  currentUser = null;
-  showNotification('Ви вийшли з системи', 'success');
-  renderAll();
+async function logout() {
+  showLoading();
+  try {
+    await supabase.auth.signOut();
+    currentUser = null;
+    showNotification('Ви вийшли з системи', 'success');
+    renderAll();
+  } catch (error) {
+    showNotification('Помилка виходу: ' + error.message, 'error');
+  } finally {
+    hideLoading();
+  }
 }
 
 function toggleAdminButtons() {
   const isAdmin = currentUser && currentUser.role === 'admin';
   
-  const adminElements = [
-    'adminPanel',
+  const adminButtons = [
+    'addProjectBtn',
     'categoryManagement',
-    'addProjectBtn'
   ];
   
-  adminElements.forEach(btnId => {
+  adminButtons.forEach(btnId => {
     const btn = document.getElementById(btnId);
+    console.log(`Element ${btnId}:`, btn ? 'found' : 'not found', 'isAdmin:', isAdmin);
     if (btn) {
-      btn.style.display = isAdmin ? 'block' : 'none';
+      btn.style.display = isAdmin ? (btnId === 'categoryManagement' ? 'block' : 'inline-flex') : 'none';
     }
   });
+  
+  if (isAdmin) {
+    console.log('Admin mode enabled - showing admin controls');
+  }
 }
 
 /* =========================
@@ -1075,94 +1065,6 @@ async function confirmDeleteProject(id) {
   }
 }
 
-/* =========================
-   Admin functions
-   ========================= */
-async function exportProjects() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може експортувати дані', 'error'); 
-    return; 
-  }
-  
-  try {
-    showLoading();
-    const projects = await loadProjects();
-    const categories = await loadCategories();
-    
-    const data = {
-      projects,
-      categories,
-      exportDate: new Date().toISOString()
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `projects-export-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    hideLoading();
-    showNotification('Дані експортовано', 'success');
-  } catch (error) {
-    hideLoading();
-    showNotification('Помилка експорту', 'error');
-  }
-}
-
-function importProjects() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може імпортувати дані', 'error'); 
-    return; 
-  }
-  
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json';
-  
-  input.onchange = async (e) => { 
-    const file = e.target.files[0]; 
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.readAsText(file, 'UTF-8');
-    
-    reader.onload = async (readerEvent) => {
-      const content = readerEvent.target.result;
-      try {
-        const data = JSON.parse(content);
-        if (!data.projects || !data.categories) {
-          showNotification('Невірний формат файлу', 'error');
-          return;
-        }
-        
-        showLoading();
-        
-
-        showNotification('Імпорт даних поки не підтримується через Supabase. Скористайтесь ручним додаванням.', 'warning');
-        
-        hideLoading();
-      } catch (error) {
-        hideLoading();
-        showNotification('Помилка при читанні файлу', 'error');
-      }
-    };
-  };
-  
-  input.click();
-}
-
-async function resetProjects() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може скидати дані', 'error'); 
-    return; 
-  }
-  
-  if (confirm('Ви впевнені, що хочете скинути всі проєкти? Ця дія незворотна!')) {
-    showNotification('Скидання даних поки не підтримується через Supabase. Видаліть проєкти вручну.', 'warning');
-  }
-}
 
 /* =========================
    Utilities
@@ -1211,7 +1113,6 @@ async function initializeDefaultData() {
       for (const project of defaultProjects) {
         await saveProject(project);
       }
-      showNotification('Додано приклади проєктів', 'success');
     }
   } catch (error) {
     console.error('Error initializing default data:', error);
@@ -1252,7 +1153,6 @@ document.addEventListener('DOMContentLoaded', async function() {
   if (isConnected) {
     await initializeDefaultData();
     await renderAll();
-    showNotification('Підключено до бази даних', 'success');
   } else {
     showNotification('Помилка підключення до бази даних. Перевірте налаштування Supabase.', 'error');
   }
