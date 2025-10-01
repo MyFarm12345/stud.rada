@@ -28,11 +28,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
 
 /* top bar */
 header{
@@ -250,19 +245,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   font-weight: bold;
 }
 
-/* Admin section */
-.admin-section {
-  background: var(--accent);
-  color: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 25px;
-}
-.admin-section h3 {
-  margin: 0 0 15px 0;
-  color: white;
-}
-
 /* Search bar */
 .search-section {
   background: var(--card);
@@ -323,7 +305,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 </head>
 <body>
 
-<!-- Loading overlay -->
 <div id="loadingOverlay" class="loading-overlay">
   <div class="loader"></div>
 </div>
@@ -347,7 +328,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     <a href="event.html"><button id="nav-events">Події</button></a>
   </nav>
   <div class="auth" id="authArea">
-    <!-- auth UI inserted here -->
   </div>
 </header>
 
@@ -364,7 +344,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     </div>
   </section>
 
-  <!-- Search section -->
+
   <div class="search-section">
     <div class="search-container">
       <input 
@@ -377,7 +357,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     </div>
   </div>
 
-  <!-- Category management (admin only) -->
+
   <div id="categoryManagement" class="category-management" style="display: none;">
     <h3>Керування категоріями</h3>
     <div class="row">
@@ -387,13 +367,13 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     <div class="category-list" id="categoryList"></div>
   </div>
 
-  <!-- Filter buttons -->
+
   <div class="filter-buttons" id="filterButtons">
     <button class="filter-btn active" data-filter="all" onclick="filterNews('all')">Всі</button>
-    <!-- Categories will be dynamically added here -->
+
   </div>
 
-  <!-- News list -->
+ 
   <div id="newsList"></div>
 
 </main>
@@ -406,31 +386,23 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </footer>
 
-<!-- MODALS (hidden containers) -->
+
 <div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:120; padding: 20px;">
   <div id="modalBox" style="width:720px;max-width:92%;background:#fff;border-radius:16px;padding:24px;max-height:90vh;overflow-y:auto;"></div>
 </div>
 
-<!-- NOTIFICATION CONTAINER -->
+
 <div id="notificationContainer"></div>
 
-<!-- Supabase JS SDK -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* =========================
-   Supabase Configuration
-   ========================= */
 
 const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-/* =========================
-   Database Operations
-   ========================= */
-
 
 function showLoading() {
   document.getElementById('loadingOverlay').style.display = 'flex';
@@ -584,18 +556,13 @@ async function deleteCategoryFromDb(categoryName) {
   }
 }
 
-/* =========================
-   Global Variables
-   ========================= */
 let NEWS = [];
 let CATEGORIES = [];
 let currentUser = null;
 let currentFilter = 'all';
 let searchQuery = '';
 
-/* =========================
-   Auth system with Supabase Auth
-   ========================= */
+
 
 const ADMIN_UIDS = [
   '4495aa8c-46fe-46de-8246-20cce7be22a4', 
@@ -746,10 +713,6 @@ function toggleAdminButtons() {
   }
 }
 
-
-/* =========================
-   Modal Helpers
-   ========================= */
 function modalOpen(html, width = 760) {
   const modal = document.getElementById('modal');
   const box = document.getElementById('modalBox');
@@ -762,9 +725,6 @@ function modalClose() {
   document.getElementById('modal').style.display = 'none';
 }
 
-/* =========================
-   Notification System
-   ========================= */
 function showNotification(message, type = 'success') {
   const container = document.getElementById('notificationContainer');
   const notification = document.createElement('div');
@@ -788,9 +748,6 @@ function showNotification(message, type = 'success') {
   }, 3000);
 }
 
-/* =========================
-   Categories Management
-   ========================= */
 async function renderCategories() {
   try {
     CATEGORIES = await loadCategories();
@@ -885,9 +842,6 @@ async function deleteCategory(category) {
   }
 }
 
-/* =========================
-   News CRUD + UI
-   ========================= */
 async function renderNews() {
   const container = document.getElementById('newsList');
   container.innerHTML = '<div class="loader"></div>';
@@ -1130,151 +1084,6 @@ async function confirmDeleteNews(id) {
     renderAll();
   }
 }
-
-/* =========================
-   Admin Functions
-   ========================= */
-async function exportNewsData() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може експортувати дані', 'error'); 
-    return; 
-  }
-  
-  try {
-    showLoading();
-    const data = {
-      news: await loadNews(),
-      categories: await loadCategories(),
-      exportDate: new Date().toISOString()
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `news-export-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    hideLoading();
-    showNotification('Дані експортовано', 'success');
-  } catch (error) {
-    hideLoading();
-    showNotification('Помилка експорту', 'error');
-  }
-}
-
-function importNewsData() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може імпортувати дані', 'error'); 
-    return; 
-  }
-  
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json';
-  
-  input.onchange = e => { 
-    const file = e.target.files[0]; 
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.readAsText(file, 'UTF-8');
-    
-    reader.onload = async readerEvent => {
-      const content = readerEvent.target.result;
-      try {
-        const data = JSON.parse(content);
-        if (data.news && Array.isArray(data.news)) {
-          showLoading();
-          
-        
-          if (data.categories && Array.isArray(data.categories)) {
-            for (const category of data.categories) {
-              await saveCategory(category);
-            }
-          }
-          
-         
-          for (const newsItem of data.news) {
-            await saveNews({
-              title: newsItem.title,
-              content: newsItem.content,
-              category: newsItem.category || 'загальне',
-              date: newsItem.date
-            });
-          }
-          
-          hideLoading();
-          showNotification('Дані імпортовано', 'success');
-          renderAll();
-        } else {
-          showNotification('Невірний формат файлу', 'error');
-        }
-      } catch (error) {
-        showNotification('Помилка при читанні файлу', 'error');
-      }
-    };
-  };
-  
-  input.click();
-}
-
-async function seedNewsData() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може додавати тестові дані', 'error');
-    return;
-  }
-  
-  if (!confirm('Додати тестові новини та категорії?')) return;
-  
-  const testCategories = ['події', 'оголошення', 'досягнення', 'спорт'];
-  const testNews = [
-    {
-      title: 'Вибори голови студентської ради',
-      category: 'події',
-      date: '07.11.2024',
-      content: 'У стінах нашого закладу відбулася значуща подія – виборча конференція. Головою обрано Кочаряна К.С. За результатами голосування, він отримав переконливу більшість голосів. Вітаємо нового голову та бажаємо успіхів у роботі!'
-    },
-    {
-      title: 'Звітно-виборча конференція',
-      category: 'події',
-      date: '26.09.2024',
-      content: 'Обрано новий склад студентської ради. До ради увійшли активні та ініціативні студенти, які готові працювати для покращення студентського життя. Усі кандидати представили свої програми та відповіли на запитання присутніх.'
-    },
-    {
-      title: 'Оголошення щодо навчального процесу',
-      category: 'оголошення',
-      date: '15.03.2025',
-      content: 'Повідомляємо про зміни в розкладі занять на наступний тиждень. Заняття з фізики переносяться з вівторка на середу. Детальніший розклад можна переглянути на інформаційних стендах або на сайті коледжу.'
-    }
-  ];
-  
-  try {
-    showLoading();
-    
-  
-    for (const category of testCategories) {
-      await saveCategory(category);
-    }
-    
- 
-    for (const news of testNews) {
-      await saveNews(news);
-    }
-    
-    hideLoading();
-    showNotification('Тестові дані додано', 'success');
-    renderAll();
-  } catch (error) {
-    hideLoading();
-    showNotification('Помилка додавання тестових даних', 'error');
-  }
-}
-
-/* =========================
-   Utilities
-   ========================= */
 function escapeHtml(s) { 
   if (!s) return '';
   return (s + '').replace(/[&<>"']/g, function(m) { 
@@ -1286,9 +1095,6 @@ function escapeHtmlAttr(s) {
   return escapeHtml(s).replace(/"/g, '&quot;'); 
 }
 
-/* =========================
-   Scroll effect for header
-   ========================= */
 window.addEventListener('scroll', function() {
   const header = document.querySelector('header');
   if (window.scrollY > 50) {
@@ -1298,9 +1104,6 @@ window.addEventListener('scroll', function() {
   }
 });
 
-/* =========================
-   Initialize and render all
-   ========================= */
 async function renderAll() {
   renderAuth();
   await Promise.all([
@@ -1309,9 +1112,7 @@ async function renderAll() {
   ]);
 }
 
-/* =========================
-   Initialize on load
-   ========================= */
+
 document.addEventListener('DOMContentLoaded', async function() {
   showLoading();
   

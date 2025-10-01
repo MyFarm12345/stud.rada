@@ -28,12 +28,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
 /* top bar */
 header{
   position:sticky; top:0; z-index:60;
@@ -282,7 +276,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 </head>
 <body>
 
-<!-- Loading overlay -->
+
 <div id="loadingOverlay" class="loading-overlay">
   <div class="loader"></div>
 </div>
@@ -304,12 +298,12 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     <a href="event.html"><button id="nav-projects">Події</button></a>
   </nav>
   <div class="auth" id="authArea">
-    <!-- auth UI inserted here -->
+
   </div>
 </header>
 
 <main class="wrap">
-  <!-- HERO -->
+
   <section class="hero">
     <div class="lead">
       <h1>Наша <span style="color:#2563eb">команда</span></h1>
@@ -321,12 +315,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     </div>
   </section>
 
-  <!-- Admin Panel -->
-  <div id="adminPanel" class="admin-section" style="display: none;">
 
-  </div>
-
-  <!-- Sections will be rendered here -->
   <div id="sectionsContainer"></div>
 
 </main>
@@ -339,36 +328,28 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </footer>
 
-<!-- MODALS (hidden containers) -->
+
 <div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:120; padding: 20px;">
   <div id="modalBox" style="width:720px;max-width:92%;background:#fff;border-radius:16px;padding:24px;max-height:90vh;overflow-y:auto;"></div>
 </div>
 
-<!-- NOTIFICATION CONTAINER -->
+
 <div id="notificationContainer"></div>
 
-<!-- Supabase JS SDK -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* =========================
-   Supabase Configuration
-   ========================= */
 
 const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* =========================
-   Global variables
-   ========================= */
+
 let SECTIONS = [];
 let currentUser = null;
 
-/* =========================
-   Loading functions
-   ========================= */
 function showLoading() {
   document.getElementById('loadingOverlay').style.display = 'flex';
 }
@@ -377,9 +358,7 @@ function hideLoading() {
   document.getElementById('loadingOverlay').style.display = 'none';
 }
 
-/* =========================
-   Supabase operations
-   ========================= */
+
 
 
 async function checkSupabaseConnection() {
@@ -553,10 +532,6 @@ async function deleteMember(id) {
   }
 }
 
-/* =========================
-   Auth system with Supabase Auth
-   ========================= */
-
 const ADMIN_UIDS = [
   '4495aa8c-46fe-46de-8246-20cce7be22a4', 
   '375bd9f4-2550-4055-8011-9ac386596898',
@@ -691,14 +666,14 @@ function toggleAdminButtons() {
   
   console.log('toggleAdminButtons called:', { isAdmin, currentUser });
   
-  // Головна кнопка "Додати секцію"
+  
   const addSectionBtn = document.getElementById('addSectionBtn');
   if (addSectionBtn) {
     addSectionBtn.style.display = isAdmin ? 'inline-flex' : 'none';
     console.log('Add Section Button:', isAdmin ? 'shown' : 'hidden');
   }
   
-  // Інші admin кнопки (якщо є на інших сторінках)
+
   const adminButtons = [
     'uploadPdfBtn',
     'addMemberBtn', 
@@ -717,10 +692,6 @@ function toggleAdminButtons() {
   }
 }
 
-
-/* =========================
-   Modal helpers
-   ========================= */
 function modalOpen(html, width = 760) {
   const modal = document.getElementById('modal');
   const box = document.getElementById('modalBox');
@@ -733,9 +704,6 @@ function modalClose() {
   document.getElementById('modal').style.display = 'none';
 }
 
-/* =========================
-   Notification system
-   ========================= */
 function showNotification(message, type = 'success') {
   const container = document.getElementById('notificationContainer');
   const notification = document.createElement('div');
@@ -759,9 +727,6 @@ function showNotification(message, type = 'success') {
   }, 3000);
 }
 
-/* =========================
-   Team Sections CRUD + UI
-   ========================= */
 async function renderSections() {
   const container = document.getElementById('sectionsContainer');
   container.innerHTML = '<div class="loader"></div>';
@@ -881,9 +846,6 @@ function getInitials(name) {
     .toUpperCase();
 }
 
-/* =========================
-   Section CRUD operations
-   ========================= */
 function openCreateSection() {
   if (!currentUser || currentUser.role !== 'admin') {
     showNotification('Тільки адміністратор може додавати секції', 'error');
@@ -970,9 +932,6 @@ async function confirmDeleteSection(sectionId) {
   }
 }
 
-/* =========================
-   Member CRUD operations
-   ========================= */
 function openAddMember(sectionId) {
   if (!currentUser || currentUser.role !== 'admin') {
     showNotification('Тільки адміністратор може додавати учасників', 'error');
@@ -1096,142 +1055,6 @@ async function confirmDeleteMember(memberId) {
   }
 }
 
-/* =========================
-   Sync with main site
-   ========================= */
-async function syncWithMainSite() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може синхронізувати дані', 'error');
-    return;
-  }
-  
-  showLoading();
-  try {
-
-    await renderAll();
-    showNotification('Синхронізація завершена! Дані оновлено з головного сайту.', 'success');
-  } catch (error) {
-    showNotification('Помилка синхронізації', 'error');
-  }
-  hideLoading();
-}
-
-/* =========================
-   Admin functions
-   ========================= */
-async function exportTeamData() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може експортувати дані', 'error');
-    return;
-  }
-  
-  showLoading();
-  try {
-    const [sections, members] = await Promise.all([
-      loadTeamSections(),
-      loadMembers()
-    ]);
-    
-    const exportData = {
-      sections,
-      members,
-      exportDate: new Date().toISOString(),
-      exportedBy: currentUser.name
-    };
-    
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-    const exportFileDefaultName = `team-data-${Date.now()}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-    
-    hideLoading();
-    showNotification('Дані експортовано', 'success');
-  } catch (error) {
-    hideLoading();
-    showNotification('Помилка експорту', 'error');
-  }
-}
-
-function importTeamData() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може імпортувати дані', 'error');
-    return;
-  }
-  
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json';
-  
-  input.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = async (readerEvent) => {
-      try {
-        showLoading();
-        const content = readerEvent.target.result;
-        const data = JSON.parse(content);
-        
-        if (!data.sections || !data.members) {
-          throw new Error('Невірний формат файлу');
-        }
-        
-
-        
-        showNotification('Імпорт даних поки що не реалізовано. Зверніться до розробника.', 'warning');
-        hideLoading();
-      } catch (error) {
-        hideLoading();
-        showNotification('Помилка при читанні файлу', 'error');
-      }
-    };
-    reader.readAsText(file, 'UTF-8');
-  };
-  
-  input.click();
-}
-
-async function resetTeamData() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може скидати дані', 'error');
-    return;
-  }
-  
-  if (!confirm('Ви впевнені, що хочете скинути всі дані команди? Це дія незворотна!')) return;
-  
-  showLoading();
-  try {
-
-    await supabase.from('members').delete().neq('id', 0);
-    await supabase.from('team_sections').delete().neq('id', 0);
-    
-
-    const initialSections = [
-      { title: 'Президія' },
-      { title: 'Організаційний відділ' }
-    ];
-    
-    for (const section of initialSections) {
-      await saveTeamSection(section);
-    }
-    
-    hideLoading();
-    showNotification('Дані скинуті до початкових значень', 'success');
-    renderAll();
-  } catch (error) {
-    hideLoading();
-    showNotification('Помилка скидання даних', 'error');
-  }
-}
-
-/* =========================
-   Utilities
-   ========================= */
 function escapeHtml(s) {
   return (s + '').replace(/[&<>"']/g, function(m) {
     return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]);
@@ -1242,9 +1065,6 @@ function escapeHtmlAttr(s) {
   return escapeHtml(s).replace(/"/g, '&quot;');
 }
 
-/* =========================
-   Scroll effect for header
-   ========================= */
 window.addEventListener('scroll', function() {
   const header = document.querySelector('header');
   if (window.scrollY > 50) {
@@ -1254,43 +1074,13 @@ window.addEventListener('scroll', function() {
   }
 });
 
-/* =========================
-   Initialize and render all
-   ========================= */
+
 async function renderAll() {
   renderAuth();
   await renderSections();
 }
 
-/* =========================
-   Setup modal for first time users
-   ========================= */
-function showSetupModal() {
-  modalOpen(`
-    <h3>🔧 Налаштування Supabase</h3>
-    <div style="line-height: 1.6; margin: 16px 0;">
-      <p>Для роботи сайту потрібно налаштувати підключення до Supabase:</p>
-      <ol style="text-align: left; margin: 16px 0; padding-left: 20px;">
-        <li>Створіть проект на <a href="https://supabase.com" target="_blank" style="color: var(--accent);">supabase.com</a></li>
-        <li>Отримайте URL проекту та anon key з Settings → API</li>
-        <li>Замініть значення SUPABASE_URL та SUPABASE_ANON_KEY в коді</li>
-        <li>Створіть таблиці в базі даних (SQL Editor)</li>
-      </ol>
-      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin: 12px 0; font-family: monospace; font-size: 13px;">
-        const SUPABASE_URL = 'your_supabase_url';<br>
-        const SUPABASE_ANON_KEY = 'your_supabase_anon_key';
-      </div>
-      <p><strong>Тестовий вхід:</strong> Логін: <code>karen</code>, Пароль: <code>Karen123123</code> (роль: admin)</p>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:20px;">
-      <button class="btn" onclick="modalClose()">Зрозуміло</button>
-    </div>
-  `, 600);
-}
 
-/* =========================
-   Initialize on load
-   ========================= */
 document.addEventListener('DOMContentLoaded', async function() {
   showLoading();
   

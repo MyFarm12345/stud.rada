@@ -28,12 +28,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
 /* top bar */
 header{
   position:sticky; top:0; z-index:60;
@@ -78,15 +72,6 @@ h1{font-size:32px;margin:0 0 12px;line-height:1.2;color:#0f172a;}
 /* right card */
 .card{background:var(--card); border-radius:14px;padding:22px;color:var(--text-primary); box-shadow:0 8px 20px rgba(0,0,0,0.06); border:1px solid var(--border); transition: all 0.3s ease; margin-bottom: 20px;}
 .card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
-.timeline{display:flex;flex-direction:column;gap:12px}
-.tl-item{display:flex;gap:12px;align-items:flex-start; padding: 10px; border-radius: 10px; transition: all 0.2s ease;}
-.tl-item:hover { background: #f8fafc; }
-.tl-item .dot{width:12px;height:12px;background:var(--accent);border-radius:999px;margin-top:6px;box-shadow:0 4px 10px rgba(37, 99, 235, 0.2); flex-shrink: 0;}
-.tl-item .txt small{color:var(--text-secondary);display:block; margin-top: 4px;}
-
-/* grid areas */
-.grid3{display:grid;grid-template-columns: 1fr 380px; gap:24px}
-.main-col{display:flex;flex-direction:column;gap:24px}
 
 /* about sections */
 .about-section {
@@ -197,13 +182,6 @@ h1{font-size:32px;margin:0 0 12px;line-height:1.2;color:#0f172a;}
   flex-shrink: 0;
 }
 
-/* small util */
-.muted{color:var(--text-secondary)}
-.row{display:flex;gap:12px;align-items:center; flex-wrap: wrap;}
-.badge-success { background: var(--success); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
-.badge-warning { background: var(--warning); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
-.badge-error { background: var(--error); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
-
 /* footer */
 footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); padding: 20px; border-top: 1px solid var(--border);}
 
@@ -229,12 +207,6 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 .notification.success { background: var(--success); }
 .notification.error { background: var(--error); }
 .notification.warning { background: var(--warning); }
-
-/* responsive */
-@media (max-width:1080px){
-  .hero{grid-template-columns:1fr; padding-bottom:12px}
-  .grid3{grid-template-columns:1fr}
-}
 
 @media (max-width:768px){
   header { flex-direction: column; gap: 15px; padding: 15px; }
@@ -284,12 +256,12 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     <a href="event.html"><button id="nav-projects">Події</button></a>
   </nav>
   <div class="auth" id="authArea">
-    <!-- auth UI inserted here -->
+   
   </div>
 </header>
 
 <main class="wrap">
-  <!-- HERO -->
+
   <section class="hero">
     <div class="lead">
       <h1>Студентська рада — <span style="color:#2563eb">ваш голос</span> у коледжі</h1>
@@ -301,9 +273,9 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     </div>
   </section>
 
-  <!-- Основной контент -->
+  
   <div class="main-col">
-    <!-- О студенческом совете -->
+   
     <section class="about-section">
       <h2>Хто ми такі?</h2>
       <p>Студентська рада — це орган студентського самоврядування, що діє в нашому коледжі. Ми є офіційним представником студентства перед адміністрацією закладу та відповідаємо за розвиток студентського життя.</p>
@@ -327,7 +299,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
       </div>
     </section>
 
-    <!-- Наша история -->
+   
     <section class="about-section">
       <h2>Наша історія</h2>
       <p>Студентська рада була створена з метою об'єднання студентів та представлення їх інтересів. За роки нашої діяльності ми реалізували десятки успішних проєктів та ініціатив.</p>
@@ -364,7 +336,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
       </div>
     </section>
 
-    <!-- Наши цели -->
+   
     <section class="about-section">
       <h2>Наші цілі</h2>
       <p>Ми працюємо для досягнення ключових цілей, спрямованих на покращення студентського досвіду:</p>
@@ -388,7 +360,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
       </div>
     </section>
 
-    <!-- Контакты -->
+  
     <section class="about-section">
       <h2>Як з нами зв'язатися?</h2>
       <p>Ми завжди раді почути ваші ідеї, пропозиції або відгуки. Зв'яжіться з нами будь-яким зручним для вас способом:</p>
@@ -435,26 +407,60 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </footer>
 
-<!-- NOTIFICATION CONTAINER -->
+
 <div id="notificationContainer"></div>
-<!-- Supabase JS SDK -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* =========================
-   Data layer - localStorage
-   ========================= */
-const LS = {
-  USER: 'sr_user_v2'
-};
 
-function read(key, def){ try{ return JSON.parse(localStorage.getItem(key) || 'null') || def }catch(e){return def}}
+const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
 
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+let currentUser = null;
 
-/* =========================
-   Auth system
-   ========================= */
+function showLoading() {
+  let overlay = document.getElementById('loadingOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'loadingOverlay';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;z-index:1000;';
+    overlay.innerHTML = '<div style="width:24px;height:24px;border:3px solid rgba(37,99,235,0.3);border-radius:50%;border-top-color:#2563eb;animation:spin 1s ease-in-out infinite;"></div>';
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = 'flex';
+}
+
+function hideLoading() {
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+function modalOpen(html, width = 760) {
+  let modal = document.getElementById('modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modal';
+    modal.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:120;padding:20px;';
+    modal.innerHTML = '<div id="modalBox" style="width:720px;max-width:92%;background:#fff;border-radius:16px;padding:24px;max-height:90vh;overflow-y:auto;"></div>';
+    document.body.appendChild(modal);
+  }
+  
+  const box = document.getElementById('modalBox');
+  box.style.width = width + 'px';
+  box.innerHTML = html;
+  modal.style.display = 'flex';
+}
+
+function modalClose() {
+  const modal = document.getElementById('modal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function renderAll() {
+  renderAuth();
+}
 
 const ADMIN_UIDS = [
   '4495aa8c-46fe-46de-8246-20cce7be22a4', 
@@ -609,9 +615,6 @@ function toggleAdminButtons() {
   }
 }
 
-/* =========================
-   Notification system
-   ========================= */
 function showNotification(message, type = 'success') {
   const container = document.getElementById('notificationContainer');
   const notification = document.createElement('div');
@@ -634,10 +637,6 @@ function showNotification(message, type = 'success') {
     }, 400);
   }, 3000);
 }
-
-/* =========================
-   Scroll effect for header
-   ========================= */
 window.addEventListener('scroll', function() {
   const header = document.querySelector('header');
   if (window.scrollY > 50) {
@@ -647,18 +646,9 @@ window.addEventListener('scroll', function() {
   }
 });
 
-/* =========================
-   Initialize on load
-   ========================= */
 document.addEventListener('DOMContentLoaded', function() {
   renderAuth();
 });
-/* =========================
-   Error missing Supabase config
-   ========================= */
-if (SUPABASE_URL === 'https://xyhnzxyhkxijxahltcwl.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo') {
-  console.warn('⚠️ Supabase не налаштований. Замініть SUPABASE_URL та SUPABASE_ANON_KEY в коді.');
-}
 </script>
 </body>
 </html>

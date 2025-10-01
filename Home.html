@@ -28,12 +28,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
 /* top bar */
 header{
   position:sticky; top:0; z-index:60;
@@ -252,13 +246,13 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     <a href="event.html"><button id="nav-projects">Події</button></a>
   </nav>
   <div class="auth" id="authArea">
-    <!-- auth UI inserted here -->
+   
   </div>
 </header>
 
 <main class="wrap" id="home">
 
-  <!-- HERO -->
+  
   <section class="hero" id="heroTop">
     <div class="lead">
       <h1>Місія — зробити студентське життя <span style="color:#2563eb">незабутнім</span></h1>
@@ -284,19 +278,17 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     <div class="card">
       <h3 style="margin:0 0 12px;color:#334155">Найближчі події</h3>
       <div class="timeline">
-        <div class="tl-item"><div class="dot"></div><div class="txt"><strong>15 Березня</strong><small>Лекція з IT-інновацій</small></div></div>
-        <div class="tl-item"><div class="dot"></div><div class="txt"><strong>22 Березня</strong><small>Еко-акція "Чисте місто"</small></div></div>
-        <div class="tl-item"><div class="dot"></div><div class="txt"><strong>30 Березня</strong><small>Спортивні змагання</small></div></div>
-        <div class="tl-item"><div class="dot"></div><div class="txt"><strong>5 Квітня</strong><small>Зустріч з випускниками</small></div></div>
+        <div class="tl-item"><div class="dot"></div><div class="txt"><strong>НЕМА</strong><small>але ми працюємо над цим</small></div></div>
+
       </div>
     </div>
   </section>
 
-  <!-- 2-column main area -->
+
   <section class="grid3">
 
     <div class="main-col">
-      <!-- NEWS -->
+  
       <div id="newsSection" class="card">
         <div style="display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 12px;">
           <div><h2 style="margin:0;color:#334155">Новини</h2><div class="muted">Актуальні події та оголошення</div></div>
@@ -308,7 +300,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
         <div id="newsGrid" class="cards" style="margin-top:20px"></div>
       </div>
 
-      <!-- PROJECTS -->
+  
 <div id="projects" class="card">
   <div style="display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 12px;">
     <div>
@@ -322,7 +314,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </div>
 
-      <!-- Team -->
+  
       <div id="teamCard" class="card centered-section">
         <div style="display:flex;justify-content:space-between;align-items:center; flex-wrap: wrap; gap: 12px;">
           <div>
@@ -336,7 +328,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
         <div id="teamGrid" class="team-grid" style="margin-top:16px"></div>
       </div>
       
-      <!-- Documents -->
+
       <div class="card">
         <h3 style="margin:0;color:#334155">Документи</h3>
         <div style="margin-top:12px" id="docsList"></div>
@@ -348,7 +340,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     </div>
 
     <aside>
-      <!-- Useful Resources -->
+   
       <div class="card">
         <h3 style="margin:0 0 12px;color:#334155">Мiнi-гра</h3>
         <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -358,7 +350,7 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
         </div>
       </div>
       
-     <!-- Student Initiatives -->
+ 
 <div class="card">
   <h3 style="margin:0 0 12px;color:#334155">Підтримай студраду!</h3>
   <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -399,32 +391,24 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </footer>
 
-<!-- MODALS (hidden containers) -->
+
 <div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:120; padding: 20px;">
   <div id="modalBox" style="width:720px;max-width:92%;background:#fff;border-radius:16px;padding:24px;max-height:90vh;overflow-y:auto;"></div>
 </div>
 
-<!-- NOTIFICATION CONTAINER -->
+
 <div id="notificationContainer"></div>
 
-<!-- Supabase JS SDK -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* =========================
-   Supabase Кофиг
-   ========================= */
 
 const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
 
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-/* =========================
-   Операции базы данных
-   ========================= */
-
 
 function showLoading() {
   document.getElementById('loadingOverlay').style.display = 'flex';
@@ -708,19 +692,12 @@ async function updateVotes(option, count) {
   }
 }
 
-/* =========================
-   Global data variables
-   ========================= */
 let NEWS = [];
 let MEMBERS = [];
 let EVENTS = [];
 let DOCS = [];
 let VOTES = [];
 let currentUser = null;
-
-/* =========================
-   Auth system
-   ========================= */
 
 const ADMIN_UIDS = [
   '4495aa8c-46fe-46de-8246-20cce7be22a4', 
@@ -875,11 +852,8 @@ function toggleAdminButtons() {
   }
 }
 
-/* =========================
-   Voting functionality
-   ========================= */
 async function voteForCouncil() {
-  // Перевірка в localStorage замість sessionStorage
+
   const hasVoted = localStorage.getItem('hasVoted'); 
   
   if (hasVoted) {
@@ -916,9 +890,6 @@ async function voteForCouncil() {
   }
 }
 
-/* =========================
-   Modal helpers
-   ========================= */
 function modalOpen(html, width = 760) {
   const modal = document.getElementById('modal');
   const box = document.getElementById('modalBox');
@@ -930,10 +901,6 @@ function modalOpen(html, width = 760) {
 function modalClose() {
   document.getElementById('modal').style.display = 'none';
 }
-
-/* =========================
-   Notification system
-   ========================= */
 function showNotification(message, type = 'success') {
   const container = document.getElementById('notificationContainer');
   const notification = document.createElement('div');
@@ -956,10 +923,6 @@ function showNotification(message, type = 'success') {
     }, 400);
   }, 3000);
 }
-
-/* =========================
-   News CRUD + UI
-   ========================= */
 async function renderNews() {
   const grid = document.getElementById('newsGrid');
   grid.innerHTML = '<div class="loader"></div>';
@@ -1224,9 +1187,6 @@ async function renderEvents() {
   }
 }
 
-/* =========================
-   Members (team)
-   ========================= */
 async function renderMembers() {
   const grid = document.getElementById('teamGrid');
   grid.innerHTML = '<div class="loader"></div>';
@@ -1327,9 +1287,6 @@ async function confirmDeleteMember(id) {
   }
 }
 
-/* =========================
-   Documents
-   ========================= */
 async function renderDocs() {
   const el = document.getElementById('docsList');
   el.innerHTML = '<div class="loader"></div>';
@@ -1345,7 +1302,7 @@ async function renderDocs() {
     
     DOCS.forEach(doc => {
       const row = document.createElement('div');
-      row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:10px; backgroundColor:#f8fafc; border-radius:8px';
+      row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:10px; background:#f8fafc; border-radius:8px';
       
       const left = document.createElement('div');
       left.innerHTML = `
@@ -1396,40 +1353,75 @@ async function onDoc(e) {
     return;
   }
   
+  showLoading();
   
-  const reader = new FileReader();
-  reader.onload = async () => {
-    showLoading();
+  try {
+    const fileName = `${Date.now()}_${file.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('documents')
+      .upload(fileName, file);
+    
+    if (uploadError) throw uploadError;
+    
+    const { data: urlData } = supabase.storage
+      .from('documents')
+      .getPublicUrl(fileName);
+    
     const saved = await saveDocument({
       name: file.name,
-      file_url: reader.result
+      file_url: urlData.publicUrl
     });
-    hideLoading();
     
     if (saved) {
       showNotification('PDF завантажено', 'success');
       renderAll();
     }
-  };
-  reader.readAsDataURL(file);
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    showNotification('Помилка завантаження: ' + error.message, 'error');
+  } finally {
+    hideLoading();
+  }
 }
 
 async function confirmDeleteDocument(id) {
   if (!confirm('Видалити документ?')) return;
   
   showLoading();
-  const deleted = await deleteDocument(id);
-  hideLoading();
   
-  if (deleted) {
-    showNotification('Документ видалено', 'success');
-    renderAll();
+  try {
+    const doc = DOCS.find(d => d.id === id);
+    if (!doc) {
+      throw new Error('Документ не знайдено');
+    }
+
+    const urlParts = doc.file_url.split('/');
+    const storageFileName = urlParts[urlParts.length - 1];
+
+    if (storageFileName && !doc.file_url.startsWith('data:')) {
+      const { error: storageError } = await supabase.storage
+        .from('documents')
+        .remove([storageFileName]);
+      
+      if (storageError) {
+        console.error('Storage delete error:', storageError);
+      }
+    }
+    
+
+    const deleted = await deleteDocument(id);
+    
+    if (deleted) {
+      showNotification('Документ видалено', 'success');
+      renderAll();
+    }
+  } catch (error) {
+    console.error('Error in confirmDeleteDocument:', error);
+    showNotification('Помилка видалення документа: ' + error.message, 'error');
+  } finally {
+    hideLoading();
   }
 }
-
-/* =========================
-   Navigation
-   ========================= */
 function goTo(section) {
 
   document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
@@ -1443,9 +1435,6 @@ function goTo(section) {
   else if (section === 'projects') document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
 }
 
-/* =========================
-   Utilities
-   ========================= */
 function escapeHtml(s) {
   return (s + '').replace(/[&<>"']/g, function(m) {
     return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]);
@@ -1464,9 +1453,6 @@ function shorten(s, len = 200) {
   return (s.length > len) ? s.slice(0, len - 1) + '…' : s;
 }
 
-/* =========================
-		render all
-   ========================= */
 async function renderAll() {
   renderAuth();
   await Promise.all([
@@ -1474,33 +1460,41 @@ async function renderAll() {
     renderMembers(), 
     renderEvents(),
     renderDocs(),
-	renderProjectsForHome()
+    renderProjectsForHome(),
+    loadAndDisplayVotes()
   ]);
-  
+}
 
+async function loadAndDisplayVotes() {
   try {
     const votes = await loadVotes();
     const councilVote = votes.find(v => v.option === 'council_support');
-    if (councilVote) {
-      document.getElementById('votesCount').textContent = councilVote.count;
+    
+    const votesCountEl = document.getElementById('votesCount');
+    if (votesCountEl && councilVote) {
+      votesCountEl.textContent = councilVote.count || 0;
     }
     
- 
-    const hasVoted = sessionStorage.getItem('hasVoted');
-    if (hasVoted) {
-      const voteBtn = document.getElementById('voteBtn');
+    const hasVoted = localStorage.getItem('hasVoted');
+    const voteBtn = document.getElementById('voteBtn');
+    const voteMessage = document.getElementById('voteMessage');
+    
+    if (hasVoted && voteBtn) {
       voteBtn.disabled = true;
       voteBtn.innerHTML = '<i>✅</i> Ви проголосували';
-      document.getElementById('voteMessage').style.display = 'block';
+      if (voteMessage) {
+        voteMessage.style.display = 'block';
+      }
     }
   } catch (error) {
     console.error('Error loading votes:', error);
+    const votesCountEl = document.getElementById('votesCount');
+    if (votesCountEl) {
+      votesCountEl.textContent = '0';
+    }
   }
 }
 
-/* =========================
-   Scroll effect for header
-   ========================= */
 window.addEventListener('scroll', function() {
   const header = document.querySelector('header');
   if (window.scrollY > 50) {
@@ -1509,10 +1503,6 @@ window.addEventListener('scroll', function() {
     header.classList.remove('scrolled');
   }
 });
-
-/* =========================
-   Initialize on load
-   ========================= */
 document.addEventListener('DOMContentLoaded', async function() {
   
   const isConnected = await checkSupabaseConnection();
@@ -1527,74 +1517,6 @@ document.addEventListener('DOMContentLoaded', async function() {
   hideLoading();
 });
 
-/* =========================
-   Setup modal for first time users
-   ========================= */
-function showSetupModal() {
-  modalOpen(`
-    <h3>🔧 Налаштування Supabase</h3>
-    <div style="line-height: 1.6; margin: 16px 0;">
-      <p>Для роботи сайту потрібно налаштувати підключення до Supabase:</p>
-      <ol style="text-align: left; margin: 16px 0; padding-left: 20px;">
-        <li>Створіть проект на <a href="https://supabase.com" target="_blank" style="color: var(--accent);">supabase.com</a></li>
-        <li>Отримайте URL проекту та anon key з Settings → API</li>
-        <li>Замініть значення SUPABASE_URL та SUPABASE_ANON_KEY в коді</li>
-        <li>Створіть таблиці в базі даних (SQL Editor)</li>
-      </ol>
-      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin: 12px 0; font-family: monospace; font-size: 13px;">
-        const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';<br>
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
-      </div>
-      <p><strong>Тестовий вхід:</strong> Логін: <code>Karen</code>, Пароль: <code>Karen123123</code> (роль: admin)</p>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:20px;">
-      <button class="btn" onclick="modalClose()">Зрозуміло</button>
-    </div>
-  `, 600);
-}
-
-/* =========================
-   Admin functions (export/import)
-   ========================= */
-async function exportData() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може експортувати дані', 'error');
-    return;
-  }
-  
-  try {
-    showLoading();
-    const data = {
-      news: await loadNews(),
-      events: await loadEvents(),
-      members: await loadMembers(),
-      documents: await loadDocuments(),
-      votes: await loadVotes(),
-      exportDate: new Date().toISOString()
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `student-council-export-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    hideLoading();
-    showNotification('Дані експортовано', 'success');
-  } catch (error) {
-    hideLoading();
-    showNotification('Помилка експорту', 'error');
-  }
-}
-
-/* =========================
-   Error missing Supabase config
-   ========================= */
-if (SUPABASE_URL === 'https://xyhnzxyhkxijxahltcwl.supabase.co' || SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo') {
-  console.warn('⚠️ Supabase не налаштований. Замініть SUPABASE_URL та SUPABASE_ANON_KEY в коді.');
-}
 </script>
 </body>
 </html>
