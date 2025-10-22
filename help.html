@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Допомога — Студентська рада</title>
+<style>
+:root{
+  --bg1:#ffffff; --bg2:#f8fafc; --accent:#2563eb;
+  --text-primary:#1e293b; --text-secondary:#64748b;
+  --card:#ffffff; --border:#e2e8f0;
+  --success:#10b981; --warning:#f59e0b; --error:#ef4444;
+}
+*{box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Inter, "Segoe UI", Roboto, Arial, system-ui;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  color:var(--text-primary);
+  background: #ffffff;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+header{
+  position:sticky; top:0; z-index:60;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.95);
+  border-bottom:1px solid var(--border);
+  padding:12px 22px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition: all 0.3s ease;
+}
+header.scrolled {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+nav{display:flex;gap:8px;align-items:center; flex-wrap: wrap;}
+nav button{background:transparent;border:none;color:var(--text-primary);padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer; transition: all 0.2s ease;}
+nav button:hover{background:rgba(0,0,0,0.05); transform: translateY(-2px);}
+nav button.active{background:var(--accent); color: white;}
+nav a { text-decoration: none; }
+.auth{display:flex;gap:8px;align-items:center}
+.auth button{background:var(--accent); color:#fff;padding:8px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer; transition: all 0.3s ease;}
+.auth button:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+.auth .role{background:rgba(0,0,0,0.05); padding:6px 12px;border-radius:999px;color:var(--text-primary);border:1px solid rgba(0,0,0,0.05); font-size: 12px;}
+
+.wrap{max-width:1200px;margin:28px auto;padding:0 20px}
+
+.card{
+  background:var(--card); 
+  border-radius:14px;
+  padding:22px;
+  color:var(--text-primary); 
+  box-shadow:0 8px 20px rgba(0,0,0,0.06); 
+  border:1px solid var(--border); 
+  transition: all 0.3s ease; 
+  margin-bottom: 20px; 
+  animation: fadeIn 0.8s ease;
+}
+
+footer{
+  margin:60px auto 30px; 
+  text-align:center;
+  color:var(--text-secondary); 
+  padding: 20px; 
+  border-top: 1px solid var(--border);
+}
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(100vw);
+  transition: transform 0.4s ease;
+}
+.notification.show {
+  transform: translateX(0);
+}
+.notification.success { background: var(--success); }
+.notification.error { background: var(--error); }
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(37, 99, 235, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--accent);
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.loading-overlay.show {
+  display: flex;
+}
+
+.contact-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.contact-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 30px;
+  color: white;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.contact-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+}
+
+.contact-card.telegram {
+  background: linear-gradient(135deg, #0088cc 0%, #00aced 100%);
+  box-shadow: 0 10px 30px rgba(0, 136, 204, 0.3);
+}
+
+.contact-card.telegram:hover {
+  box-shadow: 0 15px 40px rgba(0, 136, 204, 0.4);
+}
+
+.contact-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.contact-card h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.contact-card p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.divider {
+  text-align: center;
+  margin: 40px 0 30px;
+  position: relative;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+.divider span {
+  background: white;
+  padding: 0 20px;
+  position: relative;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+@media (max-width:768px){
+  header { flex-direction: column; gap: 15px; padding: 15px; }
+  nav { width: 100%; justify-content: center; }
+  .auth { width: 100%; justify-content: center; }
+  .card { padding: 18px; }
+  .contact-options {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loader"></div>
+</div>
+
+<header>
+  <a href="https://kre.dp.ua" style="display:flex; align-items:center; text-decoration:none;">
+    <div style="width:40px; height:40px; background-color:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; border-radius:6px; margin-right:10px;">
+      SR
+    </div>
+    <div>
+      <div style="font-size:14px; color:#334155; font-weight:600;">Студентська рада</div>
+      <div style="font-size:11px; color:#64748b;">Коледж — офіційний сайт ДФКР</div>
+    </div>
+  </a>
+  <nav>
+    <a href="Home.html"><button>Головна</button></a>
+    <a href="info.html"><button>Про раду</button></a>
+    <a href="command.html"><button>Команда</button></a>
+    <a href="news.html"><button>Новини</button></a>
+    <a href="project.html"><button>Проєкти</button></a>
+    <a href="event.html"><button>Події</button></a>
+  </nav>
+  <div class="auth" id="authArea"></div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <h1 style="text-align: center; color:#334155; margin-top: 0;">Допомога та підтримка</h1>
+    <p style="text-align: center; color: var(--text-secondary); font-size: 16px; max-width: 700px; margin: 10px auto 0;">
+      Маєте запитання, пропозицію чи зіткнулися з проблемою? <br>
+      Оберіть зручний для вас спосіб зв'язку:
+    </p>
+        <div class="divider">
+      <span>або</span>
+    </div>
+    <div class="contact-options">
+      <button class="contact-card telegram" onclick="openTelegram()">
+        <span class="contact-icon">📱</span>
+        <h3>Telegram Bot</h3>
+        <p>допомога через нашого бота в Telegram</p>
+      </button>
+      
+      <button class="contact-card" onclick="showForm()">
+        <span class="contact-icon">📝</span>
+        <h3>Google Forms</h3>
+        <p>Заповніть детальну форму зворотного зв'язку. Ми розглянемо ваш запит.</p>
+      </button>
+    </div>
+
+
+    <div id="formContainer" style="display: none; margin-top: 28px; position: relative; width: 100%; height: 1200px; overflow: hidden; border-radius: 12px; border: 1px solid var(--border);">
+      <iframe 
+        src="https://docs.google.com/forms/d/e/1FAIpQLSfS6uEi-7d09sSZX-Ggp7OwIKuB1NER7JRtDCUcm6dwZoReAg/viewform?embedded=true" 
+        width="100%" 
+        height="100%" 
+        frameborder="0" 
+        marginheight="0" 
+        marginwidth="0"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+      >
+        Завантаження…
+      </iframe>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div style="opacity:0.9;color:var(--text-secondary); margin-bottom: 10px;">© 2025 Студентська рада — зроблено з ❤️ для студентів</div>
+  <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+    <a href="privacy.html" style="color: var(--accent); text-decoration: none;">Політика конфіденційності</a>
+    <a href="help.html" style="color: var(--accent); text-decoration: none;">Допомога</a>
+  </div>
+</footer>
+
+<div id="notificationContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function showLoading() {
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('show');
+}
+
+let currentUser = null;
+
+const ADMIN_UIDS = [
+  '4495aa8c-46fe-46de-8246-20cce7be22a4', 
+  '375bd9f4-2550-4055-8011-9ac386596898',
+  'b25d0c73-dd74-4dc5-9a32-77ad1e526db3' 
+];
+
+async function initAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    await setCurrentUser(session.user);
+  } else {
+    renderAuth(); 
+  }
+  
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      setCurrentUser(session.user);
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      renderAuth();
+    }
+  });
+}
+
+async function setCurrentUser(user) {
+  const isAdmin = ADMIN_UIDS.includes(user.id);
+  currentUser = {
+    id: user.id,
+    email: user.email,
+    name: user.email.split('@')[0],
+    role: isAdmin ? 'admin' : 'user'
+  };
+  renderAuth(); 
+}
+
+function renderAuth() {
+  const el = document.getElementById('authArea');
+  if (!el) return;
+  el.innerHTML = '';
+  
+  if (currentUser) {
+    const roleSpan = document.createElement('div');
+    roleSpan.className = 'role';
+    roleSpan.style.marginRight = '8px';
+    roleSpan.textContent = currentUser.role.toUpperCase();
+    
+    const name = document.createElement('div');
+    name.style.color = '#334155';
+    name.style.fontWeight = '700';
+    name.style.marginRight = '8px';
+    name.textContent = currentUser.email || currentUser.name;
+    
+    const btnOut = document.createElement('button');
+    btnOut.textContent = 'Вийти';
+    btnOut.onclick = logout;
+    
+    el.appendChild(name);
+    el.appendChild(roleSpan);
+    el.appendChild(btnOut);
+  } else {
+    const btn = document.createElement('button');
+    btn.textContent = 'Увійти';
+    btn.onclick = showLogin;
+    el.appendChild(btn);
+  }
+}
+
+function showLogin() {
+  showNotification('Для входу зверніться до адміністратора', 'error');
+}
+
+async function logout() {
+  showLoading();
+  try {
+    await supabase.auth.signOut();
+    currentUser = null;
+    showNotification('Ви вийшли з системи', 'success');
+    renderAuth();
+  } catch (error) {
+    showNotification('Помилка виходу: ' + error.message, 'error');
+  } finally {
+    hideLoading();
+  }
+}
+
+function showNotification(message, type = 'success') {
+  const container = document.getElementById('notificationContainer');
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `<div>${message}</div>`;
+  container.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      if (container.contains(notification)) {
+        container.removeChild(notification);
+      }
+    }, 400);
+  }, 3000);
+}
+
+function openTelegram() {
+  window.open('https://t.me/StudradaSupport_bot', '_blank');
+  showNotification('Відкриваємо Telegram бот...', 'success');
+}
+
+function showForm() {
+  const formContainer = document.getElementById('formContainer');
+  if (formContainer.style.display === 'none') {
+    formContainer.style.display = 'block';
+    formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function goTo(page) {
+  if (page === 'home') {
+    window.location.href = 'index.html';
+  }
+}
+
+window.addEventListener('scroll', function() {
+  const header = document.querySelector('header');
+  if (window.scrollY > 50) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
+
+document.addEventListener('DOMContentLoaded', async function() {
+  await initAuth();
+  hideLoading(); 
+});
+</script>
+</body>
+</html>
