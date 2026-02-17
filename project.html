@@ -1,249 +1,185 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Проєкти — Студентська рада</title>
-<style>
-:root{
-  --bg1:#ffffff; --bg2:#f8fafc; --accent:#2563eb;
-  --text-primary:#1e293b; --text-secondary:#64748b;
-  --card:#ffffff; --border:#e2e8f0;
-  --success:#10b981; --warning:#f59e0b; --error:#ef4444;
-}
-*{box-sizing:border-box}
-body {
-  margin:0;
-  font-family:Inter, "Segoe UI", Roboto, Arial, system-ui;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-  color:var(--text-primary);
-  background: #ffffff;
-  line-height: 1.6;
-}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Проєкти — Студентська рада</title>
+  <style>
+    :root{
+      --bg1:#ffffff; --bg2:#f8fafc; --accent:#2563eb;
+      --text-primary:#1e293b; --text-secondary:#64748b;
+      --card:#ffffff; --border:#e2e8f0;
+      --success:#10b981; --warning:#f59e0b; --error:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body {
+      margin:0;
+      font-family:Inter, "Segoe UI", Roboto, Arial, system-ui;
+      -webkit-font-smoothing:antialiased;
+      min-height:100vh;
+      color:var(--text-primary);
+      background: #ffffff;
+      line-height: 1.6;
+    }
 
-/* Improved animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-/* top bar */
-header{
-  position:sticky; top:0; z-index:60;
-  backdrop-filter: blur(8px);
-  background: rgba(255,255,255,0.95);
-  border-bottom:1px solid var(--border);
-  padding:12px 22px;
-  display:flex; align-items:center; justify-content:space-between;
-  transition: all 0.3s ease;
-}
-header.scrolled {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-.logo{display:flex;gap:12px;align-items:center;font-weight:700;color:#0f172a; text-decoration: none;}
-.logo:hover { opacity: 0.9; }
-.logo .badge{background:var(--accent); width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;box-shadow:0 4px 14px rgba(37, 99, 235, 0.15); transition: all 0.3s ease;}
-.logo .badge:hover { transform: rotate(5deg); }
-nav{display:flex;gap:8px;align-items:center; flex-wrap: wrap;}
-nav button{background:transparent;border:none;color:var(--text-primary);padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer; transition: all 0.2s ease;}
-nav button:hover{background:rgba(0,0,0,0.05); transform: translateY(-2px);}
-nav button.active{background:var(--accent); color: white;}
-.auth{display:flex;gap:8px;align-items:center}
-.auth button{background:var(--accent); color:#fff;padding:8px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer; transition: all 0.3s ease;}
-.auth button:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
-.auth .role{background:rgba(0,0,0,0.05); padding:6px 12px;border-radius:999px;color:var(--text-primary);border:1px solid rgba(0,0,0,0.05); font-size: 12px;}
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:60;
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.95);
+      border-bottom:1px solid var(--border);
+      padding:12px 22px;
+      display:flex; align-items:center; justify-content:space-between;
+      transition: all 0.3s ease;
+    }
+    header.scrolled {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .logo{display:flex;gap:12px;align-items:center;font-weight:700;color:#0f172a; text-decoration: none;}
+    nav{display:flex;gap:8px;align-items:center; flex-wrap: wrap;}
+    nav button{background:transparent;border:none;color:var(--text-primary);padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer; transition: all 0.2s ease;}
+    nav button:hover{background:rgba(0,0,0,0.05); transform: translateY(-2px);}
+    nav button.active{background:var(--accent); color: white;}
+    .auth{display:flex;gap:8px;align-items:center}
+    .auth button{background:var(--accent); color:#fff;padding:8px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer; transition: all 0.3s ease;}
+    .auth .role{background:rgba(0,0,0,0.05); padding:6px 12px;border-radius:999px;color:var(--text-primary);border:1px solid rgba(0,0,0,0.05); font-size: 12px;}
 
-/* container */
-.wrap{max-width:1200px;margin:28px auto;padding:0 20px}
+    /* Main Layout */
+    .wrap{max-width:1200px;margin:28px auto;padding:0 20px}
+    .hero{display:grid;grid-template-columns:1fr;gap:28px;align-items:center;margin-bottom:28px; animation: fadeIn 0.8s ease;}
+    .hero .lead{background:var(--card); padding:32px;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,0.05); color:var(--text-primary); border: 1px solid var(--border);}
+    h1{font-size:32px;margin:0 0 12px;line-height:1.2;color:#0f172a;}
+    .lead p{margin:0;color:var(--text-secondary); line-height: 1.6;}
+    .cta{margin-top:22px;display:flex;gap:12px; flex-wrap: wrap;}
 
-/* hero */
-.hero{display:grid;grid-template-columns:1fr;gap:28px;align-items:center;margin-bottom:28px; animation: fadeIn 0.8s ease;}
-.hero .lead{background:var(--card); padding:32px;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,0.05); color:var(--text-primary); border: 1px solid var(--border);}
-h1{font-size:32px;margin:0 0 12px;line-height:1.2;color:#0f172a;}
-.lead p{margin:0;color:var(--text-secondary); line-height: 1.6;}
-.cta{margin-top:22px;display:flex;gap:12px; flex-wrap: wrap;}
-.btn{background:var(--accent); color:white;padding:12px 20px;border-radius:10px;border:none;font-weight:700;cursor:pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;}
-.btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.2); }
-.btn.secondary{background:#f1f5f9;border:1px solid var(--border);color:var(--text-primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-.btn.secondary:hover { background: #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.btn i { font-size: 16px; }
+    /* Buttons */
+    .btn{background:var(--accent); color:white;padding:12px 20px;border-radius:10px;border:none;font-weight:700;cursor:pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;}
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.2); }
+    .btn.secondary{background:#f1f5f9;border:1px solid var(--border);color:var(--text-primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+    .btn.secondary:hover { background: #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-/* right card */
-.card{background:var(--card); border-radius:14px;padding:22px;color:var(--text-primary); box-shadow:0 8px 20px rgba(0,0,0,0.06); border:1px solid var(--border); transition: all 0.3s ease; margin-bottom: 20px;}
-.card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+    /* Project Cards */
+    .project-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      animation: fadeIn 0.5s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .project-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-primary);
+    }
+    .project-meta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .project-category {
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .project-description {
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .project-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .project-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .project-actions {
+      display: flex;
+      gap: 8px;
+    }
 
-/* small util */
-.muted{color:var(--text-secondary)}
-.row{display:flex;gap:12px;align-items:center; flex-wrap: wrap;}
-.badge-success { background: var(--success); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
-.badge-warning { background: var(--warning); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
-.badge-error { background: var(--error); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
+    /* Badges */
+    .badge-success { background: var(--success); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
+    .badge-warning { background: var(--warning); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
+    .badge-error { background: var(--error); color: white; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
 
-/* footer */
-footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); padding: 20px; border-top: 1px solid var(--border);}
+    /* Filter Buttons */
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
 
-/* notifications */
-.notification {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 16px 20px;
-  border-radius: 10px;
-  color: white;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transform: translateX(100vw);
-  transition: transform 0.4s ease;
-}
-.notification.show {
-  transform: translateX(0);
-}
-.notification.success { background: var(--success); }
-.notification.error { background: var(--error); }
-.notification.warning { background: var(--warning); }
+    /* Notifications & Loaders */
+    .notification {
+      position: fixed; bottom: 20px; right: 20px; padding: 16px 20px; border-radius: 10px; color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15); z-index: 1000; display: flex; align-items: center; gap: 10px;
+      transform: translateX(100vw); transition: transform 0.4s ease;
+    }
+    .notification.show { transform: translateX(0); }
+    .notification.success { background: var(--success); }
+    .notification.error { background: var(--error); }
+    .loader {
+      width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+      border-top-color: white; animation: spin 1s ease-in-out infinite; margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9);
+      display: none; align-items: center; justify-content: center; z-index: 1000;
+    }
+    footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); padding: 20px; border-top: 1px solid var(--border);}
 
-/* loader */
-.loader {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 1s ease-in-out infinite;
-  margin: 0 auto;
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* loading overlay */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0.9);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-/* Filter buttons */
-.filter-buttons {
-  display: flex;
-  gap: 8px;
-  margin: 20px 0;
-  flex-wrap: wrap;
-}
-.filter-btn {
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.filter-btn.active, .filter-btn:hover {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-
-/* Project cards */
-.project-card {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 1px solid var(--border);
-  transition: all 0.3s ease;
-}
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-.project-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.project-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text-primary);
-}
-.project-meta {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.project-category {
-  background: #f1f5f9;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-.project-description {
-  color: var(--text-secondary);
-  margin-bottom: 16px;
-  line-height: 1.6;
-}
-.project-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.project-date {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-.project-actions {
-  display: flex;
-  gap: 8px;
-}
-
-/* Category management */
-.category-management {
-  background: #f8fafc;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-.category-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 15px 0;
-}
-.category-item {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 8px 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.category-item .delete {
-  color: var(--error);
-  cursor: pointer;
-  font-weight: bold;
-}
-</style>
+    @media (max-width:768px){
+      header { flex-direction: column; gap: 15px; padding: 15px; }
+      nav { width: 100%; justify-content: center; }
+      .auth { width: 100%; justify-content: center; }
+      .cta { flex-direction: column; }
+      .project-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
 
@@ -252,30 +188,26 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
 </div>
 
 <header>
-<a href="https://kre.dp.ua" style="display:flex; align-items:center; text-decoration:none;">
-  <div style="width:40px; height:40px; background-color:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; border-radius:6px; margin-right:10px;">
-    SR
-  </div>
-  <div>
-    <div style="font-size:14px; color:#334155; font-weight:600;">Студентська рада</div>
-    <div style="font-size:11px; color:#64748b;">Коледж — офіційний сайт ДФКР</div>
-  </div>
-</a>
+  <a href="https://kre.dp.ua" style="display:flex; align-items:center; text-decoration:none;">
+    <div style="width:40px; height:40px; background-color:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; border-radius:6px; margin-right:10px;">
+      SR
+    </div>
+    <div>
+      <div style="font-size:14px; color:#334155; font-weight:600;">Студентська рада</div>
+      <div style="font-size:11px; color:#64748b;">Коледж — офіційний сайт ДФКР</div>
+    </div>
+  </a>
   <nav>
-    <a href="Home.html"><button id="nav-projects">Головна</button></a>
-   <a href="info.html"><button id="nav-projects"">Про раду</button></a>
-     <a href="command.html"><button id="nav-projects ">Команда</button></a>
-    <a href="news.html"><button id="nav-projects">Новини</button></a>
-    <a href="project.html"><button id="nav-projects" class="active">Проєкти</button></a>
-    <a href="event.html"><button id="nav-projects">Події</button></a>
+    <button id="nav-home" onclick="window.location.href='Home.html'">Головна</button>
+    <a href="info.html"><button id="info">Про раду</button></a>
+    <a href="command.html"><button id="command">Команда</button></a>
+    <a href="project.html"><button id="project" class="active">Проєкти</button></a>
+    <a href="event.html"><button id="event">Події</button></a>
   </nav>
-  <div class="auth" id="authArea">
-    <!-- auth UI inserted here -->
-  </div>
+  <div class="auth" id="authArea"></div>
 </header>
 
 <main class="wrap">
-  <!-- HERO -->
   <section class="hero">
     <div class="lead">
       <h1>Наші <span style="color:#2563eb">проєкти</span></h1>
@@ -287,28 +219,17 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
     </div>
   </section>
 
-
-  <!-- Category management (admin only) -->
-  <div id="categoryManagement" class="category-management" style="display: none;">
-    <h3>Керування категоріями</h3>
-    <div class="row">
-      <input id="newCategoryInput" placeholder="Нова категорія" style="padding:10px;border:1px solid var(--border);border-radius:8px;flex:1">
-      <button class="btn" onclick="addCategory()">Додати категорію</button>
-    </div>
-    <div class="category-list" id="categoryList"></div>
-  </div>
-
-  <!-- Filter buttons -->
   <div class="filter-buttons" id="filterButtons">
     <button class="filter-btn active" onclick="filterProjects('all')">Всі</button>
-    <!-- Categories will be dynamically added here -->
+    <button class="filter-btn" onclick="filterProjects('соціальні')">Соціальні</button>
+    <button class="filter-btn" onclick="filterProjects('розважальні')">Розважальні</button>
+    <button class="filter-btn" onclick="filterProjects('екологічні')">Екологічні</button>
+    <button class="filter-btn" onclick="filterProjects('навчальні')">Навчальні</button>
   </div>
 
-  <!-- Projects list -->
   <div id="projectsList">
     <div class="loader"></div>
   </div>
-
 </main>
 
 <footer>
@@ -319,801 +240,337 @@ footer{margin:60px auto 30px; text-align:center;color:var(--text-secondary); pad
   </div>
 </footer>
 
-<!-- MODALS (hidden containers) -->
 <div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:120; padding: 20px;">
   <div id="modalBox" style="width:720px;max-width:92%;background:#fff;border-radius:16px;padding:24px;max-height:90vh;overflow-y:auto;"></div>
 </div>
 
-<!-- NOTIFICATION CONTAINER -->
 <div id="notificationContainer"></div>
 
-<!-- Supabase JS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* =========================
-   Supabase Configuration
-   ========================= */
-const SUPABASE_URL = 'https://xyhnzxyhkxijxahltcwl.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5aG56eHloa3hpanhhaGx0Y3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzMDQwODksImV4cCI6MjA3Mzg4MDA4OX0.3rCiET2xh7hY3bya09tmCo1L6Lc8ucM5UVF8VUbz1Oo';
+  // --- КОНФІГУРАЦІЯ (як у Home.html) ---
+  var SUPABASE_URL = 'https://uveepbqnvrnhyneomyrc.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_UD-w93C2L33atN6OlqRRmQ_r4DymMT5';
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // --- ADMIN CONFIG (як у Home.html) ---
+  const ADMIN_UIDS = [
+    'ee251218-a8fb-4a12-bd3b-4b09e1ebe512',
+    '375bd9f4-2550-4055-8011-9ac386596898',
+    'b25d0c73-dd74-4dc5-9a32-77ad1e526db3'
+  ];
 
-/* =========================
-   Global variables
-   ========================= */
-let PROJECTS = [];
-let CATEGORIES = [];
-let currentUser = null;
+  var PROJECTS = [];
+  var currentUser = null;
 
-/* =========================
-   Database operations
-   ========================= */
-function showLoading() {
-  document.getElementById('loadingOverlay').style.display = 'flex';
-}
+  // --- LOADER & NOTIFICATIONS ---
+  function showLoading() { document.getElementById('loadingOverlay').style.display = 'flex'; }
+  function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
 
-function hideLoading() {
-  document.getElementById('loadingOverlay').style.display = 'none';
-}
-
-async function checkSupabaseConnection() {
-  try {
-    const { data, error } = await supabase.from('projects').select('count', { count: 'exact' });
-    if (error) throw error;
-    return true;
-  } catch (error) {
-    console.error('Supabase connection error:', error);
-    showNotification('Помилка підключення до бази даних', 'error');
-    return false;
+  function showNotification(message, type = 'success') {
+    const container = document.getElementById('notificationContainer');
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `<div>${message}</div>`;
+    container.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 400);
+    }, 3000);
   }
-}
 
+  // --- AUTH (ідентично до Home.html) ---
+  async function initAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      await setCurrentUser(session.user);
+    }
 
-async function loadProjects() {
-  try {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        setCurrentUser(session.user);
+        renderAll();
+      } else if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        renderAll();
+      }
+    });
+  }
+
+  async function setCurrentUser(user) {
+    const isAdmin = ADMIN_UIDS.includes(user.id);
+    currentUser = {
+      id: user.id,
+      email: user.email,
+      name: user.email.split('@')[0],
+      role: isAdmin ? 'admin' : 'user'
+    };
+  }
+
+  function renderAuth() {
+    const el = document.getElementById('authArea');
+    el.innerHTML = '';
+
+    if (currentUser) {
+      const roleSpan = document.createElement('div');
+      roleSpan.className = 'role';
+      roleSpan.style.marginRight = '8px';
+      roleSpan.textContent = currentUser.role.toUpperCase();
+
+      const name = document.createElement('div');
+      name.style.color = '#334155';
+      name.style.fontWeight = '700';
+      name.style.marginRight = '8px';
+      name.textContent = currentUser.email || currentUser.name;
+
+      const btnOut = document.createElement('button');
+      btnOut.textContent = 'Вийти';
+      btnOut.onclick = logout;
+
+      el.appendChild(name);
+      el.appendChild(roleSpan);
+      el.appendChild(btnOut);
+    } else {
+      const btn = document.createElement('button');
+      btn.textContent = 'Увійти';
+      btn.onclick = showLogin;
+      el.appendChild(btn);
+    }
+
+    toggleAdminButtons();
+  }
+
+  function toggleAdminButtons() {
+    const isAdmin = currentUser && currentUser.role === 'admin';
+    const btn = document.getElementById('addProjectBtn');
+    if (btn) {
+      btn.style.display = isAdmin ? 'inline-flex' : 'none';
+    }
+  }
+
+  // --- LOGIN LOGIC (як у Home.html) ---
+  function showLogin() {
+    modalOpen(`<h3>Вхід</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+        <input id="loginEmail" type="email" placeholder="Email" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+        <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onclick="modalClose()" class="btn secondary">Відмінити</button>
+          <button class="btn" onclick="doLogin()">Увійти</button>
+        </div>
+      </div>`, 480);
+    document.getElementById('loginEmail').focus();
+  }
+
+  async function doLogin() {
+    const email = (document.getElementById('loginEmail').value || '').trim();
+    const password = (document.getElementById('loginPass').value || '').trim();
+
+    if (!email || !password) {
+      showNotification('Введіть email і пароль', 'error');
+      return;
+    }
+
+    showLoading();
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      await setCurrentUser(data.user);
+      modalClose();
+      showNotification(`Вітаємо! Ви увійшли як ${currentUser.role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
+      await renderAll();
+
+    } catch (error) {
+      showNotification('Помилка входу: ' + error.message, 'error');
+    } finally {
+      hideLoading();
+    }
+  }
+
+  async function logout() {
+    showLoading();
+    try {
+      await supabase.auth.signOut();
+      currentUser = null;
+      showNotification('Ви вийшли з системи', 'success');
+      renderAll();
+    } catch (error) {
+      showNotification('Помилка виходу: ' + error.message, 'error');
+    } finally {
+      hideLoading();
+    }
+  }
+
+  // --- DATABASE OPERATIONS (Projects) ---
+  async function loadProjects() {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
       .order('created_at', { ascending: false });
-    
-    if (error) throw error;
+
+    if (error) {
+      console.error('Error:', error);
+      return [];
+    }
     return data || [];
-  } catch (error) {
-    console.error('Error loading projects:', error);
-    showNotification('Помилка завантаження проєктів', 'error');
-    return [];
   }
-}
 
-async function saveProject(projectData) {
-  try {
-    const { data, error } = await supabase
-      .from('projects')
-      .insert([{
-        ...projectData,
-        created_at: new Date().toISOString()
-      }])
-      .select();
-    
-    if (error) throw error;
+  async function saveProject(projectData) {
+    const { data, error } = await supabase.from('projects').insert([projectData]).select();
+    if (error) {
+      console.error('Error saving:', error);
+      return null;
+    }
     return data[0];
-  } catch (error) {
-    return null;
   }
-}
 
-async function updateProject(id, projectData) {
-  try {
-    const { data, error } = await supabase
-      .from('projects')
-      .update(projectData)
-      .eq('id', id)
-      .select();
-    
-    if (error) throw error;
-    return data[0];
-  } catch (error) {
-    console.error('Error updating project:', error);
-    showNotification('Помилка оновлення проєкту', 'error');
-    return null;
+  async function deleteProject(id) {
+    const { error } = await supabase.from('projects').delete().eq('id', id);
+    return !error;
   }
-}
 
-async function deleteProject(id) {
-  try {
-    const { error } = await supabase
-      .from('projects')
-      .delete()
-      .eq('id', id);
-    
-    if (error) throw error;
-    return true;
-  } catch (error) {
-    console.error('Error deleting project:', error);
-    showNotification('Помилка видалення проєкту', 'error');
-    return false;
-  }
-}
+  // --- RENDERING ---
+  async function renderProjects(filter = 'all') {
+    const container = document.getElementById('projectsList');
+    container.innerHTML = '<div class="loader"></div>';
 
-
-async function loadCategories() {
-  try {
-    const { data, error } = await supabase
-      .from('project_categories')
-      .select('*')
-      .order('name');
-    
-    if (error) throw error;
-    return data?.map(cat => cat.name) || [];
-  } catch (error) {
-    console.error('Error loading categories:', error);
-    showNotification('Помилка завантаження категорій', 'error');
-    return [];
-  }
-}
-
-async function saveCategory(categoryName) {
-  try {
-    const { data, error } = await supabase
-      .from('project_categories')
-      .insert([{ name: categoryName }])
-      .select();
-    
-    if (error) throw error;
-    return data[0];
-  } catch (error) {
-    console.error('Error saving category:', error);
-    showNotification('Помилка збереження категорії', 'error');
-    return null;
-  }
-}
-
-async function deleteCategoryFromDB(categoryName) {
-  try {
-    const { error } = await supabase
-      .from('project_categories')
-      .delete()
-      .eq('name', categoryName);
-    
-    if (error) throw error;
-    return true;
-  } catch (error) {
-    console.error('Error deleting category:', error);
-    showNotification('Помилка видалення категорії', 'error');
-    return false;
-  }
-}
-
-/* =========================
-   Auth system with Supabase Auth
-   ========================= */
-
-const ADMIN_UIDS = [
-  '4495aa8c-46fe-46de-8246-20cce7be22a4', 
-  '375bd9f4-2550-4055-8011-9ac386596898',
-  'b25d0c73-dd74-4dc5-9a32-77ad1e526db3' 
-];
-
-async function initAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session) {
-    await setCurrentUser(session.user);
-  }
-  
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-      setCurrentUser(session.user);
-      renderAll();
-    } else if (event === 'SIGNED_OUT') {
-      currentUser = null;
-      renderAll();
-    }
-  });
-}
-
-async function setCurrentUser(user) {
-  const isAdmin = ADMIN_UIDS.includes(user.id);
-   const displayName = user.user_metadata?.display_name || user.email.split('@')[0];
-  currentUser = {
-    id: user.id,
-    email: user.email,
-    name: displayName,
-    role: isAdmin ? 'admin' : 'user'
-  };
-}
-
-function renderAuth() {
-  const el = document.getElementById('authArea');
-  el.innerHTML = '';
-  
-  if (currentUser) {
-    const roleSpan = document.createElement('div');
-    roleSpan.className = 'role';
-    roleSpan.style.marginRight = '8px';
-    roleSpan.textContent = currentUser.role.toUpperCase();
-    
-    const name = document.createElement('div');
-    name.style.color = '#334155';
-    name.style.fontWeight = '700';
-    name.style.marginRight = '8px';
-    name.textContent = currentUser.email || currentUser.name;
-    
-    const btnOut = document.createElement('button');
-    btnOut.textContent = 'Вийти';
-    btnOut.onclick = logout;
-    
-    el.appendChild(name);
-    el.appendChild(roleSpan);
-    el.appendChild(btnOut);
-  } else {
-    const btn = document.createElement('button');
-    btn.textContent = 'Увійти';
-    btn.onclick = showLogin;
-    el.appendChild(btn);
-  }
-  
-  toggleAdminButtons();
-}
-
-function showLogin() {
-  modalOpen(`<h3>Вхід</h3>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-      <input id="loginEmail" type="email" placeholder="Email" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <input id="loginPass" type="password" placeholder="Пароль" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button onclick="modalClose()" class="btn secondary">Відмінити</button>
-        <button class="btn" onclick="doLogin()">Увійти</button>
-      </div>
-    </div>`, 480);
-  document.getElementById('loginEmail').focus();
-}
-
-async function doLogin() {
-  const email = (document.getElementById('loginEmail').value || '').trim();
-  const password = (document.getElementById('loginPass').value || '').trim();
-  
-  if (!email || !password) {
-    showNotification('Введіть email і пароль', 'error');
-    return;
-  }
-  
-  showLoading();
-  
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    
-    if (error) throw error;
-    
-    await setCurrentUser(data.user);
-    modalClose();
-    
-    console.log('User logged in:', currentUser);
-    
-    showNotification(`Вітаємо! Ви увійшли як ${currentUser.role === 'admin' ? 'адміністратор' : 'користувач'}`, 'success');
-    
-    
-    await renderAll();
-    
-  } catch (error) {
-    showNotification('Помилка входу: ' + error.message, 'error');
-  } finally {
-    hideLoading();
-  }
-}
-
-async function logout() {
-  showLoading();
-  try {
-    await supabase.auth.signOut();
-    currentUser = null;
-    showNotification('Ви вийшли з системи', 'success');
-    renderAll();
-  } catch (error) {
-    showNotification('Помилка виходу: ' + error.message, 'error');
-  } finally {
-    hideLoading();
-  }
-}
-
-function toggleAdminButtons() {
-  const isAdmin = currentUser && currentUser.role === 'admin';
-  
-  const adminButtons = [
-    'addProjectBtn',
-    'categoryManagement',
-  ];
-  
-  adminButtons.forEach(btnId => {
-    const btn = document.getElementById(btnId);
-    console.log(`Element ${btnId}:`, btn ? 'found' : 'not found', 'isAdmin:', isAdmin);
-    if (btn) {
-      btn.style.display = isAdmin ? (btnId === 'categoryManagement' ? 'block' : 'inline-flex') : 'none';
-    }
-  });
-  
-  if (isAdmin) {
-    console.log('Admin mode enabled - showing admin controls');
-  }
-}
-
-/* =========================
-   Modal helpers
-   ========================= */
-function modalOpen(html, width = 760) {
-  const modal = document.getElementById('modal');
-  const box = document.getElementById('modalBox');
-  box.style.width = width + 'px';
-  box.innerHTML = html;
-  modal.style.display = 'flex';
-}
-
-function modalClose() {
-  document.getElementById('modal').style.display = 'none';
-}
-
-/* =========================
-   Notification system
-   ========================= */
-function showNotification(message, type = 'success') {
-  const container = document.getElementById('notificationContainer');
-  const notification = document.createElement('div');
-  notification.className = `notification ${type}`;
-  notification.innerHTML = `<div>${message}</div>`;
-  container.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => {
-      if (container.contains(notification)) {
-        container.removeChild(notification);
-      }
-    }, 400);
-  }, 3000);
-}
-
-/* =========================
-   Categories management
-   ========================= */
-async function renderCategories() {
-  try {
-    CATEGORIES = await loadCategories();
-    
-
-    const filterContainer = document.getElementById('filterButtons');
-    while (filterContainer.children.length > 1) {
-      filterContainer.removeChild(filterContainer.lastChild);
-    }
-    
-
-    CATEGORIES.forEach(category => {
-      const button = document.createElement('button');
-      button.className = 'filter-btn';
-      button.textContent = category;
-      button.onclick = () => filterProjects(category);
-      filterContainer.appendChild(button);
-    });
-    
-   
-    const categoryList = document.getElementById('categoryList');
-    if (categoryList) {
-      categoryList.innerHTML = '';
-      
-      CATEGORIES.forEach(category => {
-        const categoryItem = document.createElement('div');
-        categoryItem.className = 'category-item';
-        categoryItem.innerHTML = `
-          ${category}
-          <span class="delete" onclick="deleteCategory('${escapeHtmlAttr(category)}')">×</span>
-        `;
-        categoryList.appendChild(categoryItem);
-      });
-    }
-  } catch (error) {
-    console.error('Error rendering categories:', error);
-  }
-}
-
-async function addCategory() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може додавати категорії', 'error');
-    return;
-  }
-  
-  const newCategory = document.getElementById('newCategoryInput').value.trim();
-  if (!newCategory) {
-    showNotification('Введіть назву категорії', 'error');
-    return;
-  }
-  
-  if (CATEGORIES.includes(newCategory)) {
-    showNotification('Ця категорія вже існує', 'error');
-    return;
-  }
-  
-  showLoading();
-  const saved = await saveCategory(newCategory);
-  hideLoading();
-  
-  if (saved) {
-    document.getElementById('newCategoryInput').value = '';
-    showNotification('Категорію додано', 'success');
-    renderAll();
-  }
-}
-
-async function deleteCategory(category) {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може видаляти категорії', 'error');
-    return;
-  }
-  
-
-  const isUsed = PROJECTS.some(project => project.category === category);
-  if (isUsed) {
-    showNotification('Не можна видалити категорію, яка використовується в проєктах', 'error');
-    return;
-  }
-  
-  if (confirm(`Видалити категорію "${category}"?`)) {
-    showLoading();
-    const deleted = await deleteCategoryFromDB(category);
-    hideLoading();
-    
-    if (deleted) {
-      showNotification('Категорію видалено', 'success');
-      renderAll();
-    }
-  }
-}
-
-/* =========================
-   Projects CRUD + UI
-   ========================= */
-async function renderProjects(filter = 'all') {
-  const container = document.getElementById('projectsList');
-  container.innerHTML = '<div class="loader"></div>';
-  
-  try {
     PROJECTS = await loadProjects();
     container.innerHTML = '';
-    
-    let filteredProjects = PROJECTS;
+
+    let filtered = PROJECTS;
     if (filter !== 'all') {
-      filteredProjects = PROJECTS.filter(p => p.category === filter);
+      filtered = PROJECTS.filter(p => p.category.toLowerCase() === filter.toLowerCase());
     }
-    
-    if (filteredProjects.length === 0) {
+
+    if (filtered.length === 0) {
       container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary)">Проєкти не знайдені</div>';
       return;
     }
-    
-    filteredProjects.forEach(project => {
-      const projectEl = document.createElement('div');
-      projectEl.className = 'project-card';
-      
-      let statusBadge = '';
-      if (project.status === 'активно') {
-        statusBadge = '<span class="badge-success">Активно</span>';
-      } else if (project.status === 'планується') {
-        statusBadge = '<span class="badge-warning">Планується</span>';
-      } else if (project.status === 'завершено') {
-        statusBadge = '<span class="badge-error">Завершено</span>';
+
+    filtered.forEach(p => {
+      let badge = `<span class="badge-warning">Планується</span>`;
+      if (p.status === 'активно') badge = `<span class="badge-success">Активно</span>`;
+      if (p.status === 'завершено') badge = `<span class="badge-error">Завершено</span>`;
+
+      // Admin buttons logic
+      let adminActions = '';
+      if (currentUser && currentUser.role === 'admin') {
+        adminActions = `<button class="btn" onclick="confirmDelete('${p.id}')">Видалити</button>`;
       }
-      
-      projectEl.innerHTML = `
+
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
         <div class="project-header">
-          <h3 class="project-title">${escapeHtml(project.title)}</h3>
+          <h3 class="project-title">${escapeHtml(p.title)}</h3>
           <div class="project-meta">
-            <span class="project-category">${escapeHtml(project.category)}</span>
-            ${statusBadge}
+            <span class="project-category">${escapeHtml(p.category)}</span>
+            ${badge}
           </div>
         </div>
-        <div class="project-description">
-          ${escapeHtml(project.description)}
-        </div>
+        <div class="project-description">${escapeHtml(p.description)}</div>
         <div class="project-footer">
-          <div class="project-date">Створено: ${project.date || formatDate(project.created_at)}</div>
+          <div class="project-date">${p.date || 'Дата не вказана'}</div>
           <div class="project-actions">
-            <button class="btn secondary" onclick="viewProject('${project.id}')">Детальніше</button>
+            ${adminActions}
           </div>
         </div>
       `;
-      
-      if (currentUser && currentUser.role === 'admin') {
-        const actions = projectEl.querySelector('.project-actions');
-        const editBtn = document.createElement('button');
-        editBtn.className = 'btn secondary';
-        editBtn.textContent = 'Редагувати';
-        editBtn.onclick = () => editProject(project.id);
-        
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn';
-        deleteBtn.textContent = 'Видалити';
-        deleteBtn.onclick = () => confirmDeleteProject(project.id);
-        
-        actions.appendChild(editBtn);
-        actions.appendChild(deleteBtn);
-      }
-      
-      container.appendChild(projectEl);
+      container.appendChild(card);
     });
-  } catch (error) {
-    container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--error)">Помилка завантаження проєктів</div>';
   }
-}
 
-function filterProjects(category) {
-
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  
-  renderProjects(category);
-}
-
-function viewProject(id) {
-  const project = PROJECTS.find(p => p.id === id);
-  if (!project) return;
-  
-  let statusBadge = '';
-  if (project.status === 'активно') {
-    statusBadge = '<span class="badge-success">Активно</span>';
-  } else if (project.status === 'планується') {
-    statusBadge = '<span class="badge-warning">Планується</span>';
-  } else if (project.status === 'завершено') {
-    statusBadge = '<span class="badge-error">Завершено</span>';
+  function filterProjects(cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderProjects(cat);
   }
-  
-  modalOpen(`
-    <h2>${escapeHtml(project.title)}</h2>
-    <div class="row" style="margin-bottom: 20px;">
-      <span class="project-category">${escapeHtml(project.category)}</span>
-      ${statusBadge}
-      <div class="muted">Дата: ${project.date || formatDate(project.created_at)}</div>
-    </div>
-    <div style="line-height: 1.6; margin-bottom: 20px;">
-      ${escapeHtml(project.description).replace(/\n/g, '<br>')}
-    </div>
-    <div style="display:flex;justify-content:flex-end">
-      <button class="btn secondary" onclick="modalClose()">Закрити</button>
-    </div>
-  `, 600);
-}
 
-function openCreateProject() {
-  if (!currentUser || currentUser.role !== 'admin') {
-    showNotification('Тільки адміністратор може додавати проєкти', 'error'); 
-    return; 
-  }
-  
-
-  const categoryOptions = CATEGORIES.map(cat => 
-    `<option value="${escapeHtmlAttr(cat)}">${escapeHtml(cat)}</option>`
-  ).join('');
-  
-  modalOpen(`
-    <h3>Новий проєкт</h3>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-      <input id="pTitle" placeholder="Назва проєкту" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <select id="pCategory" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        ${categoryOptions}
-      </select>
-      <select id="pStatus" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <option value="активно">Активно</option>
-        <option value="планується">Планується</option>
-        <option value="завершено">Завершено</option>
-      </select>
-      <input id="pDate" placeholder="Дата (напр. 12.03.2025)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <textarea id="pDescription" placeholder="Опис проєкту..." style="height:160px;padding:12px;border:1px solid var(--border);border-radius:8px; resize: vertical;"></textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button class="btn secondary" onclick="modalClose()">Відмінити</button>
-        <button class="btn" onclick="createProject()">Зберегти</button>
+  // --- CREATE PROJECT ---
+  function openCreateProject() {
+    modalOpen(`
+      <h3>Новий проєкт</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+        <input id="pTitle" placeholder="Назва" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+        <select id="pCategory" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+          <option value="соціальні">Соціальні</option>
+          <option value="розважальні">Розважальні</option>
+          <option value="екологічні">Екологічні</option>
+          <option value="навчальні">Навчальні</option>
+        </select>
+        <select id="pStatus" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+          <option value="активно">Активно</option>
+          <option value="планується">Планується</option>
+          <option value="завершено">Завершено</option>
+        </select>
+        <input id="pDate" placeholder="Дата (напр. 12.03.2025)" style="padding:12px;border:1px solid var(--border);border-radius:8px">
+        <textarea id="pDesc" placeholder="Опис..." style="height:120px;padding:12px;border:1px solid var(--border);border-radius:8px"></textarea>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onclick="modalClose()" class="btn secondary">Відмінити</button>
+          <button onclick="createProject()" class="btn">Створити</button>
+        </div>
       </div>
-    </div>
-  `, 640);
-}
-
-async function createProject() {
-  const title = document.getElementById('pTitle').value.trim();
-  const category = document.getElementById('pCategory').value;
-  const status = document.getElementById('pStatus').value;
-  const date = document.getElementById('pDate').value.trim();
-  const description = document.getElementById('pDescription').value.trim();
-  
-  if (!title || !description) {
-    showNotification('Заповніть назву та опис проєкту', 'error'); 
-    return;
+    `, 500);
   }
-  
-  const projectData = {
-    title,
-    category,
-    status,
-    date: date || new Date().toLocaleDateString('uk-UA'),
-    description
-  };
-  
-  showLoading();
-  const saved = await saveProject(projectData);
-  hideLoading();
-  
-  if (saved) {
-    modalClose();
-    showNotification('Проєкт додано успішно!', 'success');
-    renderAll();
-  }
-}
 
-function editProject(id) {
-  const project = PROJECTS.find(p => p.id === id);
-  if (!project) return;
-  
+  async function createProject() {
+    const title = document.getElementById('pTitle').value;
+    const category = document.getElementById('pCategory').value;
+    const status = document.getElementById('pStatus').value;
+    const date = document.getElementById('pDate').value;
+    const description = document.getElementById('pDesc').value;
 
-  const categoryOptions = CATEGORIES.map(cat => 
-    `<option value="${escapeHtmlAttr(cat)}" ${project.category === cat ? 'selected' : ''}>${escapeHtml(cat)}</option>`
-  ).join('');
-  
-  modalOpen(`
-    <h3>Редагування проєкту</h3>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-      <input id="eTitle" value="${escapeHtmlAttr(project.title)}" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <select id="eCategory" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        ${categoryOptions}
-      </select>
-      <select id="eStatus" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-        <option value="активно" ${project.status === 'активно' ? 'selected' : ''}>Активно</option>
-        <option value="планується" ${project.status === 'планується' ? 'selected' : ''}>Планується</option>
-        <option value="завершено" ${project.status === 'завершено' ? 'selected' : ''}>Завершено</option>
-      </select>
-      <input id="eDate" value="${escapeHtmlAttr(project.date || '')}" style="padding:12px;border:1px solid var(--border);border-radius:8px">
-      <textarea id="eDescription" style="height:160px;padding:12px;border:1px solid var(--border);border-radius:8px; resize: vertical;">${escapeHtmlAttr(project.description)}</textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button class="btn secondary" onclick="modalClose()">Відмінити</button>
-        <button class="btn" onclick="updateProjectModal('${project.id}')">Оновити</button>
-      </div>
-    </div>
-  `, 640);
-}
+    if (!title || !description) return showNotification('Заповніть всі поля', 'error');
 
-async function updateProjectModal(id) {
-  const projectData = {
-    title: document.getElementById('eTitle').value.trim(),
-    category: document.getElementById('eCategory').value,
-    status: document.getElementById('eStatus').value,
-    date: document.getElementById('eDate').value.trim(),
-    description: document.getElementById('eDescription').value.trim()
-  };
-  
-  if (!projectData.title || !projectData.description) {
-    showNotification('Заповніть назву та опис проєкту', 'error');
-    return;
-  }
-  
-  showLoading();
-  const updated = await updateProject(id, projectData);
-  hideLoading();
-  
-  if (updated) {
-    modalClose();
-    showNotification('Проєкт оновлено успішно!', 'success');
-    renderAll();
-  }
-}
+    showLoading();
+    const res = await saveProject({ title, category, status, date, description });
+    hideLoading();
 
-async function confirmDeleteProject(id) {
-  if (!confirm('Видалити проєкт?')) return;
-  
-  showLoading();
-  const deleted = await deleteProject(id);
-  hideLoading();
-  
-  if (deleted) {
-    showNotification('Проєкт видалено', 'success');
-    renderAll();
-  }
-}
-
-
-/* =========================
-   Utilities
-   ========================= */
-function escapeHtml(s) {
-  return (s + '').replace(/[&<>"']/g, function(m) {
-    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]);
-  });
-}
-
-function escapeHtmlAttr(s) {
-  return escapeHtml(s).replace(/"/g, '&quot;');
-}
-
-function formatDate(dateString) {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('uk-UA');
-}
-
-/* =========================
-   Initialize default data
-   ========================= */
-async function initializeDefaultData() {
-  try {
-  
-    const existingProjects = await loadProjects();
-    const existingCategories = await loadCategories();
-    
-    
-    if (existingCategories.length === 0) {
-      const defaultCategories = ['лекції', 'міні-ігри', 'соціальні', 'інше'];
-      for (const category of defaultCategories) {
-        await saveCategory(category);
-      }
-      showNotification('Додано базові категорії', 'success');
+    if (res) {
+      modalClose();
+      showNotification('Проєкт додано', 'success');
+      renderProjects();
     }
+  }
 
-    if (existingProjects.length === 0) {
-      const defaultProjects = [
-        {
-         
-        }
-      ];
-      
-      for (const project of defaultProjects) {
-        await saveProject(project);
-      }
+  async function confirmDelete(id) {
+    if (confirm('Видалити цей проєкт?')) {
+      showLoading();
+      await deleteProject(id);
+      hideLoading();
+      renderProjects();
     }
-  } catch (error) {
-    console.error('Error initializing default data:', error);
   }
-}
 
-/* =========================
-   Scroll effect for header
-   ========================= */
-window.addEventListener('scroll', function() {
-  const header = document.querySelector('header');
-  if (window.scrollY > 50) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
+  // --- UTILS ---
+  function modalOpen(html, width) {
+    const modal = document.getElementById('modal');
+    const box = document.getElementById('modalBox');
+    box.style.width = width + 'px';
+    box.innerHTML = html;
+    modal.style.display = 'flex';
   }
-});
+  function modalClose() { document.getElementById('modal').style.display = 'none'; }
+  function escapeHtml(s) { return (s + '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
 
-/* =========================
-   Main render function
-   ========================= */
-async function renderAll() {
-  renderAuth();
-  await Promise.all([
-    renderCategories(),
-    renderProjects()
-  ]);
-}
+  // --- INIT ---
+  async function renderAll() {
+    renderAuth();
+    await renderProjects();
+  }
 
-/* =========================
-   Initialize on load
-   ========================= */
-document.addEventListener('DOMContentLoaded', async function() {
-  showLoading();
-  
-  const isConnected = await checkSupabaseConnection();
-  
-  if (isConnected) {
-    await initializeDefaultData();
+  document.addEventListener('DOMContentLoaded', async () => {
+    await initAuth();
     await renderAll();
-  } else {
-    showNotification('Помилка підключення до бази даних. Перевірте налаштування Supabase.', 'error');
-  }
-  
-  hideLoading();
-});
+  });
 </script>
 </body>
 </html>
