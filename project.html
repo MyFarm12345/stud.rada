@@ -249,22 +249,22 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // --- КОНФІГУРАЦІЯ (як у Home.html) ---
+
   var SUPABASE_URL = 'https://uveepbqnvrnhyneomyrc.supabase.co';
   var SUPABASE_ANON_KEY = 'sb_publishable_UD-w93C2L33atN6OlqRRmQ_r4DymMT5';
   var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // --- ADMIN CONFIG (як у Home.html) ---
+
   const ADMIN_UIDS = [
     'ee251218-a8fb-4a12-bd3b-4b09e1ebe512',
-    '375bd9f4-2550-4055-8011-9ac386596898',
-    'b25d0c73-dd74-4dc5-9a32-77ad1e526db3'
+    '86b277e6-e501-4883-a32f-244265d80d4c',
+    '1bb2187f-f460-4d6d-8b8c-d1efdbf8b422',
+    'cfda0080-0685-4ace-a3d6-35c0d990fc39'
   ];
 
   var PROJECTS = [];
   var currentUser = null;
 
-  // --- LOADER & NOTIFICATIONS ---
   function showLoading() { document.getElementById('loadingOverlay').style.display = 'flex'; }
   function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
 
@@ -281,7 +281,7 @@
     }, 3000);
   }
 
-  // --- AUTH (ідентично до Home.html) ---
+
   async function initAuth() {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
@@ -350,7 +350,7 @@
     }
   }
 
-  // --- LOGIN LOGIC (як у Home.html) ---
+
   function showLogin() {
     modalOpen(`<h3>Вхід</h3>
       <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
@@ -409,7 +409,6 @@
     }
   }
 
-  // --- DATABASE OPERATIONS (Projects) ---
   async function loadProjects() {
     const { data, error } = await supabase
       .from('projects')
@@ -437,7 +436,7 @@
     return !error;
   }
 
-  // --- RENDERING ---
+
   async function renderProjects(filter = 'all') {
     const container = document.getElementById('projectsList');
     container.innerHTML = '<div class="loader"></div>';
@@ -460,7 +459,7 @@
       if (p.status === 'активно') badge = `<span class="badge-success">Активно</span>`;
       if (p.status === 'завершено') badge = `<span class="badge-error">Завершено</span>`;
 
-      // Admin buttons logic
+
       let adminActions = '';
       if (currentUser && currentUser.role === 'admin') {
         adminActions = `<button class="btn" onclick="confirmDelete('${p.id}')">Видалити</button>`;
@@ -494,7 +493,7 @@
     renderProjects(cat);
   }
 
-  // --- CREATE PROJECT ---
+
   function openCreateProject() {
     modalOpen(`
       <h3>Новий проєкт</h3>
@@ -550,7 +549,6 @@
     }
   }
 
-  // --- UTILS ---
   function modalOpen(html, width) {
     const modal = document.getElementById('modal');
     const box = document.getElementById('modalBox');
@@ -561,7 +559,6 @@
   function modalClose() { document.getElementById('modal').style.display = 'none'; }
   function escapeHtml(s) { return (s + '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
 
-  // --- INIT ---
   async function renderAll() {
     renderAuth();
     await renderProjects();
@@ -573,4 +570,5 @@
   });
 </script>
 </body>
+
 </html>
